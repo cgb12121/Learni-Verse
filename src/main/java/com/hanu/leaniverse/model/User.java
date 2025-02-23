@@ -9,6 +9,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
+    private String username;
     private String fullName;
     private String password;
     @OneToOne(mappedBy = "user")
@@ -37,6 +38,15 @@ public class User {
     private List<Comment> comments;
 
     public User() {
+    }
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getUserId() {
