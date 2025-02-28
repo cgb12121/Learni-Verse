@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:each ="question,iter:${questions}">
+    <h5 th:text="${question.requirement}"></h5>
+<div th:each ="choice:${questions.get(iter.index).getChoices()}">
+    <input type="checkbox" id="vehicle1" name="vehicle1" th:value="${choice.id}">
+    <label for="vehicle1" th:text="${choice.content}"></label><br>
+</div>
+</div>
+</body>
+</html>

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -35,11 +36,13 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests(configurer -> configurer
                                 .requestMatchers( "/", "/login/**", "/logout/**", "/sign-up/**", "/img/**").permitAll()
+                                .requestMatchers("/quizz").permitAll()
+                                .requestMatchers("/question").permitAll()
 
                                 /// admin
 //                        .requestMatchers(HttpMethod.GET,"/api/admin/**").hasAuthority("ADMIN")
 //                        .requestMatchers(HttpMethod.POST,"/api/admin/**").hasAuthority("ADMIN")
-                                .anyRequest().authenticated()
+                              .anyRequest().authenticated()
 
 
                 )
@@ -48,7 +51,8 @@ public class SecurityConfig {
                                 .defaultSuccessUrl("/loginTest", true)
                                 .permitAll()
                 )
-                .sessionManagement(session -> session.maximumSessions(1));
+                .sessionManagement(session -> session.maximumSessions(1))
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
