@@ -6,7 +6,7 @@ public class User_Quizz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userQuizzId;
-    private int grade;
+    private double grade;
     @ManyToOne
     @JoinColumn(name = "quizzId")
     private Quizz quizz;
@@ -25,11 +25,11 @@ public class User_Quizz {
         this.userQuizzId = userQuizzId;
     }
 
-    public int getGrade() {
+    public double getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(double grade) {
         this.grade = grade;
     }
 

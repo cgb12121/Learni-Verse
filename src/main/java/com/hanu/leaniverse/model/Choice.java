@@ -8,7 +8,7 @@ public class Choice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String content;
-    private boolean isTrue;
+    private int isTrue;
     @ManyToOne
     @JoinColumn(name = "questionId", nullable = false)
     private Question question;
@@ -29,11 +29,11 @@ public class Choice {
         this.content = content;
     }
 
-    public boolean isTrue() {
+    public int isTrue() {
         return isTrue;
     }
 
-    public void setTrue(boolean aTrue) {
+    public void setTrue(int aTrue) {
         isTrue = aTrue;
     }
 
