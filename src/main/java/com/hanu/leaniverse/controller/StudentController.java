@@ -2,9 +2,10 @@ package com.hanu.leaniverse.controller;
 
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.*;
-import com.hanu.leaniverse.service.GradingService;
+import com.hanu.leaniverse.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +21,11 @@ public class StudentController {
     @Autowired
     GradingService gradingService;
     @Autowired
-    QuizzRepository quizzRepository;
+    QuizzService quizzService;
     @Autowired
     QuestionRepository questionRepository;
     @Autowired
-    ChoiceRepository choiceRepository;
+    CartService cartService;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -32,18 +33,19 @@ public class StudentController {
     @Autowired
     CourseRepository courseRepository;
     @Autowired
-    WishListRepository wishListRepository;
+    WishListService wishListService;
     @Autowired
-    ReviewRepository reviewRepository;
+    UserQuizzService userQuizzService;
     @Autowired
-    UserQuizzRepository userQuizzRepository;
+    UserService userService;
     @GetMapping("/quizz")
     public String showAllQuizzInAUnitPage(Model model,@RequestParam("unitId") int unitId){
 
-        List<Quizz> quizzes = quizzRepository.findQuizzByUnitId(unitId);
+        List<Quizz> quizzes = quizzService.findQuizzByUnitId(unitId);
         if(quizzes != null) {
             model.addAttribute("quizzes", quizzes);
         }
+
         return "quizz-test";
     }
     @GetMapping("/question")
@@ -53,13 +55,9 @@ public class StudentController {
         return "question-test";
     }
     @PostMapping("/grade")
-    public String gradeTheQuizz(Model model, @RequestBody List<String> gradeList, @RequestParam int quizzId){
+    public String gradeTheQuizz(Model model, @RequestBody List<String> gradeList, @RequestParam int quizzId, Authentication authentication){
         double grade = gradingService.Grading(gradeList);
-        User_Quizz user_quizz = new User_Quizz();
-        user_quizz.setQuizz(quizzRepository.findById(quizzId).get());
-        user_quizz.setGrade(grade);
-        user_quizz.setUser(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
-        userQuizzRepository.saveAndFlush(user_quizz);
+        userQuizzService.setUserQuizz(quizzId,grade,authentication);
         model.addAttribute("grade",grade);
         return "hello" ;
     }
@@ -71,19 +69,13 @@ public class StudentController {
     }
 
     @PostMapping("/addToCart")
-    public String addCart(Model model, @RequestParam("courseId") int courseId ) throws Exception{
-        Course course = courseRepository.findById(courseId).get();
-        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(cartRepository.findCartByUserAndCourse(user.getUserId(), courseId)==null){
-            Cart cart = new Cart();
-            cart.setUser(user);
-            cart.setCourse(course);
-            cartRepository.saveAndFlush(cart);
-            return "successful";
+    public String addCart(Model model, @RequestParam("courseId") int courseId, Authentication authentication ) throws Exception{
+        if(cartService.addCartService(courseId, authentication)){
+            return "success";
         }
-        else {
-            throw new Exception("already exist in cart");
-        }
+        else throw new Exception("can not add cart");
+
+
     }
     @PostMapping("/deleteCartItem")
     public String deleteCart(Model model, @RequestParam("cartId") int cartId){
@@ -91,28 +83,23 @@ public class StudentController {
         return "success";
     }
     @GetMapping("/showWishList")
-    public String showWishList(Model model){
-        model.addAttribute("WishList",wishListRepository.findAllWishListByUserId(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUserId()));
+    public String showWishList(Model model,Authentication authentication){
+        model.addAttribute("WishList",wishListService.showWishList(authentication));
         return null;
     }
     @PostMapping("/addToWishList")
-    public String addWishCourse(Model model,@RequestParam("courseId") int courseId) throws Exception{
-        Course course = courseRepository.findById(courseId).get();
-        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(wishListRepository.findWishListByUserIdAndCourse(user.getUserId(), courseId)==null){
-            WishList wishList = new WishList();
-            wishList.setUser(user);
-            wishList.setCourse(course);
-            wishListRepository.saveAndFlush(wishList);
+    public String addWishCourse(Model model,@RequestParam("courseId") int courseId,Authentication authentication) throws Exception{
+
+        if(wishListService.addToWishList(courseId,authentication)){
             return "successful";
         }
         else {
-            throw new Exception("already exist in cart");
+            throw new Exception("already exist in WishList");
         }
     }
     @PostMapping("/deleteWishListItem")
     public String deleteWishListItem(Model model, @RequestParam("WishListId") int wishListId){
-        wishListRepository.deleteById(wishListId);
+        wishListService.deleteFromWishList(wishListId);
         return null;
     }
 
