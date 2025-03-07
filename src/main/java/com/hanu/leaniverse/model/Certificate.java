@@ -2,7 +2,7 @@ package com.hanu.leaniverse.model;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
+import java.util.Date;
 @Entity
 public class Certificate {
     @Id
