@@ -13,5 +13,4 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
            nativeQuery = true)
   public List<Question> findQuestionsByQuizzId(int quizzId);
 
-
 }

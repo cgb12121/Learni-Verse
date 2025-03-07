@@ -7,6 +7,7 @@ import com.hanu.leaniverse.model.User;
 import com.hanu.leaniverse.repository.TutorRepository;
 import com.hanu.leaniverse.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -83,5 +84,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return savedUser;
+    }
+
+    @Override
+    public User getCurrentUser(Authentication authentication) {
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+            return userRepository.findByUsername(username);
+        }
+        return null;
     }
 }

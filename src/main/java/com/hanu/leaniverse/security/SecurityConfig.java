@@ -38,6 +38,8 @@ public class SecurityConfig {
                                 .requestMatchers( "/", "/login/**", "/logout/**", "/sign-up/**", "/img/**").permitAll()
                                 .requestMatchers("/quizz").permitAll()
                                 .requestMatchers("/question").permitAll()
+                                .requestMatchers("/home-page").permitAll()
+                                .requestMatchers("/course-detail").permitAll()
 
                                 /// admin
 //                        .requestMatchers(HttpMethod.GET,"/api/admin/**").hasAuthority("ADMIN")
@@ -48,7 +50,7 @@ public class SecurityConfig {
                 )
                 .formLogin(
                         form -> form.loginPage("/login")
-                                .defaultSuccessUrl("/loginTest", true)
+                                .defaultSuccessUrl("/home-page", true)
                                 .permitAll()
                 )
                 .sessionManagement(session -> session.maximumSessions(1))

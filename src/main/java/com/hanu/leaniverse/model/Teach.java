@@ -3,6 +3,7 @@ package com.hanu.leaniverse.model;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+
 @Entity
 public class Teach {
     @Id
@@ -14,6 +15,7 @@ public class Teach {
     @ManyToOne
     @JoinColumn(name ="courseId")
     private Course course;
+
     private Date teachTime;
 
     public Teach() {

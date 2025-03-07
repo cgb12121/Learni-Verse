@@ -11,6 +11,7 @@ public class Course {
     private String courseName;
     private String courseDetail;
     private double price;
+    private String courseIMG;
     @OneToMany(mappedBy = "course")
     private List<Favourite> favourites;
     @OneToMany(mappedBy = "course")
@@ -135,5 +136,13 @@ public class Course {
 
     public void setUnits(List<Unit> units) {
         this.units = units;
+    }
+
+    public String getCourseIMG() {
+        return courseIMG;
+    }
+
+    public void setCourseIMG(String courseIMG) {
+        this.courseIMG = courseIMG;
     }
 }
