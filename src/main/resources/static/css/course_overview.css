@@ -1,0 +1,74 @@
+/* Nền tổng thể */
+.body-bg {
+    background-color: #f3f4f6;
+}
+
+/* Container chính */
+.container {
+    max-width: 768px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề khóa học */
+.course-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Thanh thông tin */
+.info-bar {
+    display: flex;
+    justify-content: space-between;
+    color: #4b5563;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+/* Mô tả khóa học */
+.course-description {
+    color: #374151;
+    margin-top: 16px;
+}
+
+/* Nút "Show more" */
+.show-more {
+    margin-top: 8px;
+    color: #2563eb;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.show-more:hover {
+    text-decoration: underline;
+}
+
+/* Tiêu đề phần */
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 24px;
+}
+
+/* Danh sách bài học */
+.lesson-list {
+    margin-top: 8px;
+    list-style: none;
+    padding: 0;
+}
+
+.lesson-item {
+    display: flex;
+    align-items: center;
+    color: #4b5563;
+    margin-bottom: 8px;
+}
+
+.lesson-text {
+    margin-left: 8px;
+}
