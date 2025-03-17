@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Course Page</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header>
+    <h1>LearniVerse</h1>
+    <nav>
+        <ul>
+            <li><a href="#">IT</a></li>
+            <li><a href="#">Marketing</a></li>
+            <li><a href="#">Accounting</a></li>
+            <li><a href="#">Design</a></li>
+            <li><a href="#">Music</a></li>
+            <li><a href="#">Cooking</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h2 th:text="${course.title}"></h2>
+    <p>Instructor: <span th:text="${course.instructor}"></span></p>
+
+    <!-- Trình phát video -->
+    <video width="800" controls>
+        <source th:src="@{/videos/{video}(video=${course.videoUrl})}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab-button">Course Content</button>
+        <button class="tab-button">Overview</button>
+        <button class="tab-button">Notes</button>
+        <button class="tab-button">Reviews</button>
+        <button class="tab-button">Discussion</button>
+    </div>
+
+    <!-- Nội dung khóa học -->
+    <div class="course-content">
+        <ul>
+            <li th:each="section : ${sections}">
+                <strong th:text="${section.title}"></strong> - <span th:text="${section.description}"></span>
+                (<span th:text="${section.lectures}"></span> lectures, <span th:text="${section.duration}"></span>)
+            </li>
+        </ul>
+    </div>
+</main>
+</body>
+</html>
