@@ -1,36 +1,64 @@
 <!-- src/main/resources/templates/fragments/header_nav.html -->
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LearniVerse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+</head>
+<body>
 <div th:fragment="headerNavCombo">
     <header>
         <div class="logo">
-            <h1>LearniVerse</h1>
+            <a href="/home-page">LearniVerse</a>
         </div>
-        <div class="search-bar">
+        <form th:action="@{/home-page}" method="get" class="search-bar">
             <i class="fa fa-search"></i>
             <input type="text" placeholder="Search my courses">
             <i class="fa fa-list-ul" aria-hidden="true"></i>
-        </div>
+            <select style="border-radius: 8px; border-color: #bfbfbf" name="categoryId">
+                <option value="">Category</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.categoryId}"
+                        th:text="${category.name}"
+                        th:selected="${param.categoryId != null && param.categoryId == category.categoryId}">
+                </option>
+            </select>
+            <button class="search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
         <div class="user-actions">
-            <i class="fa fa-gift"></i>
-            <i class="fa fa-shopping-cart"></i>
-            <i class="fa fa-user"></i>
-            <a href="#">My Course</a>
+            <a href="">
+                <i class="fa fa-gift"></i>
+            </a>
+            <a href="/showWishList">
+                <i class="fa-solid fa-heart"></i>
+            </a>
+            <a href="/showCart">
+                <i class="fa fa-shopping-cart"></i>
+            </a>
+            <a href="">
+                <i class="fa fa-user"></i>
+            </a>
+            <a href="">My Course</a>
         </div>
     </header>
 
     <nav class="category-bar">
-        <a href="#">IT</a>
-        <a href="#">Marketing</a>
-        <a href="#">Accounting</a>
-        <a href="#">Design</a>
-        <a href="#">Music</a>
-        <a href="#">Cooking</a>
+        <a href="/home-page?title=&categoryId=1">IT</a>
+        <a href="/home-page?title=&categoryId=2">Marketing</a>
+        <a href="/home-page?title=&categoryId=3">Accounting</a>
+        <a href="/home-page?title=&categoryId=4">Design</a>
+        <a href="/home-page?title=&categoryId=5">Music</a>
+        <a href="/home-page?title=&categoryId=6">Cooking</a>
     </nav>
 
 </div>
-<div th:fragment="footer">
-    <footer class="footer">
+
+
+<div>
+    <footer th:fragment="footer" class="footer">
         <div class="footer-left">
             <h2 class="logo">Learn<span style="font-weight: bold;">iVerse</span></h2>
             <p>&copy;2024 Learniverse, INC</p>
@@ -51,5 +79,7 @@
         </div>
     </footer>
 </div>
-
+</body>
 </html>
+
+

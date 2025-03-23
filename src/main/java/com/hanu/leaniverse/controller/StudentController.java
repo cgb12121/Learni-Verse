@@ -1,5 +1,6 @@
 package com.hanu.leaniverse.controller;
 
+import com.hanu.leaniverse.dto.ReviewDTO;
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.*;
 import com.hanu.leaniverse.service.*;
@@ -9,15 +10,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Controller
 public class StudentController {
+    @Autowired
+    ReviewService reviewService;
     @Autowired
     GradingService gradingService;
     @Autowired
@@ -38,6 +43,35 @@ public class StudentController {
     UserQuizzService userQuizzService;
     @Autowired
     UserService userService;
+
+    @Autowired
+    CourseService courseService;
+    @GetMapping("/home-page")
+    public String showHomePage(@RequestParam(value = "title", required = false) String title,
+                               @RequestParam(value = "categoryId", required = false) Integer categoryId,
+                               Model model) {
+
+        Map<String, Object> data = courseService.getHomePageData(title, categoryId);
+
+        model.addAttribute("courses", data.get("courses"));
+        model.addAttribute("categories", data.get("categories"));
+        model.addAttribute("courseRatings", data.get("courseRatings"));
+        return "homePage";
+    }
+
+    @GetMapping("/course-detail")
+    public String showCourseDetail(@RequestParam("courseId") int courseId, Model model) {
+
+        Map<String, Object> data = courseService.getCourseDetailData(courseId);
+        model.addAttribute("reviewDTO", new ReviewDTO());
+        model.addAttribute("course", data.get("course"));
+        model.addAttribute("tutor", data.get("tutor"));
+        model.addAttribute("reviews", data.get("reviews"));
+        model.addAttribute("averageRating", data.get("averageRating"));
+        model.addAttribute("relatedCourses", data.get("relatedCourses"));
+        return "courseDetail";
+    }
+
     @GetMapping("/quizz")
     public String showAllQuizzInAUnitPage(Model model,@RequestParam("unitId") int unitId){
 
@@ -65,43 +99,82 @@ public class StudentController {
     @GetMapping("/showCart")
     public String showCart(Model model){
         model.addAttribute("CartList",cartRepository.findAllCartByUser(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUserId()));
-        return "sucess";
+        return "cart";
     }
 
     @PostMapping("/addToCart")
     public String addCart(Model model, @RequestParam("courseId") int courseId, Authentication authentication ) throws Exception{
         if(cartService.addCartService(courseId, authentication)){
-            return "success";
+            return "redirect:/course-detail?courseId=" + courseId;
         }
-        else throw new Exception("can not add cart");
-
+        else {
+            model.addAttribute("existedInCart", true);
+            return "redirect:/course-detail?courseId=" + courseId;
+        }
 
     }
     @PostMapping("/deleteCartItem")
     public String deleteCart(Model model, @RequestParam("cartId") int cartId){
         cartRepository.deleteById(cartId);
-        return "success";
+        return "redirect:/showCart";
+    }
+    @GetMapping("/deleteCartItem")
+    public String updateAfterDeleteCart(){
+        return "redirect:/showCart";
     }
     @GetMapping("/showWishList")
     public String showWishList(Model model,Authentication authentication){
         model.addAttribute("WishList",wishListService.showWishList(authentication));
-        return null;
+        return "wishList";
     }
     @PostMapping("/addToWishList")
     public String addWishCourse(Model model,@RequestParam("courseId") int courseId,Authentication authentication) throws Exception{
 
         if(wishListService.addToWishList(courseId,authentication)){
-            return "successful";
+            return "redirect:/course-detail?courseId=" + courseId;
         }
         else {
-            throw new Exception("already exist in WishList");
+            return "redirect:/course-detail?courseId=" + courseId;
         }
     }
     @PostMapping("/deleteWishListItem")
     public String deleteWishListItem(Model model, @RequestParam("WishListId") int wishListId){
         wishListService.deleteFromWishList(wishListId);
-        return null;
+        return "redirect:/showWishList";
+    }
+    @GetMapping("/write-review")
+    public String showReviewForm(@RequestParam("courseId") Integer courseId,
+                                 Model model,
+                                 Authentication authentication) {
+        if (userService.getCurrentUser(authentication) == null) {
+            return "redirect:/login";
+        }
+
+        if (courseId == null) {
+            return "redirect:/home-page";
+        }
+
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setCourseId(courseId);
+        model.addAttribute("reviewDTO", reviewDTO);
+        model.addAttribute("courseId", courseId);
+        return "writeReview";
     }
 
+    @PostMapping("/submit-review")
+    public String submitReview(@ModelAttribute("reviewDTO") ReviewDTO reviewDTO,
+                               BindingResult result,
+                               Authentication authentication) {
+        if (result.hasErrors()) {
+            return "writeReview";
+        }
 
+        User currentUser = userService.getCurrentUser(authentication);
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        reviewService.addReview(reviewDTO, currentUser);
+        return "redirect:/course-detail?courseId=" + reviewDTO.getCourseId();
+    }
 }

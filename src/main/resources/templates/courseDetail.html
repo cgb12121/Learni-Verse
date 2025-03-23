@@ -1,45 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course Details</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<div>
     <!-- TEXT DESCRIPTION CONTAINER -->
     <div class="description-container">
         <!-- Category path to the course -->
-        <h3 class="path">IT <a href="CATEGORY"></a> > Web development<a href="SUB_CATEGORY"></a> > Java<a href="SUB_CATEGORY"></a></h3>
-        <h3 class="course-name">INTRODUCTION TO SPRING BOOT BACK-END DEVELOPMENT</h3>
-        <p class="description">Welcome students! This course is designed to give you a good in-sight of Java Spring Boot Back-end.</p>
-        <p class="time">
-            <img class="icon" src="" alt="">
-            Latest update: 11/2/2025
-        </p>
+        <h3 class="path"><a th:text="${course.getCourseCategories[0].getCategory.getName}" href="CATEGORY"></a></h3>
+        <h3 class="course-name" th:text="${course.courseName}"></h3>
+        <p class="description" th:text="${course.courseDetail}"></p>
+        <p class="time">Status: Verified</p>
     </div>
 
 
     <!-- PURCHASING SECTION -->
     <div class="purchasing-section">
         <img class="logo" src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-        <p class="price">đ 2.500.000</p>
-        <button class="btn purchasing-button">Add to cart</button>
+        <p th:text="'$' + ${course.price}" class="price"></p>
+        <!--        <a th:href="'/addToCart?courseId=' +'${course.courseId}' + '&' + '" class="btn purchasing-button">Add to cart</a>-->
+        <form th:action="@{/addToCart(courseId=${course.courseId})}" method="post">
+            <button type="submit" class="btn purchasing-button">Add to Cart</button>
+        </form>
         <div class="button-container">
-            <button class="btn gift-button">Purchase as Gift</button>
-            <button class="btn favourite-button"><i class="fa-regular fa-heart"></i></button>
+            <form class="btn gift-button">
+                <button type="submit">Purchase as Gift</button>
+            </form>
+            <form th:action="@{/addToWishList(courseId=${course.courseId})}" class="btn favourite-button" method="post">
+                <button type="submit">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+            </form>
         </div>
         <div class="content-list">
             <p>Content:</p>
             <div class="list-element">
                 <i class="fa-solid fa-circle-play"></i>
-                <p>13 lecture videos</p>
+                <p>N/A</p>
             </div>
             <div class="list-element">
                 <i class="fa-solid fa-certificate"></i>
-                <p>Certificate of completion</p>
+                <p>N/A</p>
             </div>
         </div>
     </div>
@@ -50,117 +61,55 @@
         <!-- Lecture videos section -->
         <div class="content">
             <div class="content-header">
-                Lecture video
+                Contents
             </div>
             <div class="content-element">
                 <div class="element">
                     <i class="fa-solid fa-circle-play"></i>
                     <div class="content-detail">
-                        <p>Lecture 1: Introduction and MVC</p>
-                        <p>01:11:45 min</p>
+                        <p>N/A</p>
+                        <p>N/A</p>
                     </div>
                 </div>
                 <div class="element">
                     <i class="fa-solid fa-circle-play"></i>
                     <div class="content-detail">
-                        <p>Lecture 1: Introduction and MVC</p>
-                        <p>01:11:45 min</p>
+                        <p>N/A</p>
+                        <p>N/A</p>
                     </div>
                 </div>
                 <div class="element">
                     <i class="fa-solid fa-circle-play"></i>
                     <div class="content-detail">
-                        <p>Lecture 1: Introduction and MVC</p>
-                        <p>01:11:45 min</p>
+                        <p>N/A</p>
+                        <p>N/A</p>
                     </div>
                 </div>
                 <div class="element">
                     <i class="fa-solid fa-circle-play"></i>
                     <div class="content-detail">
-                        <p>Lecture 1: Introduction and MVC</p>
-                        <p>01:11:45 min</p>
+                        <p>N/A</p>
+                        <p>N/A</p>
                     </div>
                 </div>
             </div>
-        </div>       
-        <div class="content">
-            <div class="content-header">
-                Other things
-            </div>
-            <div class="content-element">
-                <div class="element">
-                    <i class="fa-solid fa-circle-play"></i>
-                    <div class="content-detail">
-                        <p>Lecture 1: Introduction and MVC</p>
-                        <p>01:11:45 min</p>
-                    </div>
-                </div>
-                <div class="element">
-                    <i class="fa-solid fa-circle-play"></i>
-                    <div class="content-detail">
-                        <p>Lecture 1: Introduction and MVC</p>
-                        <p>01:11:45 min</p>
-                    </div>
-                </div>
-                <div class="element">
-                    <i class="fa-solid fa-circle-play"></i>
-                    <div class="content-detail">
-                        <p>Lecture 1: Introduction and MVC</p>
-                        <p>01:11:45 min</p>
-                    </div>
-                </div>
-                <div class="element">
-                    <i class="fa-solid fa-circle-play"></i>
-                    <div class="content-detail">
-                        <p>Lecture 1: Introduction and MVC</p>
-                        <p>01:11:45 min</p>
-                    </div>
-                </div>
-            </div>
-        </div>   
+        </div>
     </div>
 
     <!-- RELATED COURSES -->
     <div class="related-container">
         <div class="related-header">
-            Related courses
+            <p>Related courses</p>
         </div>
         <div class="course-container">
-            <div class="course">
+            <div th:each="relatedCourse : ${relatedCourses}" class="course">
                 <div class="img-container">
                     <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
                 </div>
-                <a class="related-course-name">Linear algebra and its applications</a>
-                <p class="author">Nguyen Tung Anh</p>
-                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                <p class="related-course-price">đ 2500000</p>
-            </div>
-            <div class="course">
-                <div class="img-container">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </div>
-                <a class="related-course-name">Linear algebra and its applications</a>
-                <p class="author">Nguyen Tung Anh</p>
-                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                <p class="related-course-price">đ 2500000</p>
-            </div>
-            <div class="course">
-                <div class="img-container">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </div>
-                <a class="related-course-name">Linear algebra and its applications</a>
-                <p class="author">Nguyen Tung Anh</p>
-                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                <p class="related-course-price">đ 2500000</p>
-            </div>
-            <div class="course">
-                <div class="img-container">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </div>
-                <a class="related-course-name">Linear algebra and its applications</a>
-                <p class="author">Nguyen Tung Anh</p>
-                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                <p class="related-course-price">đ 2500000</p>
+                <a th:href="@{/course-detail(courseId=${relatedCourse.courseId})}" th:text="${relatedCourse.courseName}"
+                   class="related-course-name"></a>
+                <p th:text="${relatedCourse.getTeaches[0].getTutor.getUser.fullName}" class="author"></p>
+                <p th:text="'$' + ${relatedCourse.price}" class="related-course-price"></p>
             </div>
         </div>
     </div>
@@ -172,31 +121,112 @@
         </div>
         <div class="tutor-information">
             <div class="img">
-                <p class="name">Thanh Tuyen</p>
-                <img class="avatar" src="https://static.tvtropes.org/pmwiki/pub/images/11fbb437_bb86_43cf_b54c_75587a77da78.jpeg" alt="">
+                <p th:text="${tutor.user.fullName}" class="name"></p>
+                <img class="avatar"
+                     src="https://static.tvtropes.org/pmwiki/pub/images/11fbb437_bb86_43cf_b54c_75587a77da78.jpeg"
+                     alt="">
             </div>
             <div class="tutor-description">
-                <p class="position">Senior developer at IntelliGenius</p>
-                <div class="rating">
-                    <i class="fa-solid fa-star"></i>
-                    <p>Rating: 4,6</p>
-                </div>
-                <div class="student-number">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                    <p>Students: 3,205</p>
-                </div>
-                <div class="course-number">
-                    <i class="fa-solid fa-book"></i>
-                    <p>Course: 13</p>
-                </div>
-                <div class="experience">
-                    <p style="font-weight: bold;">Experience:</p>
-                    <p>Organization: IntelliGenius</p>
-                    <p>Experience: Pro dog eater</p>
-                </div>
+                <p th:text="${tutor.tutorDescribtion}"></p>
+                <p>
+                    <strong>Contact:</strong>
+                    <span th:text="${tutor.getUser.getUserSensitiveInformation != null ? tutor.getUser.getUserSensitiveInformation.getEmail : 'N/A'}"></span>
+                </p>
+
+                <ul style="padding: 0">
+                    <p style="padding: 0"><strong style="padding: 0">Some courses:</strong></p>
+                    <li style="padding-block: 1%" th:each="teach, iterStat : ${tutor.getTeaches}" th:if="${iterStat.index < 4}">
+                        <a th:href="@{course-detail(courseId=${teach.getCourse.courseId})}"
+                           th:text="${teach.getCourse.courseName}"></a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
+    <div id="reviews" class="reviews">
+        <div class="review-header">
+            <h2>Review and rating</h2>
+            <button onclick="openReviewPopup()" class="modal-btn">Write a Review</button>
+        </div>
+        <div class="reviews-container">
+            <div class="review-item" th:if="${reviews.isEmpty()}">
+                <p>No review yet</p>
+            </div>
+
+            <div th:each="review : ${reviews}" class="review-item">
+                <p><strong th:text="${review.user.fullName}"></strong></p>
+                <p><strong>Rating:</strong> <span th:text="${review.star}"></span>⭐</p>
+                <p><strong>Content:</strong> <span th:text="${review.content}"></span></p>
+            </div>
+        </div>
+    </div>
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeReviewPopup()">&times;</span>
+            <h2>Submit Your Review</h2>
+
+            <form th:action="@{/submit-review(courseId=${course.courseId})}+'#reviews'" th:object="${reviewDTO}" method="post">
+                <div class="form-group">
+                    <label for="rating">Rating:</label>
+                    <select id="rating" th:field="*{star}" required>
+                        <option value="">Select a Rating</option>
+                        <option value="1">⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="comment">Your Review:</label>
+                    <textarea id="comment" th:field="*{content}" placeholder="Write your review here..."
+                              required></textarea>
+                </div>
+
+                <input type="hidden" th:field="*{courseId}"/>
+
+                <button type="submit" class="submit-btn">Submit Review</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const purchasingSection = document.querySelector(".purchasing-section");
+        const navBar = document.querySelector("nav"); // Adjust this to match your navigation bar selector
+
+    window.addEventListener("scroll", function () {
+        let navBottom = navBar.offsetTop + navBar.offsetHeight;
+        let scrollY = window.scrollY;
+
+        if (scrollY > navBottom) {
+            purchasingSection.style.position = "fixed";
+            purchasingSection.style.top = "0"; // Add some spacing from the top
+        } else {
+            purchasingSection.style.position = "absolute";
+            purchasingSection.style.top = navBottom + "px"; // Stay below the navbar
+        }
+    });
+});
+    function openReviewPopup() {
+            document.getElementById("reviewModal").style.display = "block";
+        }
+
+        function closeReviewPopup() {
+            document.getElementById("reviewModal").style.display = "none";
+        }
+
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            let modal = document.getElementById("reviewModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+
+</script>
 </html>

@@ -1,57 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>Cart</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<div>
     <h1 class="cart-header title">Shopping Cart</h1>
     <p class="cart-header course-num">2 courses in cart</p>
-
     <!-- CART TABLE -->
     <div class="cart-section">
         <div class="cart-container">
-
-            <!-- For loop to get the cart items -->
-            <div class="cart-item">
-                <a class="cart-img-container" href="">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
+            <div th:each="course : ${CartList}" class="cart-item">
+                <a class="cart-img-container" th:href="@{/course-detail(courseId=${course.getCourse().courseId})}">
+                    <img src="" alt="Course Image">
                 </a>
                 <div class="cart-text-container">
-                    <a class="related-course-name">Linear algebra and its applications</a>
-                    <p class="author">Nguyen Tung Anh</p>
-                    <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
+                    <a class="related-course-name" th:text="${course.getCourse.courseName}">Course Name</a>
+                    <p class="author" th:text="${course.getCourse.getTeaches[0].getTutor.getUser.fullName}">Author
+                        Name</p>
                     <div class="remove-container">
-                        <button class="remove-btn">Remove</button>
-                        <p class="related-course-price">đ 2500000</p>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-item">
-                <a class="cart-img-container" href="">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </a>
-                <div class="cart-text-container">
-                    <a class="related-course-name">Linear algebra and its applications</a>
-                    <p class="author">Nguyen Tung Anh</p>
-                    <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                    <div class="remove-container">
-                        <button class="remove-btn">Remove</button>
-                        <p class="related-course-price">đ 2500000</p>
+                        <form class="remove-btn" method="post" th:action="@{/deleteCartItem(cartId=${course.cardId})}">
+                            <button class="remove-btn" type="submit">Remove</button>
+                        </form>
+                        <p class="related-course-price" th:text="'$ ' + ${course.getCourse.price}"></p>
                     </div>
                 </div>
             </div>
         </div>
 
-
         <!-- Puchasing section -->
         <div class="cart-purchasing-section">
             <h2>Total:</h2>
-            <p class="price">đ 2.500.000</p>
+            <p class="price"></p>
             <button class="btn purchasing-button">Purchase</button>
         </div>
     </div>
@@ -60,7 +49,7 @@
     <!-- RELATED COURSES -->
     <div class="related-container cart-related-container">
         <div class="related-header">
-            Related courses
+            <p>Related courses</p>
         </div>
         <div class="course-container">
             <div class="course">
@@ -101,5 +90,44 @@
             </div>
         </div>
     </div>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
+<script>
+    function updateWishListCount() {
+
+        let cartItems = document.querySelectorAll(".cart-item");
+        let count = cartItems.length; // Count the number of items
+
+
+        let cartHeader = document.querySelector(".cart-header.course-num");
+        if (cartHeader) {
+            cartHeader.textContent = count + (count === 1 ? " course" : " courses") + " in wish list";
+        }
+    }
+
+    function updateCartTotal() {
+        let totalPrice = 0;
+
+        document.querySelectorAll(".cart-item .related-course-price").forEach(priceElement => {
+            let priceText = priceElement.textContent.trim().replace("$", ""); // Remove "$" symbol
+            let price = parseFloat(priceText); // Convert to number
+            if (!isNaN(price)) {
+                totalPrice += price; // Sum up valid prices
+            }
+        });
+
+
+        let priceElement = document.querySelector(".cart-purchasing-section .price");
+        if (priceElement) {
+            priceElement.textContent = "$ " + totalPrice.toFixed(2);
+        }
+    }
+
+
+    document.addEventListener("DOMContentLoaded",()=>{
+        updateCartTotal();
+        updateWishListCount();
+     });
+</script>
 </html>

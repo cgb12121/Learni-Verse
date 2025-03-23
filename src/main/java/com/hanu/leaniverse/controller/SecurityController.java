@@ -31,7 +31,7 @@ public class SecurityController {
             User user = (User) userService.loadUserByUsername(userDTO.getUsername());
 
             if (user != null) {
-                return "redirect:/homeTest"; // If success
+                return "homePage"; // If success
             }
 
         } catch (UsernameNotFoundException e) {

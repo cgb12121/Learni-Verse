@@ -48,7 +48,7 @@ public class SecurityConfig {
                 )
                 .formLogin(
                         form -> form.loginPage("/login")
-                                .defaultSuccessUrl("/loginTest", true)
+                                .defaultSuccessUrl("/home-page", true)
                                 .permitAll()
                 )
                 .sessionManagement(session -> session.maximumSessions(1))

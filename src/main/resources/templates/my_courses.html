@@ -10,7 +10,7 @@
 
 <body>
 <!-- Import Header -->
-<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
 
 <!-- Main Content -->
 <div class="main-content">
@@ -50,7 +50,7 @@
 </div>
 
 <!-- Import Footer -->
-<div th:replace="/fragments/header_nav.html :: footer"></div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

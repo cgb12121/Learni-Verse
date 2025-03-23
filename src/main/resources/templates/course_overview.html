@@ -11,7 +11,7 @@
   <title>Course Layout</title>
 </head>
 <body class="body-bg">
-<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
 
 <div class="container">
   <h1 class="course-title" th:text="${courseTitle}">How to Design & Prototype in Adobe XD?</h1>
@@ -38,7 +38,7 @@
     </li>
   </ul>
 </div>
-<div th:replace="/fragments/header_nav.html :: footer"></div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
 </html>
 
