@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Cart</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
+<div>
+    <h1 class="cart-header title">Wish List</h1>
+    <p class="cart-header course-num">0 course in wish list</p>
+
+    <!-- CART TABLE -->
+    <div class="cart-section">
+        <div class="cart-container wishlist-container">
+
+            <!-- For loop to get the cart items -->
+            <div th:each="course : ${WishList}" class="cart-item">
+                <a class="cart-img-container" th:href="@{/course-detail(courseId=${course.getCourse().courseId})}">
+                    <img src="" alt="Course Image">
+                </a>
+                <div class="cart-text-container">
+                    <a th:href="@{/course-detail(courseId=${course.getCourse().courseId})}" class="related-course-name" th:text="${course.getCourse.courseName}">Course Name</a>
+                    <p class="author" th:text="${course.getCourse.getTeaches[0].getTutor.getUser.fullName}">Author
+                        Name</p>
+                    <div class="remove-container">
+                        <form class="remove-btn" method="post" th:action="@{/deleteWishListItem(WishListId=${course.wishListId})}">
+                            <button class="remove-btn" type="submit">Remove</button>
+                        </form>
+                        <p class="related-course-price" th:text="'$ ' + ${course.getCourse.price}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- RELATED COURSES -->
+    <div class="related-container cart-related-container">
+        <div class="related-header">
+            <p>Related courses</p>
+        </div>
+        <div class="course-container">
+            <div class="course">
+                <div class="img-container">
+                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
+                </div>
+                <a class="related-course-name">Linear algebra and its applications</a>
+                <p class="author">Nguyen Tung Anh</p>
+                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
+                <p class="related-course-price">đ 2500000</p>
+            </div>
+            <div class="course">
+                <div class="img-container">
+                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
+                </div>
+                <a class="related-course-name">Linear algebra and its applications</a>
+                <p class="author">Nguyen Tung Anh</p>
+                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
+                <p class="related-course-price">đ 2500000</p>
+            </div>
+            <div class="course">
+                <div class="img-container">
+                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
+                </div>
+                <a class="related-course-name">Linear algebra and its applications</a>
+                <p class="author">Nguyen Tung Anh</p>
+                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
+                <p class="related-course-price">đ 2500000</p>
+            </div>
+            <div class="course">
+                <div class="img-container">
+                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
+                </div>
+                <a class="related-course-name">Linear algebra and its applications</a>
+                <p class="author">Nguyen Tung Anh</p>
+                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
+                <p class="related-course-price">đ 2500000</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
+</body>
+<script>
+    function updateWishListCount() {
+        // Select all rendered wishlist items
+        let wishListItems = document.querySelectorAll(".cart-item");
+        let count = wishListItems.length; // Count the number of items
+
+        // Update the text content
+        let cartHeader = document.querySelector(".cart-header.course-num");
+        if (cartHeader) {
+            cartHeader.textContent = count + (count === 1 ? " course" : " courses") + " in wish list";
+        }
+    }
+
+    // Run after the DOM loads
+    document.addEventListener("DOMContentLoaded", updateWishListCount);
+</script>
+</html>
