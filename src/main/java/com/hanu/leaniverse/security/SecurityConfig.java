@@ -42,7 +42,7 @@ public class SecurityConfig {
                                 /// admin
 //                        .requestMatchers(HttpMethod.GET,"/api/admin/**").hasAuthority("ADMIN")
 //                        .requestMatchers(HttpMethod.POST,"/api/admin/**").hasAuthority("ADMIN")
-                              .anyRequest().authenticated()
+                              .anyRequest().permitAll()
 
 
                 )
