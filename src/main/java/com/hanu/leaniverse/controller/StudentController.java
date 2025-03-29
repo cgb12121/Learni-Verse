@@ -96,13 +96,13 @@ public class StudentController {
         return "hello" ;
     }
 
-    @GetMapping("/showCart")
+    @GetMapping("/show-cart")
     public String showCart(Model model){
         model.addAttribute("CartList",cartRepository.findAllCartByUser(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUserId()));
         return "cart";
     }
 
-    @PostMapping("/addToCart")
+    @PostMapping("/add-to-cart")
     public String addCart(Model model, @RequestParam("courseId") int courseId, Authentication authentication ) throws Exception{
         if(cartService.addCartService(courseId, authentication)){
             return "redirect:/course-detail?courseId=" + courseId;
@@ -113,21 +113,21 @@ public class StudentController {
         }
 
     }
-    @PostMapping("/deleteCartItem")
+    @PostMapping("/delete-cart-item")
     public String deleteCart(Model model, @RequestParam("cartId") int cartId){
         cartRepository.deleteById(cartId);
         return "redirect:/showCart";
     }
-    @GetMapping("/deleteCartItem")
+    @GetMapping("/delete-cart-item")
     public String updateAfterDeleteCart(){
         return "redirect:/showCart";
     }
-    @GetMapping("/showWishList")
+    @GetMapping("/show-wish-list")
     public String showWishList(Model model,Authentication authentication){
         model.addAttribute("WishList",wishListService.showWishList(authentication));
         return "wishList";
     }
-    @PostMapping("/addToWishList")
+    @PostMapping("/add-to-wish-list")
     public String addWishCourse(Model model,@RequestParam("courseId") int courseId,Authentication authentication) throws Exception{
 
         if(wishListService.addToWishList(courseId,authentication)){
@@ -137,7 +137,7 @@ public class StudentController {
             return "redirect:/course-detail?courseId=" + courseId;
         }
     }
-    @PostMapping("/deleteWishListItem")
+    @PostMapping("/delete-wish-list-item")
     public String deleteWishListItem(Model model, @RequestParam("WishListId") int wishListId){
         wishListService.deleteFromWishList(wishListId);
         return "redirect:/showWishList";

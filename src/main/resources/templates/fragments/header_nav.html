@@ -16,7 +16,7 @@
         </div>
         <form th:action="@{/home-page}" method="get" class="search-bar">
             <i class="fa fa-search"></i>
-            <input type="text" placeholder="Search my courses">
+            <input name="title" type="text" placeholder="Search my courses" th:value="${param.title}">
             <i class="fa fa-list-ul" aria-hidden="true"></i>
             <select style="border-radius: 8px; border-color: #bfbfbf" name="categoryId">
                 <option value="">Category</option>
@@ -32,10 +32,10 @@
             <a href="">
                 <i class="fa fa-gift"></i>
             </a>
-            <a href="/showWishList">
+            <a href="/show-wish-list">
                 <i class="fa-solid fa-heart"></i>
             </a>
-            <a href="/showCart">
+            <a href="/show-cart">
                 <i class="fa fa-shopping-cart"></i>
             </a>
             <a href="">
