@@ -33,9 +33,10 @@ header {
 }
 
 /* Logo */
-.logo h1 {
+.logo a {
+    text-decoration: none;
     color: var(--primary-color);
-    font-size: 25px;
+    font-size: 30px;
     margin: 0;            /* Bỏ margin mặc định của h1 */
 }
 
@@ -51,6 +52,7 @@ header {
     background: var(--bg-color);
     /* width cố định hoặc max-width để responsive hơn */
     width: 500px;         /* Hoặc: max-width: 500px; */
+    min-width: fit-content;
 }
 
 .search-bar i {
@@ -67,7 +69,14 @@ header {
     flex: 1;              /* Chiếm toàn bộ không gian còn lại */
     padding: 5px;
 }
-
+.search-btn {
+    border: none;
+    background-color: white;
+}
+.search-btn:hover {
+    background-color: var(--bg-color);
+    transition: 0.3s;
+}
 /* -------------------------------------------
    5) User actions (icon, link) góc phải header
 -------------------------------------------- */
@@ -75,17 +84,28 @@ header {
     display: flex;
     align-items: center;
 }
-
+.user-actions a {
+    display: flex;
+    align-items: center;
+}
 /* Các icon trong user-actions */
 .user-actions i {
-    margin-left: 15px;
+    width: 100%
     font-size: 20px;
     cursor: pointer;
     padding: 5px;
     /* Khai báo transition ở trạng thái bình thường */
     transition: background-color 0.2s ease, color 0.2s ease;
 }
-
+#user-icon {
+    margin-left: 15px;
+    padding: 5px;
+}
+#user-icon:hover {
+    color: #fff;
+        background-color: var(--primary-color);
+        border-radius: 5px;
+}
 /* Hiệu ứng hover cho icon */
 .user-actions i:hover {
     color: #fff;
@@ -94,16 +114,17 @@ header {
 }
 
 /* Nếu có link <a> trong user-actions */
-.user-actions a {
+.action {
     margin-left: 15px;
     text-decoration: none;
     font-size: 16px;
     color: var(--text-color);
     padding: 5px;
     transition: background-color 0.2s ease, color 0.2s ease;
+    display: flex; justify-content: center; align-items: center; width: fit-content;
 }
 
-.user-actions a:hover {
+.action:hover {
     color: #fff;
     background-color: var(--primary-color);
     border-radius: 5px;
@@ -119,34 +140,32 @@ header {
     align-items: center;
     padding: 5px;
     border-top: 1px solid var(--primary-color);
-    box-shadow: none;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .category-bar a {
     margin: 0 10px;
     text-decoration: none;
-    color: var(--primary-color);
     font-weight: bold;
     font-size: 18px;
     /* Thêm transition */
     transition: color 0.2s ease, background-color 0.2s ease;
+    color: var(--primary-color);
 }
 
 .category-bar a:hover {
-    color: var(--hover-color);
+    opacity: 0.6;
     border-radius: 5px;
-    text-decoration: underline;
 }
 
 
 
 footer {
-    position: fixed;
-    bottom: 0;
+    margin-top: 5%;
     width: 100%;
+    box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-evenly;
     padding: 15px 30px;
     background: #f8f8f8;
     border-top: 3px solid #007bff;
@@ -165,9 +184,10 @@ footer {
 }
 
 .footer-center {
-    flex: 1;
+
+    justify-content: right;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
 }
 
 .language-btn {
@@ -179,6 +199,7 @@ footer {
 }
 
 .footer-right {
+    justify-content: right;
     display: flex;
     gap: 10px;
     flex-direction: column; /* Nếu muốn hàng ngang, bỏ dòng này */
@@ -191,5 +212,54 @@ footer {
     font-size: 14px;
      align-items: flex-end; /* Căn chữ về bên phải */
         padding-right: 50px;  /* Dịch sang phải */
-        min-width: 150px;  /* Đảm bảo không bị co quá nhỏ *
+        min-width: 150px;  /* Đảm bảo không bị co quá nhỏ */
 }
+.user-menu {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.popup-menu {
+    display: none; /* Initially hidden */
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 180px;
+    z-index: 1000;
+    padding: 10px 0;
+}
+
+.popup-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.popup-menu ul li {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.popup-menu ul li:hover {
+    background-color: #f5f5f5;
+}
+
+.popup-menu ul li a {
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    display: block;
+}
+
+/* Show the menu when clicked */
+.show {
+    display: block ;
+}
+

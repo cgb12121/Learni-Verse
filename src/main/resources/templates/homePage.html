@@ -1,0 +1,132 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Learni-Verse</title>-->
+<!--    <style>-->
+<!--        body { font-family: Arial, sans-serif; margin: 20px; }-->
+<!--        table { width: 100%; border-collapse: collapse; margin-top: 20px; }-->
+<!--        th, td { border: 1px solid black; padding: 10px; text-align: left; }-->
+<!--        th { background-color: #f2f2f2; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h2>Search the course</h2>-->
+<!--<form th:action="@{/home-page}" method="get">-->
+<!--    <input type="text" name="title" placeholder="Pls enter desired course">-->
+<!--    <button type="submit">Search</button>-->
+<!--</form>-->
+
+<!--<h2>Filter course</h2>-->
+<!--<form th:action="@{/home-page}" method="get">-->
+<!--    <select name="categoryId">-->
+<!--        <option value="">Course type</option>-->
+<!--        <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.name}"></option>-->
+<!--    </select>-->
+<!--    <button type="submit">Filter</button>-->
+<!--</form>-->
+
+<!--<h2>All the course</h2>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>ID</th>-->
+<!--        <th>Course's name</th>-->
+<!--&lt;!&ndash;        <th>Details</th>&ndash;&gt;-->
+<!--        <th>Price</th>-->
+<!--        <th>Tutor</th>-->
+<!--        <th>Rating</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="course : ${courses}">-->
+<!--        <td th:text="${course.courseId}"></td>-->
+<!--&lt;!&ndash;        <td th:text="${course.courseName}"></td>&ndash;&gt;-->
+<!--        <td>-->
+<!--            <a th:href="@{/course-detail(courseId=${course.courseId})}" th:text="${course.courseName}"></a>-->
+<!--&lt;!&ndash;        <td th:text="${course.courseDetail}"></td>&ndash;&gt;-->
+<!--        <td th:text="${course.price}"></td>-->
+<!--        <td th:text="${course.teaches[0].tutor.user.fullName}"></td>-->
+<!--        <td th:text="${courseRatings.get(course.courseId)}"></td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Learni-Verse</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<div>
+<!--    <h2>Search and Filter Courses</h2>-->
+<!--    <form th:action="@{/home-page}" method="get">-->
+<!--        <input type="text" name="title" placeholder="Enter course title" th:value="${param.title}">-->
+<!--        <select name="categoryId">-->
+<!--            <option value="">All Categories</option>-->
+<!--            <option th:each="category : ${categories}"-->
+<!--                    th:value="${category.categoryId}"-->
+<!--                    th:text="${category.name}"-->
+<!--                    th:selected="${param.categoryId != null && param.categoryId == category.categoryId}">-->
+<!--            </option>-->
+<!--        </select>-->
+<!--        <button type="submit">Search</button>-->
+<!--    </form>-->
+
+    <h2>All Courses</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Course's name</th>
+            <th>Price</th>
+            <th>Tutor</th>
+            <th>Rating</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="course : ${courses}">
+            <td th:text="${course.courseId}"></td>
+            <td>
+                <a th:href="@{/course-detail(courseId=${course.courseId})}" th:text="${course.courseName}"></a>
+            </td>
+            <td th:text="${course.price}"></td>
+            <td th:text="${course.teaches[0].tutor.user.fullName}"></td>
+            <td th:text="${courseRatings.get(course.courseId)}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const userIcon = document.getElementById("user-icon");
+    const userPopup = document.getElementById("user-popup");
+
+    userIcon.addEventListener("click", ()=> {
+        userPopup.classList.toggle("show");
+    });
+
+    // Close the popup when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+            userPopup.classList.remove("show");
+        }
+    });
+});
+
+</script>
+</html>
