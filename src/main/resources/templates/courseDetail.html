@@ -29,14 +29,14 @@
         <img class="logo" src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
         <p th:text="'$' + ${course.price}" class="price"></p>
         <!--        <a th:href="'/addToCart?courseId=' +'${course.courseId}' + '&' + '" class="btn purchasing-button">Add to cart</a>-->
-        <form th:action="@{/addToCart(courseId=${course.courseId})}" method="post">
+        <form th:action="@{/add-to-cart(courseId=${course.courseId})}" method="post">
             <button type="submit" class="btn purchasing-button">Add to Cart</button>
         </form>
         <div class="button-container">
             <form class="btn gift-button">
                 <button type="submit">Purchase as Gift</button>
             </form>
-            <form th:action="@{/addToWishList(courseId=${course.courseId})}" class="btn favourite-button" method="post">
+            <form th:action="@{/add-to-wish-list(courseId=${course.courseId})}" class="btn favourite-button" method="post">
                 <button type="submit">
                     <i class="fa-regular fa-heart"></i>
                 </button>
@@ -117,7 +117,7 @@
     <!-- TUTOR INFORMATION -->
     <div class="tutor-information-container">
         <div class="tutor-header">
-            Tutor
+            <p>Tutor</p>
         </div>
         <div class="tutor-information">
             <div class="img">
@@ -227,6 +227,21 @@
                 modal.style.display = "none";
             }
         };
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
 
 </script>
 </html>

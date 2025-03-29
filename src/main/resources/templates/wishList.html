@@ -31,7 +31,7 @@
                     <p class="author" th:text="${course.getCourse.getTeaches[0].getTutor.getUser.fullName}">Author
                         Name</p>
                     <div class="remove-container">
-                        <form class="remove-btn" method="post" th:action="@{/deleteWishListItem(WishListId=${course.wishListId})}">
+                        <form class="remove-btn" method="post" th:action="@{/delete-wish-list-item(WishListId=${course.wishListId})}">
                             <button class="remove-btn" type="submit">Remove</button>
                         </form>
                         <p class="related-course-price" th:text="'$ ' + ${course.getCourse.price}"></p>
@@ -104,5 +104,21 @@
 
     // Run after the DOM loads
     document.addEventListener("DOMContentLoaded", updateWishListCount);
+        document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
+
 </script>
 </html>

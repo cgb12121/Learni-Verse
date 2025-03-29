@@ -149,7 +149,6 @@ a {
 -------------------------------------------- */
 .content-container {
     margin: 5% 40% 5% 4%;
-    border: 1px solid rgba(164, 217, 255, 0.529);
     font-size: 18px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -162,21 +161,20 @@ a {
 }
 
 .content-header {
-    background-color: rgba(164, 217, 255, 0.529);
-    padding-block: 2%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
-    padding-inline: 2%;
+    margin-bottom: 2%;
+    color: #007bff;
 }
 
 .content-element {
     padding-inline: 4%;
+        border: 1px solid rgb(164, 217, 255);
+        border-radius: 10px;
 }
 
 .content-element {
-    max-height: 180px;
+    max-height: 250px;
     overflow-y: auto;
 }
 
@@ -218,28 +216,21 @@ a {
 .related-container {
     margin: 0 4%;
     display: block;
-    border: 1px solid rgba(164, 217, 255, 0.529);
     width: 60%;
     border-radius: 1%;
     box-sizing: border-box;
 }
 
-.related-header {
-    width: 100%;
-    box-sizing: border-box;
-}
 
 .related-header p {
-    background-color: rgba(164, 217, 255, 0.529);
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
-    padding: 2%;
-    margin: 0;
+    margin-bottom: 2%;
+    color: #007bff;
 }
 
 .course-container {
+    border-radius: 10px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -247,6 +238,7 @@ a {
     padding-bottom: 2%;
     scroll-snap-type: x mandatory;
     box-sizing: border-box;
+    border: 1px solid rgb(164, 217, 255);
 }
 
 .course-container::-webkit-scrollbar {
@@ -269,12 +261,12 @@ a {
 }
 
 .course {
-    flex: 0 0 calc(40% - 10px);
-    min-width: calc(40% - 10px);
+    flex: 0 0 calc(30% - 10px);
+    min-width: calc(30% - 10px);
     scroll-snap-align: start;
     background: white;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(164, 217, 255, 0.529);
+    margin-right: 1%;
 }
 
 .img-container {
@@ -322,23 +314,25 @@ a {
 .tutor-information-container {
     display: block;
     margin: 5% 40% 5% 4%;
-    border: 1px solid rgba(164, 217, 255, 0.529);
     border-radius: 8px;
     width: 60%;
     padding-bottom: 2%;
     box-sizing: border-box;
 }
 
-.tutor-header {
-    background-color: rgba(164, 217, 255, 0.529);
-    padding-block: 3%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    font-size: 18px;
+.tutor-header p {
+    font-size: 22px;
     font-weight: bold;
-    width: 100%;
-    padding-left: 2%;
-    box-sizing: border-box;
+    margin-bottom: 2%;
+    color: #007bff;
+}
+
+.tutor-information {
+    display: flex;
+    padding-inline: 2%;
+    border: 1px solid rgb(164, 217, 255);
+    border-radius: 10px;
+    padding-block: 1%;
 }
 
 .tutor-information {
@@ -399,35 +393,29 @@ a {
 .reviews {
     display: block;
     margin: 5% 40% 5% 4%;
-    border: 1px solid rgba(164, 217, 255, 0.529);
-    border-radius: 8px;
     width: 60%;
     padding-bottom: 2%;
     box-sizing: border-box;
 }
 
 .review-header {
-    background-color: rgba(164, 217, 255, 0.529);
-    padding-block: 3%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    font-weight: bold;
-    width: 100%;
-    padding-inline: 2%;
-    box-sizing: border-box;
-    margin: 0;
+        margin-bottom: 2%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .review-header h2 {
-    font-size: 18px;
+    font-size: 22px
     margin: 0;
+    color: #007bff;
+    font-weight: bold;
 }
 .reviews-container {
     max-height: 50vh;
     overflow-y: auto;
     width: 100%;
+        border: 1px solid rgb(164, 217, 255);
+        border-radius: 10px;
 }
 .review-item {
     width: 80%;
@@ -515,7 +503,13 @@ a {
     margin-top: 4%;
     font-size: 40px;
 }
-
+.cart-header.course-num {
+    font-size: 22px;
+        margin: 0;
+        color: #007bff;
+        font-weight: bold;
+        margin-bottom: 2%;
+}
 .cart-section {
     display: flex;
     justify-content: space-between;
@@ -524,19 +518,24 @@ a {
 .cart-container {
     margin: 0 4% 4%;
     width: 60%;
-    border: 1px solid rgba(164, 217, 255, 0.529);
+    border: 1px solid rgb(164, 217, 255);
+    height: fit-content;
+    border-radius: 10px;
 }
 
 .cart-item {
     display: flex;
     padding: 1%;
-    border: 1px solid rgba(164, 217, 255, 0.529);
-
+    border-bottom: 1px solid rgb(164, 217, 255);
+    box-sizing: border-box;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .wishlist-container {
     width: 95%;
     height: fit-content;
+    rgb(164, 217, 255)
 }
 
 .wishlist-container .cart-img-container {
@@ -601,7 +600,7 @@ a {
     justify-content: center;
     text-align: center;
     border-radius: 2%;
-    border: 1px solid #74b7ffd0;
+        border: 1px solid rgb(164, 217, 255);
 }
 
 .cart-purchasing-section .btn.purchasing-button {

@@ -116,7 +116,7 @@ public class StudentController {
     @PostMapping("/delete-cart-item")
     public String deleteCart(Model model, @RequestParam("cartId") int cartId){
         cartRepository.deleteById(cartId);
-        return "redirect:/showCart";
+        return "redirect:/show-cart";
     }
     @GetMapping("/delete-cart-item")
     public String updateAfterDeleteCart(){
@@ -140,7 +140,7 @@ public class StudentController {
     @PostMapping("/delete-wish-list-item")
     public String deleteWishListItem(Model model, @RequestParam("WishListId") int wishListId){
         wishListService.deleteFromWishList(wishListId);
-        return "redirect:/showWishList";
+        return "redirect:/show-wish-list";
     }
     @GetMapping("/write-review")
     public String showReviewForm(@RequestParam("courseId") Integer courseId,
