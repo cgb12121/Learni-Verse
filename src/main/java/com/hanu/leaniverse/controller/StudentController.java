@@ -1,6 +1,9 @@
 package com.hanu.leaniverse.controller;
 
+
 import com.hanu.leaniverse.dto.ReviewDTO;
+import com.hanu.leaniverse.dto.QuestionDTO;
+
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.*;
 import com.hanu.leaniverse.service.*;
@@ -85,12 +88,14 @@ public class StudentController {
     @GetMapping("/question")
     public String showAllQuestionInAQuizz(Model model, @RequestParam("quizzId") int quizzId){
         List<Question> questions = questionRepository.findQuestionsByQuizzId(quizzId);
+        List<QuestionDTO> questionDTOS = new ArrayList<QuestionDTO>();
         model.addAttribute("questions",questions);
-        return "question-test";
+        model.addAttribute("quizzId",quizzId);
+        return "do_quizz_test";
     }
     @PostMapping("/grade")
-    public String gradeTheQuizz(Model model, @RequestBody List<String> gradeList, @RequestParam int quizzId, Authentication authentication){
-        double grade = gradingService.Grading(gradeList);
+    public String gradeTheQuizz(Model model, @RequestBody List<QuestionDTO> questionDTOS, @RequestParam int quizzId, Authentication authentication){
+        double grade = gradingService.Grading(questionDTOS);
         userQuizzService.setUserQuizz(quizzId,grade,authentication);
         model.addAttribute("grade",grade);
         return "hello" ;
@@ -111,7 +116,6 @@ public class StudentController {
             model.addAttribute("existedInCart", true);
             return "redirect:/course-detail?courseId=" + courseId;
         }
-
     }
     @PostMapping("/delete-cart-item")
     public String deleteCart(Model model, @RequestParam("cartId") int cartId){

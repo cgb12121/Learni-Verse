@@ -12,8 +12,6 @@ public class Course {
     private String courseDetail;
     private double price;
     @OneToMany(mappedBy = "course")
-    private List<Favourite> favourites;
-    @OneToMany(mappedBy = "course")
     private List<WishList> wishLists;
     @OneToMany(mappedBy = "course")
     private List<Certificate> certificates;
@@ -63,14 +61,6 @@ public class Course {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public List<Favourite> getFavourites() {
-        return favourites;
-    }
-
-    public void setFavourites(List<Favourite> favourites) {
-        this.favourites = favourites;
     }
 
     public List<WishList> getWishLists() {
