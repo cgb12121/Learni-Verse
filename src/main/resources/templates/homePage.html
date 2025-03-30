@@ -126,7 +126,31 @@
             userPopup.classList.remove("show");
         }
     });
+
 });
+    const slider = document.querySelector('.quotes-slider');
+const prevBtn = document.querySelector('.prev-quote');
+const nextBtn = document.querySelector('.next-quote');
+
+let index = 0;
+
+function showQuote(direction) {
+    const slides = document.querySelectorAll('.quote-card');
+    const totalSlides = slides.length;
+
+    if (direction === 'next') {
+        index = (index + 1) % totalSlides;
+    } else {
+        index = (index - 1 + totalSlides) % totalSlides;
+    }
+
+    const offset = -index * 100;
+    slider.style.transform = `translateX(${offset}%)`;
+}
+
+prevBtn.addEventListener('click', () => showQuote('prev'));
+nextBtn.addEventListener('click', () => showQuote('next'));
+
 
 </script>
 </html>

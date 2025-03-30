@@ -11,9 +11,10 @@
     <link rel="stylesheet" th:href="@{/css/course_overview.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body>
+<body style="background-color: #f8f9fa;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
-<div>
+<div style="width: 90%;
+    justify-self: center;">
     <h1 class="cart-header title">Shopping Cart</h1>
     <p class="cart-header course-num">2 courses in cart</p>
     <!-- CART TABLE -->
@@ -52,41 +53,32 @@
             <p>Related courses</p>
         </div>
         <div class="course-container">
-            <div class="course">
-                <div class="img-container">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </div>
-                <a class="related-course-name">Linear algebra and its applications</a>
-                <p class="author">Nguyen Tung Anh</p>
-                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                <p class="related-course-price">đ 2500000</p>
+            <div class="course-card">
+                <img src="" alt="Course image" class="course-image">
+                <a class="course-title">Linear algebra and its applications</a>
+                <p class="course-instructor">Nguyen Tung Anh</p>
+                <p class="course-price">$ 99</p>
             </div>
-            <div class="course">
-                <div class="img-container">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </div>
-                <a class="related-course-name">Linear algebra and its applications</a>
-                <p class="author">Nguyen Tung Anh</p>
-                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                <p class="related-course-price">đ 2500000</p>
+            <div class="course-card">
+                <img src="" alt="Course image" class="course-image">
+                <a class="course-title">Linear algebra and its applications</a>
+                <p class="course-instructor">Nguyen Tung Anh</p>
+
+                <p class="course-price">$ 99</p>
             </div>
-            <div class="course">
-                <div class="img-container">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </div>
-                <a class="related-course-name">Linear algebra and its applications</a>
-                <p class="author">Nguyen Tung Anh</p>
-                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                <p class="related-course-price">đ 2500000</p>
+            <div class="course-card">
+                <img src="" alt="Course image" class="course-image">
+                <a class="course-title">Linear algebra and its applications</a>
+                <p class="course-instructor">Nguyen Tung Anh</p>
+
+                <p class="course-price">$ 99</p>
             </div>
-            <div class="course">
-                <div class="img-container">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </div>
-                <a class="related-course-name">Linear algebra and its applications</a>
-                <p class="author">Nguyen Tung Anh</p>
-                <p class="star"><i class="fa-solid fa-star"></i>4,8</p>
-                <p class="related-course-price">đ 2500000</p>
+            <div class="course-card">
+                <img src="" alt="Course image" class="course-image">
+                <a class="course-title">Linear algebra and its applications</a>
+                <p class="course-instructor">Nguyen Tung Anh</p>
+
+                <p class="course-price">$ 99</p>
             </div>
         </div>
     </div>

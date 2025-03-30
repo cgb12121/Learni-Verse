@@ -56,7 +56,7 @@ public class StudentController {
         model.addAttribute("courses", data.get("courses"));
         model.addAttribute("categories", data.get("categories"));
         model.addAttribute("courseRatings", data.get("courseRatings"));
-        return "homePage";
+        return "homePage1";
     }
 
     @GetMapping("/course-detail")
