@@ -15,8 +15,6 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Tutor tutor;
     @OneToMany(mappedBy = "user")
-    private List<Favourite> favourite;
-    @OneToMany(mappedBy = "user")
     private List<WishList> wishLists;
     @OneToOne(mappedBy = "user")
     private UserSensitiveInformation userSensitiveInformation;
@@ -81,13 +79,7 @@ public class User {
         this.tutor = tutor;
     }
 
-    public List<Favourite> getFavourite() {
-        return favourite;
-    }
 
-    public void setFavourite(List<Favourite> favourite) {
-        this.favourite = favourite;
-    }
 
     public List<WishList> getWishLists() {
         return wishLists;

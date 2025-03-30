@@ -1,7 +1,9 @@
 package com.hanu.leaniverse.service;
 
+import com.hanu.leaniverse.dto.QuestionDTO;
+
 import java.util.List;
 
 public interface GradingService {
-    double Grading(List<String> questions_choices);
+    double Grading(List<QuestionDTO> questions_choices);
 }
