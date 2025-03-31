@@ -32,7 +32,7 @@
                     <p class="author" th:text="${course.getCourse.getTeaches[0].getTutor.getUser.fullName}">Author
                         Name</p>
                     <div class="remove-container">
-                        <form class="remove-btn" method="post" th:action="@{/delete-wish-list-item(WishListId=${course.wishListId})}">
+                        <form method="post" th:action="@{/delete-wish-list-item(WishListId=${course.wishListId})}">
                             <button class="remove-btn" type="submit">Remove</button>
                         </form>
                         <p class="related-course-price" th:text="'$ ' + ${course.getCourse.price}"></p>

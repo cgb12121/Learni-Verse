@@ -29,7 +29,7 @@
                     <p class="author" th:text="${course.getCourse.getTeaches[0].getTutor.getUser.fullName}">Author
                         Name</p>
                     <div class="remove-container">
-                        <form class="remove-btn" method="post" th:action="@{/delete-cart-item(cartId=${course.cardId})}">
+                        <form method="post" th:action="@{/delete-cart-item(cartId=${course.cardId})}">
                             <button class="remove-btn" type="submit">Remove</button>
                         </form>
                         <p class="related-course-price" th:text="'$ ' + ${course.getCourse.price}"></p>
@@ -46,7 +46,14 @@
         </div>
     </div>
 
-
+    <div id="overlay" class="overlay"></div>
+    <div style="width: 20%;height: 150px;" th:if="${param.message}"
+         th:class="${param.success == 'true'} ? 'popup success' : 'popup fail'"
+         id="popup">
+        <button style="color: black; font-size: 12px;" class="close-btn" onclick="closePopup()">✖</button>
+        <div class="icon" th:text="${param.success == 'true'} ? '✔' : '✖'"></div>
+        <p th:text="${param.message}"></p>
+    </div>
     <!-- RELATED COURSES -->
     <div class="related-container cart-related-container">
         <div class="related-header">
@@ -136,6 +143,28 @@
             }
         });
     });
+    document.addEventListener("DOMContentLoaded", function() {
+            let popup = document.getElementById("popup");
+            let overlay = document.getElementById("overlay");
 
+            if (popup) {
+                popup.style.display = "block";
+                overlay.style.display = "block"; // Show overlay
+            }
+
+            // Close when clicking outside the pop-up
+            overlay.addEventListener("click", closePopup);
+        });
+
+        function closePopup() {
+            let popup = document.getElementById("popup");
+            let overlay = document.getElementById("overlay");
+
+            if (popup) {
+                popup.style.display = "none";
+                overlay.style.display = "none"; // Hide overlay
+                window.history.replaceState({}, document.title, window.location.pathname); // Remove query params
+            }
+        }
 </script>
 </html>

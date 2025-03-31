@@ -54,7 +54,14 @@
             </div>
         </div>
     </div>
-
+    <div id="overlay" class="overlay"></div>
+    <div style="width: 20%;height: 150px;" th:if="${param.message}"
+         th:class="${param.success[0] == 'true'} ? 'popup success' : 'popup fail'"
+         id="popup">
+        <button style="color: black; font-size: 12px;" class="close-btn" onclick="closePopup()">✖</button>
+        <div class="icon" th:text="${param.success[0] == 'true'} ? '✔' : '✖'"></div>
+        <p th:text="${param.message}"></p>
+    </div>
     <!-- CONTENT TABLE -->
     <div class="content-container">
 
@@ -239,6 +246,28 @@
             }
         });
     });
+    document.addEventListener("DOMContentLoaded", function() {
+            let popup = document.getElementById("popup");
+            let overlay = document.getElementById("overlay");
 
+            if (popup) {
+                popup.style.display = "block";
+                overlay.style.display = "block"; // Show overlay
+            }
+
+            // Close when clicking outside the pop-up
+            overlay.addEventListener("click", closePopup);
+        });
+
+        function closePopup() {
+            let popup = document.getElementById("popup");
+            let overlay = document.getElementById("overlay");
+
+            if (popup) {
+                popup.style.display = "none";
+                overlay.style.display = "none"; // Hide overlay
+                window.history.replaceState({}, document.title, window.location.pathname); // Remove query params
+            }
+        }
 </script>
 </html>
