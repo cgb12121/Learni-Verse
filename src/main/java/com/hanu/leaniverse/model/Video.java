@@ -15,12 +15,10 @@ public class Video {
     @ManyToOne
     @JoinColumn(name = "unitId")
     private Unit unit;
+    private String filePath;
     private Date createAt;
     @OneToMany(mappedBy = "video")
     private List<Comment> comments;
-
-    public Video() {
-    }
 
     public int getVideoId() {
         return videoId;
@@ -76,5 +74,13 @@ public class Video {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
