@@ -8,7 +8,7 @@ import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.*;
 import com.hanu.leaniverse.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,11 +16,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 @Controller
 public class StudentController {
@@ -49,6 +50,21 @@ public class StudentController {
 
     @Autowired
     CourseService courseService;
+
+    @Autowired
+    EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    EnrollmentService enrollmentService;
+
+    @GetMapping("/shopping-history")
+    public String showHistoryPage(Model model, Authentication authentication){
+        User currentUser = userService.getCurrentUser(authentication);
+        Map<LocalDate, List<Enrollment>> enrollmentsByDate = enrollmentService.getEnrollmentsGroupedByDate(currentUser);
+        model.addAttribute("user", currentUser);
+        model.addAttribute("enrollmentsByDate", enrollmentsByDate);
+        return "shoppingHistory";
+    }
     @GetMapping("/home-page")
     public String showHomePage(@RequestParam(value = "title", required = false) String title,
                                @RequestParam(value = "categoryId", required = false) Integer categoryId,

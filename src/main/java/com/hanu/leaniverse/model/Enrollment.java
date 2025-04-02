@@ -11,14 +11,14 @@ public class Enrollment {
     private int enrollmentId;
     private double price;
     private Date createAt;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course")
     private Course course;
-    @OneToOne
-    @JoinColumn(name = "paymentInfoId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_information_id", insertable = false, updatable = false)
     private PaymentInformation paymentInformation;
 
     public Enrollment() {
