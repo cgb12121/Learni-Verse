@@ -140,6 +140,23 @@
             });
         })
     });
+    document.addEventListener("DOMContentLoaded", function () {
+        const purchasingSection = document.querySelector(".purchasing-section");
+        const navBar = document.querySelector("nav"); // Adjust this to match your navigation bar selector
+
+    window.addEventListener("scroll", function () {
+        let navBottom = navBar.offsetTop + navBar.offsetHeight;
+        let scrollY = window.scrollY;
+
+        if (scrollY > navBottom) {
+            purchasingSection.style.position = "fixed";
+            purchasingSection.style.top = "0"; // Add some spacing from the top
+        } else {
+            purchasingSection.style.position = "absolute";
+            purchasingSection.style.top = navBottom + "px"; // Stay below the navbar
+        }
+    });
+});
 </script>
 
 </html>

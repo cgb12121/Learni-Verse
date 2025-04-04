@@ -8,7 +8,7 @@ import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.*;
 import com.hanu.leaniverse.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,11 +16,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 @Controller
 public class StudentController {
@@ -49,6 +50,21 @@ public class StudentController {
 
     @Autowired
     CourseService courseService;
+
+    @Autowired
+    EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    EnrollmentService enrollmentService;
+
+    @GetMapping("/shopping-history")
+    public String showHistoryPage(Model model, Authentication authentication){
+        User currentUser = userService.getCurrentUser(authentication);
+        Map<LocalDate, List<Enrollment>> enrollmentsByDate = enrollmentService.getEnrollmentsGroupedByDate(currentUser);
+        model.addAttribute("user", currentUser);
+        model.addAttribute("enrollmentsByDate", enrollmentsByDate);
+        return "shoppingHistory";
+    }
     @GetMapping("/home-page")
     public String showHomePage(@RequestParam(value = "title", required = false) String title,
                                @RequestParam(value = "categoryId", required = false) Integer categoryId,
@@ -59,7 +75,7 @@ public class StudentController {
         model.addAttribute("courses", data.get("courses"));
         model.addAttribute("categories", data.get("categories"));
         model.addAttribute("courseRatings", data.get("courseRatings"));
-        return "homePage";
+        return "homePage1";
     }
 
     @GetMapping("/course-detail")
@@ -110,21 +126,28 @@ public class StudentController {
     @PostMapping("/add-to-cart")
     public String addCart(Model model, @RequestParam("courseId") int courseId, Authentication authentication ) throws Exception{
         if(cartService.addCartService(courseId, authentication)){
-            return "redirect:/course-detail?courseId=" + courseId;
+            String message = "Course successfully added to cart!";
+            boolean success = true;
+            return "redirect:/course-detail?courseId=" + courseId + "&message=" + message + "&success=" + success;
         }
         else {
-            model.addAttribute("existedInCart", true);
-            return "redirect:/course-detail?courseId=" + courseId;
+            String message = "Course is already in the cart!";
+            boolean success = false;
+            return "redirect:/course-detail?courseId=" + courseId + "&message=" + message + "&success=" + success;
         }
     }
     @PostMapping("/delete-cart-item")
     public String deleteCart(Model model, @RequestParam("cartId") int cartId){
         cartRepository.deleteById(cartId);
-        return "redirect:/show-cart";
+        String message = "Course was deleted successfully!";
+        boolean success = true;
+        return "redirect:/show-cart?message=" + message + "&success=" +success;
     }
     @GetMapping("/delete-cart-item")
-    public String updateAfterDeleteCart(){
-        return "redirect:/showCart";
+    public String updateAfterDeleteCart(Model model){
+        String message = "Course was deleted successfully!";
+        boolean success = true;
+        return "redirect:/showCart?message=" +message + "&success="+success;
     }
     @GetMapping("/show-wish-list")
     public String showWishList(Model model,Authentication authentication){
@@ -135,10 +158,14 @@ public class StudentController {
     public String addWishCourse(Model model,@RequestParam("courseId") int courseId,Authentication authentication) throws Exception{
 
         if(wishListService.addToWishList(courseId,authentication)){
-            return "redirect:/course-detail?courseId=" + courseId;
+            String message = "Course successfully added to wish list!";
+            boolean success = true;
+            return "redirect:/course-detail?courseId=" + courseId + "&message=" + message + "&success=" + success;
         }
         else {
-            return "redirect:/course-detail?courseId=" + courseId;
+            String message = "Course is already in the wish list!";
+            boolean success = false;
+            return "redirect:/course-detail?courseId=" + courseId + "&message=" + message + "&success=" + success;
         }
     }
     @PostMapping("/delete-wish-list-item")
@@ -146,24 +173,24 @@ public class StudentController {
         wishListService.deleteFromWishList(wishListId);
         return "redirect:/show-wish-list";
     }
-    @GetMapping("/write-review")
-    public String showReviewForm(@RequestParam("courseId") Integer courseId,
-                                 Model model,
-                                 Authentication authentication) {
-        if (userService.getCurrentUser(authentication) == null) {
-            return "redirect:/login";
-        }
-
-        if (courseId == null) {
-            return "redirect:/home-page";
-        }
-
-        ReviewDTO reviewDTO = new ReviewDTO();
-        reviewDTO.setCourseId(courseId);
-        model.addAttribute("reviewDTO", reviewDTO);
-        model.addAttribute("courseId", courseId);
-        return "writeReview";
-    }
+//    @GetMapping("/write-review")
+//    public String showReviewForm(@RequestParam("courseId") Integer courseId,
+//                                 Model model,
+//                                 Authentication authentication) {
+//        if (userService.getCurrentUser(authentication) == null) {
+//            return "redirect:/login";
+//        }
+//
+//        if (courseId == null) {
+//            return "redirect:/home-page";
+//        }
+//
+//        ReviewDTO reviewDTO = new ReviewDTO();
+//        reviewDTO.setCourseId(courseId);
+//        model.addAttribute("reviewDTO", reviewDTO);
+//        model.addAttribute("courseId", courseId);
+//        return "writeReview";
+//    }
 
     @PostMapping("/submit-review")
     public String submitReview(@ModelAttribute("reviewDTO") ReviewDTO reviewDTO,

@@ -14,7 +14,7 @@
         <div class="logo">
             <a href="/home-page" style="font-weight: bold;">LearniVerse</a>
         </div>
-        <form th:action="@{/home-page}" method="get" class="search-bar">
+        <form th:action="@{/home-page} + '#search-result'" method="get" class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input name="title" type="text" placeholder="Search my courses" th:value="${param.title}">
         </form>
@@ -36,6 +36,7 @@
                     <ul>
                         <li><i class="fa fa-book"></i> <a href="/my-courses">My Courses</a></li>
                         <li><i class="fa fa-user"></i> <a href="/profile">Profile</a></li>
+                        <li><i class="fa-solid fa-clock-rotate-left"></i> <a href="/shopping-history">History</a></li>
                         <li><i class="fa fa-sign-out-alt"></i> <a href="/logout">Log Out</a></li>
                     </ul>
                 </div>
@@ -44,12 +45,12 @@
     </header>
 
     <nav class="category-bar">
-        <a href="/home-page?title=&categoryId=1">IT</a>
-        <a href="/home-page?title=&categoryId=2">Marketing</a>
-        <a href="/home-page?title=&categoryId=3">Accounting</a>
-        <a href="/home-page?title=&categoryId=4">Design</a>
-        <a href="/home-page?title=&categoryId=5">Music</a>
-        <a href="/home-page?title=&categoryId=6">Cooking</a>
+        <a href="/home-page?categoryId=1#search-result">IT</a>
+        <a href="/home-page?categoryId=2#search-result">Marketing</a>
+        <a href="/home-page?categoryId=3#search-result">Accounting</a>
+        <a href="/home-page?categoryId=4#search-result">Design</a>
+        <a href="/home-page?categoryId=5#search-result">Music</a>
+        <a href="/home-page?categoryId=6#search-result">Cooking</a>
     </nav>
 
 </div>

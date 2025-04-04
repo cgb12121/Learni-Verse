@@ -2,6 +2,8 @@ package com.hanu.leaniverse.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class PaymentInformation {
     @Id
@@ -14,8 +16,8 @@ public class PaymentInformation {
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
-    @OneToOne(mappedBy = "paymentInformation")
-    private Enrollment enrollment;
+    @OneToMany(mappedBy = "paymentInformation", cascade = CascadeType.ALL)
+    private List<Enrollment> enrollments;
 
     public PaymentInformation() {
     }
@@ -68,11 +70,11 @@ public class PaymentInformation {
         this.user = user;
     }
 
-    public Enrollment getEnrollment() {
-        return enrollment;
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
     }
 
-    public void setEnrollment(Enrollment enrollment) {
-        this.enrollment = enrollment;
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
     }
 }
