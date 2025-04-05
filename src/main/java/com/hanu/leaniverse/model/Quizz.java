@@ -13,7 +13,7 @@ public class Quizz {
     @JoinColumn(name = "unitId")
     private Unit unit;
     @OneToMany(mappedBy = "quizz")
-    private List<User_Quizz> user_quizzList;
+    private List<UserQuizz> user_quizzList;
     @OneToMany(mappedBy = "quizz")
     private List<Question> questions;
     @Column(nullable = false)
@@ -56,11 +56,11 @@ public class Quizz {
         this.unit = unit;
     }
 
-    public List<User_Quizz> getUser_quizzList() {
+    public List<UserQuizz> getUser_quizzList() {
         return user_quizzList;
     }
 
-    public void setUser_quizzList(List<User_Quizz> user_quizzList) {
+    public void setUser_quizzList(List<UserQuizz> user_quizzList) {
         this.user_quizzList = user_quizzList;
     }
 

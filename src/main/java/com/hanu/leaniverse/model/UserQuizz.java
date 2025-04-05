@@ -1,8 +1,9 @@
 package com.hanu.leaniverse.model;
 
 import jakarta.persistence.*;
+
 @Entity
-public class User_Quizz {
+public class UserQuizz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userQuizzId;
@@ -14,7 +15,7 @@ public class User_Quizz {
     @JoinColumn(name = "userId")
     private User user;
 
-    public User_Quizz() {
+    public UserQuizz() {
     }
 
     public int getUserQuizzId() {

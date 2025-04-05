@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Add Unit</title>
+</head>
+<body>
+<h1>Add Unit to Course</h1>
+<form th:action="@{/tutor/course/{courseId}/addUnit(courseId=${courseId})}" method="post">
+  <label for="description">Unit Description:</label>
+  <input type="text" id="description" name="description" required />
+  <br/>
+  <button type="submit">Add Unit</button>
+</form>
+<a th:href="@{/tutor/course/{courseId}/edit(courseId=${courseId})}">Back to Edit Course</a>
+</body>
+</html>

@@ -1,10 +1,9 @@
 package com.hanu.leaniverse.repository;
 
-import com.hanu.leaniverse.model.Category;
+import com.hanu.leaniverse.model.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Integer> {
-
+public interface ReportRepository extends JpaRepository<Report, Integer> {
 }

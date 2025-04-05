@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Tutor Dashboard</title>
+</head>
+<body>
+<h1>Tutor Dashboard</h1>
+<h2>Your Courses</h2>
+<ul>
+  <li th:each="course : ${courses}">
+    <span th:text="${course.courseName}"></span>
+    <a th:href="@{/tutor/course/{id}/edit(id=${course.courseId})}">Edit</a>
+    <form th:action="@{/tutor/course/{id}/delete(id=${course.courseId})}" method="post" style="display:inline;">
+      <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+    </form>
+  </li>
+</ul>
+<a th:href="@{/tutor/course/new}">Create New Course</a>
+</body>
+</html>
