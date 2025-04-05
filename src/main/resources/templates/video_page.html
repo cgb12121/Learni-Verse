@@ -2,36 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Course Page</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/VideoPage.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<header>
-    <h1>LearniVerse</h1>
-    <nav>
-        <ul>
-            <li><a href="#">IT</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Accounting</a></li>
-            <li><a href="#">Design</a></li>
-            <li><a href="#">Music</a></li>
-            <li><a href="#">Cooking</a></li>
-        </ul>
-    </nav>
-</header>
+
+<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
 
 <main>
-    <h2 th:text="${course.title}"></h2>
-    <p>Instructor: <span th:text="${course.instructor}"></span></p>
+    <!-- Thanh tiêu đề màu xanh -->
+    <div class="course-header">
+        <a th:href="@{/courses}" class="btn-back"><i class="fa fa-arrow-left"></i></a>
+        <h2 th:text="${course.title}"></h2>
+    </div>
 
-    <!-- Trình phát video -->
-    <video width="800" controls>
-        <source th:src="@{/videos/{video}(video=${course.videoUrl})}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div class="video-container">
+        <!-- Trình phát video với nút chuyển -->
+        <div class="video-wrapper">
+            <button class="video-nav left" onclick="previousVideo()"><i class="fa fa-chevron-left"></i></button>
+            <video id="videoPlayer" autoplay loop>
+                <source th:src="${course.videoUrl}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <button class="video-nav right" onclick="nextVideo()"><i class="fa fa-chevron-right"></i></button>
+        </div>
+    </div>
 
     <!-- Tabs -->
     <div class="tabs">
-        <button class="tab-button">Course Content</button>
+        <button class="tab-button active">Course Content</button>
         <button class="tab-button">Overview</button>
         <button class="tab-button">Notes</button>
         <button class="tab-button">Reviews</button>
@@ -41,12 +41,47 @@
     <!-- Nội dung khóa học -->
     <div class="course-content">
         <ul>
-            <li th:each="section : ${sections}">
+            <li th:each="section, iterStat : ${sections}" th:data-index="${iterStat.index}">
                 <strong th:text="${section.title}"></strong> - <span th:text="${section.description}"></span>
                 (<span th:text="${section.lectures}"></span> lectures, <span th:text="${section.duration}"></span>)
             </li>
         </ul>
     </div>
 </main>
+
+<div th:replace="/fragments/header_nav.html :: footer"></div>
+
+<!-- JavaScript điều khiển video -->
+<script>
+    let videos = [];
+    let currentVideoIndex = 0;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        videos = [...document.querySelectorAll(".course-content li")].map(li => li.dataset.index);
+        if (videos.length > 0) {
+            currentVideoIndex = 0;
+        }
+    });
+
+    function previousVideo() {
+        if (currentVideoIndex > 0) {
+            currentVideoIndex--;
+            updateVideo();
+        }
+    }
+
+    function nextVideo() {
+        if (currentVideoIndex < videos.length - 1) {
+            currentVideoIndex++;
+            updateVideo();
+        }
+    }
+
+    function updateVideo() {
+        let newVideoUrl = `/videos/video${videos[currentVideoIndex]}.mp4`;
+        document.getElementById("videoPlayer").src = newVideoUrl;
+    }
+</script>
+
 </body>
 </html>

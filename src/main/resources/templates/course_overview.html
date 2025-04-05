@@ -1,46 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" th:href="@{/css/userHP.css}">
-  <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
-  <link rel="stylesheet" th:href="@{/css/course_overview.css}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>Course Layout</title>
+
+  <!-- Link đến các file CSS -->
+  <link rel="stylesheet" href="/css/userHP.css">
+  <link rel="stylesheet" href="/css/Header_Footer.css">
+  <link rel="stylesheet" href="/css/course_overview.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body class="body-bg">
-<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<!-- Header -->
+<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
+
 
 <div class="container">
-  <h1 class="course-title" th:text="${courseTitle}">How to Design & Prototype in Adobe XD?</h1>
+  <!-- Tiêu đề khóa học -->
+  <h1 class="course-title">How to Design & Prototype in Adobe XD?</h1>
 
+  <!-- Thanh thông tin về tiến độ khóa học -->
   <div class="info-bar">
-    <span>🕒 <span th:text="${videoTimeLeft}">1h 30m</span> of video left</span>
-    <span>📖 <span th:text="${readingTimeLeft}">30 min</span> of readings left</span>
-    <span>📝 <span th:text="${quizzesLeft}">2</span> quizzes left</span>
+    <span>🕒 1h 30m of video left</span>
+    <span>📖 30 min of readings left</span>
+    <span>📝 2 quizzes left</span>
   </div>
 
-  <p class="course-description" th:text="${courseDescription}">
+  <!-- Mô tả khóa học -->
+  <p class="course-description">
     Adobe XD is a powerful design and prototyping tool developed by Adobe Inc.
+    This course will guide you through the fundamentals of UX/UI design,
+    helping you create interactive and visually appealing prototypes.
   </p>
 
+  <!-- Button mở rộng mô tả -->
   <button class="show-more">Show more</button>
 
+  <!-- Section 1: Basic Tools -->
   <h2 class="section-title">Section 1: Basic Tools</h2>
+  <p class="section-description">
+    In this section, you will learn how to navigate Adobe XD and use its core tools effectively.
+  </p>
+
+  <!-- Danh sách bài học -->
   <ul class="lesson-list">
-    <li th:each="lesson : ${lessons}" class="lesson-item">
-      <span th:text="${lesson.icon}">📖</span>
-      <span class="lesson-text" th:text="|${lesson.index}. ${lesson.name} - ${lesson.duration} min|">
-        1. Creating artboards - 1 min
-      </span>
+    <li class="lesson-item">
+      <span class="lesson-icon"><img src="/icons/video-icon.svg" alt="Video" width="24"></span>
+      <a href="#" class="lesson-text">1. Creating Artboards</a>
+      <div class="lesson-meta">
+        <img src="/icons/play-icon.svg" alt="Time Icon" width="16">
+        <span>1 min</span>
+      </div>
+    </li>
+
+    <li class="lesson-item">
+      <span class="lesson-icon"><img src="/icons/book-icon.svg" alt="Book" width="24"></span>
+      <a href="#" class="lesson-text">2. Line and Shapes</a>
+      <div class="lesson-meta">
+        <img src="/icons/read-icon.svg" alt="Time Icon" width="16">
+        <span>2 min</span>
+      </div>
+    </li>
+
+    <li class="lesson-item">
+      <span class="lesson-icon"><img src="/icons/video-icon.svg" alt="Video" width="24"></span>
+      <a href="#" class="lesson-text">3. Borders, Fills & Shadows</a>
+      <div class="lesson-meta">
+        <img src="/icons/play-icon.svg" alt="Time Icon" width="16">
+        <span>3 min</span>
+      </div>
     </li>
   </ul>
+
+  <!-- Button để bắt đầu học -->
+  <button class="start-learning">Start Learning Now</button>
 </div>
-<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
-</body>
-</html>
+
+<!-- Footer -->
+<div th:replace="/fragments/header_nav.html :: footer"></div>
+
 
 </body>
 </html>
