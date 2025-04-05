@@ -4,8 +4,10 @@ package com.hanu.leaniverse.service;
 import com.hanu.leaniverse.dto.UserDTO;
 import com.hanu.leaniverse.model.Tutor;
 import com.hanu.leaniverse.model.User;
+import com.hanu.leaniverse.model.UserSensitiveInformation;
 import com.hanu.leaniverse.repository.TutorRepository;
 import com.hanu.leaniverse.repository.UserRepository;
+import com.hanu.leaniverse.repository.UserSensitiveInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -27,8 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TutorRepository tutorRepository;
-
-
+    @Autowired
+    private UserSensitiveInformationRepository userSensitiveInformationRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
@@ -92,5 +95,34 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+    public void updateUserProfile(UserSensitiveInformation userInfo, String fullName, Authentication authentication) {
+        // Get the current authenticated user
+        User currentUser = getCurrentUser(authentication);
+        if (currentUser == null) {
+            throw new IllegalStateException("User not found");
+        }
 
+        // Check if UserSensitiveInformation exists
+        Optional<UserSensitiveInformation> existingUserInfo = userSensitiveInformationRepository.findByUser(currentUser);
+
+        if (existingUserInfo.isPresent()) {
+            UserSensitiveInformation existingInfo = existingUserInfo.get();
+            existingInfo.setEmail(userInfo.getEmail());
+            existingInfo.setDob(userInfo.getDob());
+            existingInfo.setPob(userInfo.getPob());
+            existingInfo.setPhoneNumber(userInfo.getPhoneNumber());
+            existingInfo.setGender(userInfo.getGender());
+            existingInfo.setPosition(userInfo.getPosition());
+            existingInfo.setOrganization(userInfo.getOrganization());
+
+            userSensitiveInformationRepository.save(existingInfo);
+        } else {
+            userInfo.setUser(currentUser);
+            userSensitiveInformationRepository.save(userInfo);
+        }
+
+        // Update user's name
+        currentUser.setFullName(fullName);
+        userRepository.save(currentUser);
+    }
 }

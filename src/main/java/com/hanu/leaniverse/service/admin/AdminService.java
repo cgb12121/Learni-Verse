@@ -3,6 +3,7 @@ package com.hanu.leaniverse.service.admin;
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,11 +11,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AdminService {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private ReportRepository reportRepository;
 
-    private final UserRepository userRepository;
-    private final CourseRepository courseRepository;
-    private final CategoryRepository categoryRepository;
-    private final ReportRepository reportRepository;
+    public AdminService() {
+    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

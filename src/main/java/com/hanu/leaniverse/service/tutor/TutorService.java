@@ -3,6 +3,7 @@ package com.hanu.leaniverse.service.tutor;
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,15 +24,22 @@ public class TutorService {
 
     @Value("${upload.dir}")
     private String uploadDir;
-
-    private final TutorRepository tutorRepository;
-    private final CourseRepository courseRepository;
-    private final EnrollmentRepository enrollmentRepository;
-    private final TeachRepository teachRepository;
-    private final UnitRepository unitRepository;
-    private final VideoRepository videoRepository;
-    private final QuizzRepository quizzRepository;
-    private final UserQuizzRepository userQuizzRepository;
+    @Autowired
+    private TutorRepository tutorRepository;
+    @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+    @Autowired
+    private TeachRepository teachRepository;
+    @Autowired
+    private UnitRepository unitRepository;
+    @Autowired
+    private VideoRepository videoRepository;
+    @Autowired
+    private QuizzRepository quizzRepository;
+    @Autowired
+    private UserQuizzRepository userQuizzRepository;
 
     public Tutor getTutorFromAuthentication(User user) {
         return tutorRepository.findByUser(user);
