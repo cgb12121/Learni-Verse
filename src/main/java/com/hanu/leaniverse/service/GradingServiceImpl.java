@@ -19,27 +19,23 @@ public class GradingServiceImpl implements GradingService {
             QuestionDTO question_choice = questions_choices.get(i);
             Question question = questionRepository.findById(question_choice.getQuestionId()).get();
             System.out.println(questions_choices.get(i).isChoice2());
-            if (questions_choices.get(i).isChoice1() && !question.isChoice1()) {
+            if (questions_choices.get(i).isChoice1() && !question.getIsChoice1()) {
                 wrong++;
                 continue;
             }
-            if (questions_choices.get(i).isChoice2() && !question.isChoice2()) {
+            if (questions_choices.get(i).isChoice2() && !question.getIsChoice2()) {
                 wrong++;
                 continue;
             }
-            if (questions_choices.get(i).isChoice2() && !question.isChoice2()) {
+            if (questions_choices.get(i).isChoice3() && !question.getIsChoice3()) {
                 wrong++;
                 continue;
             }
-            if (questions_choices.get(i).isChoice3() && !question.isChoice3()) {
+            if (questions_choices.get(i).isChoice4() && !question.getIsChoice4()) {
                 wrong++;
                 continue;
             }
-            if (questions_choices.get(i).isChoice4() && !question.isChoice4()) {
-                wrong++;
-                continue;
-            }
-            if (questions_choices.get(i).isChoice5() && !question.isChoice5()) {
+            if (questions_choices.get(i).isChoice5() && !question.getIsChoice5()) {
                 wrong++;
                 continue;
             }
