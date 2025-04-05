@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Learni-Verse</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+
+    <div style="box-sizing: border-box;
+    background-color: #f8f9fa;
+    transition: opacity 0.3s ease-in-out;width: 100%;">
+        <div class="hero-section">
+            <img src="/img/cover.jpg" alt="Hero Image" class="hero-image">
+            <div class="hero-text">
+                <h2>Learn what you find interesting</h2>
+                <p>For all your skills at the present (and in the future). Start learning with us.</p>
+            </div>
+        </div>
+
+        <div class="logo-section">
+            <h2>Trusted by over 16,000 companies and millions of learners around the world</h2>
+            <img src="/img/cisco_logo.svg" alt="Logo 1">
+            <img src="/img/citi_logo.svg" alt="Logo 2">
+            <img src="/img/ericsson_logo.svg" alt="Logo 3">
+            <img src="/img/samsung_logo.svg" alt="Logo 4">
+            <img src="/img/hewlett_packard_enterprise_logo.svg" alt="Logo 5">
+            <img src="/img/vimeo_logo_resized-2.svg" alt="Logo 6">
+            <img src="/img/volkswagen_logo.svg" alt="Logo 7">
+        </div>
+
+        <div id="search-result" class="courses-container" style="display: flex;flex-direction: column; justify-content:center;">
+            <h2 class="section-title" style="text-align: center; font-size: 22px;color: #007bff;">Current learners are viewing</h2>
+            <p style="text-align: center; font-size: 20px; font-weight:bold; margin: 0;" th:if="${param.title}" th:text="'Result for ' + ${param.title}"></p>
+            <p style="text-align: center; font-size: 20px; font-weight:bold; margin: 0;" th:if="${param.categoryId}" th:text="'Result for ' + ${param.categoryId}"></p>
+            <div class="courses-wrapper-container">
+                <button class="nav-button prev-button" aria-label="Previous courses">&#10094;</button>
+                <div class="courses-wrapper">
+                    <!--                <button class="nav-button prev-button" aria-label="Previous courses">&#10094;</button>-->
+                    <div class="courses-slider">
+                        <!-- Course 1 -->
+                        <div class="course-card" th:each="course : ${courses}">
+                            <div class="course-badge bestseller">Recommended</div>
+                            <img src="" alt="Course image" class="course-image">
+                            <a th:href="@{/course-detail(courseId=${course.courseId})}" class="course-title"
+                               style="font-size: 16px;" th:text="${course.courseName}"></a>
+                            <p class="course-instructor" th:text="${course.teaches[0].tutor.user.fullName}"></p>
+                            <div class="course-rating">
+                                <span class="rating-stars" th:text="${courseRatings.get(course.courseId)}"></span>
+                                <span class="stars">★</span>
+                                <!--                            <span class="rating-count">(88)</span>-->
+                            </div>
+                            <p class="course-price" th:text="'$ '+${course.price}"></p>
+                        </div>
+                    </div>
+                    <!--                <button class="nav-button next-button" aria-label="Next courses">&#10095;</button>-->
+                </div>
+                <button class="nav-button next-button" aria-label="Next courses">&#10095;</button>
+            </div>
+        </div>
+        <section class="quotes-container">
+            <h1 class="section-title" style="font-size: 22px;color: #007bff;margin-bottom: 4%;">Wisdom from the Greatest Educators</h1>
+
+            <div class="quotes-wrapper">
+                <!-- Left Navigation Button -->
+                <button class="nav-button prev-quote" aria-label="Previous quote">&#10094;</button>
+
+                <div class="quotes-slider">
+                    <div class="quotes-track">
+                        <!-- Quote 1 -->
+                        <div class="quote-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Albert_Einstein_%28Nobel%29.png/250px-Albert_Einstein_%28Nobel%29.png" alt="Albert Einstein" class="tutor-image">
+                            <div class="quote-content">
+                                <p class="quote-text">"Education is not the learning of facts, but the training of the mind to think."</p>
+                                <p class="quote-author">- Albert Einstein</p>
+                            </div>
+                        </div>
+
+                        <!-- Quote 2 -->
+                        <div class="quote-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_sQrq0O3jOfr3GZ1hStJQO-hqtfclGXq_Hw&s" alt="Socrates" class="tutor-image">
+                            <div class="quote-content">
+                                <p class="quote-text">"Education is the kindling of a flame, not the filling of a vessel."</p>
+                                <p class="quote-author">- Socrates</p>
+                            </div>
+                        </div>
+
+                        <!-- Quote 3 -->
+                        <div class="quote-card">
+                            <img src="https://www.historytoday.com/sites/default/files/Box_1168555.jpg" alt="Confucius" class="tutor-image">
+                            <div class="quote-content">
+                                <p class="quote-text">"Learning without reflection is a waste. Reflection without learning is dangerous."</p>
+                                <p class="quote-author">- Confucius</p>
+                            </div>
+                        </div>
+
+                        <!-- Quote 4 -->
+                        <div class="quote-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/John_Dewey_cph.3a51565.jpg/250px-John_Dewey_cph.3a51565.jpg" alt="John Dewey" class="tutor-image">
+                            <div class="quote-content">
+                                <p class="quote-text">"Education is not preparation for life; education is life itself."</p>
+                                <p class="quote-author">- John Dewey</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Navigation Button -->
+                <button class="nav-button next-quote" aria-label="Next quote">&#10095;</button>
+            </div>
+        </section>
+
+
+
+        <div class="about">
+            <h1 style="justify-self: center;font-size: 22px;color: #007bff;margin-bottom: 4%;">About Us</h1>
+            <div class="about-info">
+                <img src="https://edunow.vn/wp-content/uploads/2021/05/elearning-la-gi-06.jpg" alt="">
+                <div class="inner-section">
+                    <p style="font-size: 15px; align-items: center;" class="text">
+                        <strong style="font-size: 18px; margin-bottom: 10px;">Empowering Your Journey, Anytime,
+                            Anywhere</strong><br>
+                        At LearniVerse, we believe that education should be accessible, engaging, and tailored to your
+                        needs. Whether you're looking to upskill, explore a new career, or follow your passion, our
+                        platform connects you with expert instructors and top-quality courses designed for real-world
+                        success.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userIcon = document.getElementById("user-icon");
+            const userPopup = document.getElementById("user-popup");
+
+            if (userIcon && userPopup) {
+                userIcon.addEventListener("click", () => {
+                    userPopup.classList.toggle("show");
+                });
+
+                document.addEventListener("click", function (event) {
+                    if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                        userPopup.classList.remove("show");
+                    }
+                });
+            }
+        });
+
+        // course
+        document.addEventListener('DOMContentLoaded', function () {
+            const slider = document.querySelector('.courses-slider');
+            const prevButton = document.querySelector('.prev-button');
+            const nextButton = document.querySelector('.next-button');
+            const courseCards = document.querySelectorAll('.course-card');
+            const cardWidth = courseCards[0].offsetWidth + 15; // width + gap
+
+            let currentPosition = 0;
+            const maxPosition = slider.scrollWidth - slider.clientWidth;
+
+            // Hide prev button initially
+            prevButton.style.visibility = 'hidden';
+
+            nextButton.addEventListener('click', function () {
+                currentPosition += cardWidth * 4; // Move by 4 cards
+                if (currentPosition > maxPosition) {
+                    currentPosition = maxPosition;
+                }
+                slider.scrollTo({
+                    left: currentPosition,
+                    behavior: 'smooth'
+                });
+
+                // Update button visibility
+                prevButton.style.visibility = 'visible';
+                if (currentPosition >= maxPosition) {
+                    nextButton.style.visibility = 'hidden';
+                }
+            });
+
+            prevButton.addEventListener('click', function () {
+                currentPosition -= cardWidth * 4; // Move back by 4 cards
+                if (currentPosition < 0) {
+                    currentPosition = 0;
+                }
+                slider.scrollTo({
+                    left: currentPosition,
+                    behavior: 'smooth'
+                });
+
+                // Update button visibility
+                nextButton.style.visibility = 'visible';
+                if (currentPosition <= 0) {
+                    prevButton.style.visibility = 'hidden';
+                }
+            });
+        });
+    const sliderTrack = document.querySelector('.quotes-track');
+const prevBtn = document.querySelector('.prev-quote');
+const nextBtn = document.querySelector('.next-quote');
+const slides = document.querySelectorAll('.quote-card');
+
+let index = 0;
+
+function updateSlide() {
+    const offset = -index * 100;
+    sliderTrack.style.transform = `translateX(${offset}%)`;
+}
+
+prevBtn.addEventListener('click', () => {
+    index = (index - 1 + slides.length) % slides.length;
+    updateSlide();
+});
+
+nextBtn.addEventListener('click', () => {
+    index = (index + 1) % slides.length;
+    updateSlide();
+});
+
+
+    </script>
+</body>
+
+</html>

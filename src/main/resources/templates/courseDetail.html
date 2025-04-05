@@ -11,7 +11,7 @@
     <link rel="stylesheet" th:href="@{/css/course_overview.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body>
+<body style="background-color: #f8f9fa;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
 <div>
     <!-- TEXT DESCRIPTION CONTAINER -->
@@ -54,7 +54,14 @@
             </div>
         </div>
     </div>
-
+    <div id="overlay" class="overlay"></div>
+    <div style="width: 20%;height: 150px;" th:if="${param.message}"
+         th:class="${param.success[0] == 'true'} ? 'popup success' : 'popup fail'"
+         id="popup">
+        <button style="color: black; font-size: 12px;" class="close-btn" onclick="closePopup()">✖</button>
+        <div class="icon" th:text="${param.success[0] == 'true'} ? '✔' : '✖'"></div>
+        <p th:text="${param.message}"></p>
+    </div>
     <!-- CONTENT TABLE -->
     <div class="content-container">
 
@@ -92,24 +99,6 @@
                         <p>N/A</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- RELATED COURSES -->
-    <div class="related-container">
-        <div class="related-header">
-            <p>Related courses</p>
-        </div>
-        <div class="course-container">
-            <div th:each="relatedCourse : ${relatedCourses}" class="course">
-                <div class="img-container">
-                    <img src="https://cdn.bap-software.net/2024/08/26213247/spring.jpg" alt="">
-                </div>
-                <a th:href="@{/course-detail(courseId=${relatedCourse.courseId})}" th:text="${relatedCourse.courseName}"
-                   class="related-course-name"></a>
-                <p th:text="${relatedCourse.getTeaches[0].getTutor.getUser.fullName}" class="author"></p>
-                <p th:text="'$' + ${relatedCourse.price}" class="related-course-price"></p>
             </div>
         </div>
     </div>
@@ -191,6 +180,21 @@
             </form>
         </div>
     </div>
+    <!-- RELATED COURSES -->
+    <div class="related-container">
+        <div class="related-header">
+            <p>Related courses</p>
+        </div>
+        <div class="course-container">
+            <div class="course-card" th:each="relatedCourse : ${relatedCourses}">
+                <img src="" alt="Course image" class="course-image">
+                <a th:href="@{/course-detail(courseId=${relatedCourse.courseId})}" class="course-title"
+                   style="font-size: 16px;" th:text="${relatedCourse.courseName}"></a>
+                <p class="course-instructor" th:text="${relatedCourse.teaches[0].tutor.user.fullName}"></p>
+                <p class="course-price" th:text="'$ '+${relatedCourse.price}"></p>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
@@ -242,6 +246,28 @@
             }
         });
     });
+    document.addEventListener("DOMContentLoaded", function() {
+            let popup = document.getElementById("popup");
+            let overlay = document.getElementById("overlay");
 
+            if (popup) {
+                popup.style.display = "block";
+                overlay.style.display = "block"; // Show overlay
+            }
+
+            // Close when clicking outside the pop-up
+            overlay.addEventListener("click", closePopup);
+        });
+
+        function closePopup() {
+            let popup = document.getElementById("popup");
+            let overlay = document.getElementById("overlay");
+
+            if (popup) {
+                popup.style.display = "none";
+                overlay.style.display = "none"; // Hide overlay
+                window.history.replaceState({}, document.title, window.location.pathname); // Remove query params
+            }
+        }
 </script>
 </html>

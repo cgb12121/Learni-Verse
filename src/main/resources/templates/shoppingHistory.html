@@ -5,113 +5,176 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <title>Cart</title>
-    <link rel="stylesheet" href="../../../../../FE_project/style.css">
+    <title>Shopping History</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body class="history">
+<body>
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<div class="history" style="margin-top: 2px;">
     <div class="history-category">
         <h1 class="history-header title">History</h1>
-        <a href="">Shopping history</a>
-        <a href="">Gift history</a>
+        <a href="show-shopping-history">Shopping history</a>
+        <a href="/show-gift-history">Gift history</a>
     </div>
     <div class="history-list">
         <h1 class="history-header title">Shopping history</h1>
 
         <!-- For loop to get history by date in Enrollment entity-->
+<!--        <div class="history-by-date-container">-->
+<!--            <div class="history-by-date-list">-->
+<!--                <div class="history-by-date">-->
+<!--                    <p class="history-text date">January 19th, 2025</p>-->
+<!--                    <div class="purchase-attempt">-->
+<!--                        <div>-->
+<!--                            <p class="history-text">Number of courses: 3</p>-->
+<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
+<!--                        </div>-->
+<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
+<!--                    </div>-->
+<!--                    <div class="purchase-attempt">-->
+<!--                        <div>-->
+<!--                            <p class="history-text">Number of courses: 3</p>-->
+<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
+<!--                        </div>-->
+<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="history-by-date-list">-->
+<!--                <div class="history-by-date">-->
+<!--                    <p class="history-text date">January 19th, 2025</p>-->
+<!--                    <div class="purchase-attempt">-->
+<!--                        <div>-->
+<!--                            <p class="history-text">Number of courses: 3</p>-->
+<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
+<!--                        </div>-->
+<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
+<!--                    </div>-->
+<!--                    <div class="purchase-attempt">-->
+<!--                        <div>-->
+<!--                            <p class="history-text">Number of courses: 3</p>-->
+<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
+<!--                        </div>-->
+<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="history-by-date-list">-->
+<!--                <div class="history-by-date">-->
+<!--                    <p class="history-text date">January 19th, 2025</p>-->
+<!--                    <div class="purchase-attempt">-->
+<!--                        <div>-->
+<!--                            <p class="history-text">Number of courses: 3</p>-->
+<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
+<!--                        </div>-->
+<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
+<!--                    </div>-->
+<!--                    <div class="purchase-attempt">-->
+<!--                        <div>-->
+<!--                            <p class="history-text">Number of courses: 3</p>-->
+<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
+<!--                        </div>-->
+<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="history-by-date-container">-->
+<!--            <div th:each="entry : ${enrollmentsByDate}">-->
+<!--                <div class="history-by-date-list">-->
+<!--                    <div class="history-by-date">-->
+<!--                        <p class="history-text date" th:text="${#temporals.format(entry.key, 'MMMM d, yyyy', T(java.util.Locale).ENGLISH)}"></p>-->
+<!--                        <div th:each="enrollment : ${entry.value}" class="purchase-attempt">-->
+<!--                            <div>-->
+<!--                                <p class="history-text">Number of courses: <span th:text="${#lists.size(entry.value)}"></span></p>-->
+<!--                                <p class="history-text">Price: đ <span th:text="${enrollment.price}"></span></p>-->
+<!--                            </div>-->
+<!--                            <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
         <div class="history-by-date-container">
-            <div class="history-by-date-list">
-                <div class="history-by-date">
-                    <p class="history-text date">January 19th, 2025</p>
-                    <div class="purchase-attempt">
-                        <div>
-                            <p class="history-text">Number of courses: 3</p>
-                            <p class="history-text">Price: đ 2.500.000</p>
+            <div th:each="entry : ${enrollmentsByDate}">
+                <div class="history-by-date-list">
+                    <div class="history-by-date">
+                        <p class="history-text date" th:text="${#temporals.format(entry.key, 'MMMM d, yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></p>
+
+                        <div class="purchase-attempt">
+                            <div>
+                                <p class="history-text">Number of courses: <span th:text="${#lists.size(entry.value)}"></span></p>
+                                <p class="history-text">Total Price: đ <span th:text="${#aggregates.sum(entry.value.![price])}"></span></p>
+                            </div>
+                            <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>
                         </div>
-                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>
                     </div>
-                    <div class="purchase-attempt">
-                        <div>
-                            <p class="history-text">Number of courses: 3</p>
-                            <p class="history-text">Price: đ 2.500.000</p>
+                    <div class="purchase-attempt-info-container">
+                        <div class="tittle-n-btn">
+                            <h1 class="history-header title">Payment detail</h1>
+                            <button>X</button>
                         </div>
-                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="history-by-date-list">
-                <div class="history-by-date">
-                    <p class="history-text date">January 19th, 2025</p>
-                    <div class="purchase-attempt">
-                        <div>
-                            <p class="history-text">Number of courses: 3</p>
-                            <p class="history-text">Price: đ 2.500.000</p>
+                        <p class="history-text detail">
+                            <strong>Card number:</strong><span th:text="${entry.value[0].paymentInformation.cardNumber}"></span>
+                        </p>
+
+                        <p class="history-text detail"><strong>Card type:</strong> <span th:text="${entry.value[0].paymentInformation.cardType}"></span></p>
+                        <p class="history-text detail"><strong>Bank:</strong> <span th:text="${entry.value[0].paymentInformation.bank}"></span></p>
+                        <p class="history-text detail"><strong>Total Price:</strong> $ <span th:text="${#aggregates.sum(entry.value.![price])}"></span></p>
+
+                        <div class="course-list">
+                            <p class="history-text detail"><strong>Courses:</strong></p>
+                            <div class="history-course-list">
+                                <div th:each="enrollment : ${entry.value}" class="history-course">
+                                    <a th:href="@{/course/{id}(id=${enrollment.course.courseId})}" th:text="'- ' + ${enrollment.course.courseName}"></a>
+                                    <p th:text="${enrollment.course.teaches[0].tutor.getUser.getFullName}"></p>
+                                </div>
+                            </div>
                         </div>
-                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                    </div>
-                    <div class="purchase-attempt">
-                        <div>
-                            <p class="history-text">Number of courses: 3</p>
-                            <p class="history-text">Price: đ 2.500.000</p>
-                        </div>
-                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="history-by-date-list">
-                <div class="history-by-date">
-                    <p class="history-text date">January 19th, 2025</p>
-                    <div class="purchase-attempt">
-                        <div>
-                            <p class="history-text">Number of courses: 3</p>
-                            <p class="history-text">Price: đ 2.500.000</p>
-                        </div>
-                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                    </div>
-                    <div class="purchase-attempt">
-                        <div>
-                            <p class="history-text">Number of courses: 3</p>
-                            <p class="history-text">Price: đ 2.500.000</p>
-                        </div>
-                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
     <!-- After click "..." icon, the system display full info about the purchase attempt -->
-    <div class="purchase-attempt-info-container">
-        <div class="tittle-n-btn">
-            <h1 class="history-header title">Payment detail</h1>
-            <button>X</button>
-        </div>
-        <p class="history-text detail">Card number: *************099</p>
-        <p class="history-text detail">Card type: VISA</p>
-        <p class="history-text detail">CVC/CVV: **8</p>
-        <p class="history-text detail">Bank: MB Bank</p>
-        <p class="history-text detail">Price: đ 2.500.000</p>
-        <div class="course-list">
-            <p class="history-text detail">Courses:</p>
-            <div class="history-course-list">
-                <div class="history-course">
-                    <a href="">- Spring Boot for beginner</a>
-                    <p>Tuyen Tom</p>
-                </div>
-                <div class="history-course">
-                    <a href="">- Spring Boot advance</a>
-                    <p>Tuyen Tom</p>
-                </div>
-                <div class="history-course">
-                    <a href="">- Thymeleaf for beginner</a>
-                    <p>Tuyen Tom</p>
-                </div>
-            </div>
-        </div>
+<!--    <div class="purchase-attempt-info-container">-->
+<!--        <div class="tittle-n-btn">-->
+<!--            <h1 class="history-header title">Payment detail</h1>-->
+<!--            <button>X</button>-->
+<!--        </div>-->
+<!--        <p class="history-text detail"><strong>Card number:</strong> *************099</p>-->
+<!--        <p class="history-text detail"><strong>Card type:</strong> VISA</p>-->
+<!--        <p class="history-text detail"><strong>CVC/CVV:</strong> **8</p>-->
+<!--        <p class="history-text detail"><strong>Bank:</strong> MB Bank</p>-->
+<!--        <p class="history-text detail"><strong>Price:</strong> đ 2.500.000</p>-->
+<!--        <div class="course-list">-->
+<!--            <p class="history-text detail"><strong>Courses:</strong></p>-->
+<!--            <div class="history-course-list">-->
+<!--                <div class="history-course">-->
+<!--                    <a href="">- Spring Boot for beginner</a>-->
+<!--                    <p>Tuyen Tom</p>-->
+<!--                </div>-->
+<!--                <div class="history-course">-->
+<!--                    <a href="">- Spring Boot advance</a>-->
+<!--                    <p>Tuyen Tom</p>-->
+<!--                </div>-->
+<!--                <div class="history-course">-->
+<!--                    <a href="">- Thymeleaf for beginner</a>-->
+<!--                    <p>Tuyen Tom</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
-<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -132,6 +195,21 @@
                 body.classList.remove("modal-active")
             });
         })
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
     });
 </script>
 
