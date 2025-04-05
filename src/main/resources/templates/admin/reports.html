@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Manage Reports</title>
+</head>
+<body>
+<h1>Manage Reports</h1>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Type</th>
+    <th>Note</th>
+    <th>Resolved</th>
+    <th>Actions</th>
+  </tr>
+  <tr th:each="report : ${reports}">
+    <td th:text="${report.reportId}"></td>
+    <td th:text="${report.type}"></td>
+    <td th:text="${report.note}"></td>
+    <td th:text="${report.resolved ? 'Yes' : 'No'}"></td>
+    <td>
+      <form th:if="${!report.resolved}" th:action="@{/admin/reports/{id}/resolve(id=${report.reportId})}" method="post" style="display:inline;">
+        <button type="submit">Resolve</button>
+      </form>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

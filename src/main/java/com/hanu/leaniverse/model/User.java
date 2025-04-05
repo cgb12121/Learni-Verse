@@ -31,9 +31,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
     @OneToMany(mappedBy = "user")
-    private List<User_Quizz> user_quizzes;
+    private List<UserQuizz> user_quizzes;
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
+
+    private String role;
 
     public User() {
     }
@@ -145,11 +147,11 @@ public class User {
         this.reviews = reviews;
     }
 
-    public List<User_Quizz> getUser_quizzes() {
+    public List<UserQuizz> getUser_quizzes() {
         return user_quizzes;
     }
 
-    public void setUser_quizzes(List<User_Quizz> user_quizzes) {
+    public void setUser_quizzes(List<UserQuizz> user_quizzes) {
         this.user_quizzes = user_quizzes;
     }
 
@@ -159,5 +161,13 @@ public class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

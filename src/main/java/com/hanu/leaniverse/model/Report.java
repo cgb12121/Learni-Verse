@@ -15,6 +15,8 @@ public class Report {
     @JoinColumn(name = "userId")
     private User user;
 
+    private boolean isResolved = false;
+
     public Report() {
     }
 
@@ -56,5 +58,13 @@ public class Report {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isResolved() {
+        return isResolved;
+    }
+
+    public void setResolved(boolean resolved) {
+        isResolved = resolved;
     }
 }

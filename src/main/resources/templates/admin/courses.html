@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Manage Courses</title>
+</head>
+<body>
+<h1>Manage Courses</h1>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Detail</th>
+    <th>Price</th>
+    <th>Actions</th>
+  </tr>
+  <tr th:each="course : ${courses}">
+    <td th:text="${course.courseId}"></td>
+    <td th:text="${course.courseName}"></td>
+    <td th:text="${course.courseDetail}"></td>
+    <td th:text="${course.price}"></td>
+    <td>
+      <form th:action="@{/admin/courses/{id}/delete(id=${course.courseId})}" method="post" style="display:inline;">
+        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+      </form>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
