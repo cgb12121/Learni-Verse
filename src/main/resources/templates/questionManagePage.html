@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Quizz</title>
+</head>
+<body>
+    <div th:each="question : ${questions}">
+        <h3 th:text="${question.requirement}"></h3>
+        <p th:text="${question.choice1}"></p>
+        <p th:text="${question.choice2}"></p>
+        <p th:text="${question.choice3}"></p>
+        <p th:text="${question.choice4}"></p>
+        <p th:text="${question.choice5}"></p>
+        <form th:action="@{/deleteQuestion(questionId=${question.questionId}, quizzId=${param.quizzId})}" method="post" style="display:inline;">
+            <button type="submit" class="button">Delete</button>
+        </form>
+
+    </div>
+    <form th:action="@{/addQuestion}" method="post" th:object="${questionForm}">
+        <!-- Hidden input to pass quizzId -->
+        <input type="hidden" name="quizzId" th:value="${param.quizzId}" />
+        <p>Question:</p>
+        <input th:field="*{requirement}" type="text" id="requirement" required />
+        <p>Choice 1:</p>
+        <input th:field="*{choice1}" type="text" id="choice1" />
+        <select th:field="*{isChoice1}">
+            <option th:value="true">True</option>
+            <option th:value="false">False</option>
+        </select>
+        <p>Choice 2:</p>
+        <input th:field="*{choice2}" type="text" id="choice2" />
+        <select th:field="*{isChoice2}">
+            <option th:value="true">True</option>
+            <option th:value="false">False</option>
+        </select>
+        <p>Choice 3:</p>
+        <input th:field="*{choice3}" type="text" id="choice3" />
+        <select th:field="*{isChoice3}">
+            <option th:value="true">True</option>
+            <option th:value="false">False</option>
+        </select>
+        <p>Choice 4:</p>
+        <input th:field="*{choice4}" type="text" id="choice4" />
+        <select th:field="*{isChoice4}">
+            <option th:value="true">True</option>
+            <option th:value="false">False</option>
+        </select>
+        <p>Choice 5:</p>
+        <input th:field="*{choice5}" type="text" id="choice5" />
+        <select th:field="*{isChoice5}">
+            <option th:value="true">True</option>
+            <option th:value="false">False</option>
+        </select>
+
+        <button class="button" type="submit">Add question</button>
+    </form>
+
+</body>
+</html>

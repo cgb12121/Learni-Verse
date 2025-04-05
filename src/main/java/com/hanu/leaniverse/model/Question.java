@@ -84,43 +84,43 @@ public class Question {
         this.choice5 = choice5;
     }
 
-    public boolean isChoice1() {
+    public boolean getIsChoice1() {
         return isChoice1;
     }
 
-    public void setChoice1(boolean choice1) {
+    public void setIsChoice1(boolean choice1) {
         isChoice1 = choice1;
     }
 
-    public boolean isChoice2() {
+    public boolean getIsChoice2() {
         return isChoice2;
     }
 
-    public void setChoice2(boolean choice2) {
+    public void setIsChoice2(boolean choice2) {
         isChoice2 = choice2;
     }
 
-    public boolean isChoice3() {
+    public boolean getIsChoice3() {
         return isChoice3;
     }
 
-    public void setChoice3(boolean choice3) {
+    public void setIsChoice3(boolean choice3) {
         isChoice3 = choice3;
     }
 
-    public boolean isChoice4() {
+    public boolean getIsChoice4() {
         return isChoice4;
     }
 
-    public void setChoice4(boolean choice4) {
+    public void setIsChoice4(boolean choice4) {
         isChoice4 = choice4;
     }
 
-    public boolean isChoice5() {
+    public boolean getIsChoice5() {
         return isChoice5;
     }
 
-    public void setChoice5(boolean choice5) {
+    public void setIsChoice5(boolean choice5) {
         isChoice5 = choice5;
     }
 
