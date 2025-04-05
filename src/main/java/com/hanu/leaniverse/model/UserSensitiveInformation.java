@@ -1,6 +1,7 @@
 package com.hanu.leaniverse.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 @Entity
@@ -9,10 +10,39 @@ public class UserSensitiveInformation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userSenInfoId;
     private String email;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
     private String pob;
     private String phoneNumber;
     private String address;
+    private String gender;
+    private String organization;
+    private String position;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
     @OneToOne
     @JoinColumn(name = "userId")
     private User user;

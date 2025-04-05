@@ -56,6 +56,8 @@ public class StudentController {
 
     @Autowired
     EnrollmentService enrollmentService;
+    @Autowired
+    UserSensitiveInformationRepository userSensitiveInformationRepository;
 
     @GetMapping("/shopping-history")
     public String showHistoryPage(Model model, Authentication authentication){
@@ -118,7 +120,11 @@ public class StudentController {
     }
 
     @GetMapping("/show-cart")
-    public String showCart(Model model){
+    public String showCart(Model model, Authentication authentication){
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("CartList",cartRepository.findAllCartByUser(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUserId()));
         return "cart";
     }
@@ -151,6 +157,10 @@ public class StudentController {
     }
     @GetMapping("/show-wish-list")
     public String showWishList(Model model,Authentication authentication){
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("WishList",wishListService.showWishList(authentication));
         return "wishList";
     }
@@ -173,25 +183,6 @@ public class StudentController {
         wishListService.deleteFromWishList(wishListId);
         return "redirect:/show-wish-list";
     }
-//    @GetMapping("/write-review")
-//    public String showReviewForm(@RequestParam("courseId") Integer courseId,
-//                                 Model model,
-//                                 Authentication authentication) {
-//        if (userService.getCurrentUser(authentication) == null) {
-//            return "redirect:/login";
-//        }
-//
-//        if (courseId == null) {
-//            return "redirect:/home-page";
-//        }
-//
-//        ReviewDTO reviewDTO = new ReviewDTO();
-//        reviewDTO.setCourseId(courseId);
-//        model.addAttribute("reviewDTO", reviewDTO);
-//        model.addAttribute("courseId", courseId);
-//        return "writeReview";
-//    }
-
     @PostMapping("/submit-review")
     public String submitReview(@ModelAttribute("reviewDTO") ReviewDTO reviewDTO,
                                BindingResult result,
@@ -207,5 +198,30 @@ public class StudentController {
 
         reviewService.addReview(reviewDTO, currentUser);
         return "redirect:/course-detail?courseId=" + reviewDTO.getCourseId();
+    }
+    @GetMapping("/profile")
+    public String getUserProfile(Model model, Authentication authentication) {
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        UserSensitiveInformation userInfo = user.getUserSensitiveInformation();
+        if (userInfo == null) {
+            userInfo = new UserSensitiveInformation();
+            userInfo.setUser(user);
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("userInfo", userInfo);
+        return "profile";
+    }
+
+    @PostMapping("/edit-profile")
+    public String updateUserProfile(@ModelAttribute("userInfo") UserSensitiveInformation userInfo,
+                                    @RequestParam("fullName") String fullName,
+                                    Authentication authentication) {
+        userService.updateUserProfile(userInfo, fullName, authentication);
+        return "redirect:/profile";
     }
 }
