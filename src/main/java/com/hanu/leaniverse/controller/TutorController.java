@@ -1,13 +1,18 @@
 package com.hanu.leaniverse.controller;
 
 import com.hanu.leaniverse.model.*;
+import com.hanu.leaniverse.repository.CategoryRepository;
+import com.hanu.leaniverse.service.UserService;
 import com.hanu.leaniverse.service.tutor.TutorService;
+import com.hanu.leaniverse.service.tutor.TutorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/tutor")
@@ -17,7 +22,13 @@ public class TutorController {
     private TutorService tutorService;
 
     @Autowired
-    public TutorController(TutorService tutorService) {
+    private UserService userService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    public TutorController(TutorServiceImpl tutorService) {
         this.tutorService = tutorService;
     }
 
@@ -26,13 +37,15 @@ public class TutorController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/login";
         }
         model.addAttribute("courses", tutorService.getCoursesForTutor(tutor));
         model.addAttribute("tutor", tutor);
+        model.addAttribute("newCourse", new Course());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "tutor/dashboard";
     }
 
@@ -43,19 +56,21 @@ public class TutorController {
     }
 
     @PostMapping("/course")
-    public String createCourse(@ModelAttribute("course") Course course, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    public String createCourse(@ModelAttribute("course") Course course, @RequestParam("categoryIds") List<Integer> categoryIds, Authentication authentication) {
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
+
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
         }
-        tutorService.createCourse(course, tutor);
+
+        tutorService.createCourse(course, tutor, categoryIds); // Pass category list
         return "redirect:/tutor/dashboard";
     }
 
     @GetMapping("/course/{courseId}/edit")
     public String showEditCourseForm(@PathVariable("courseId") int courseId, Model model, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
@@ -69,9 +84,9 @@ public class TutorController {
         return "tutor/edit_course";
     }
 
-    @PostMapping("/course/{courseId}")
-    public String updateCourse(@PathVariable("courseId") int courseId, @ModelAttribute("course") Course updatedCourse, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    @PostMapping("/course/edit")
+    public String updateCourse(@RequestParam("courseId") int courseId, @ModelAttribute("course") Course updatedCourse, Authentication authentication) {
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
@@ -86,7 +101,7 @@ public class TutorController {
 
     @PostMapping("/course/{courseId}/delete")
     public String deleteCourse(@PathVariable("courseId") int courseId, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
@@ -100,7 +115,7 @@ public class TutorController {
 
     @GetMapping("/course/{courseId}/students")
     public String viewStudents(@PathVariable("courseId") int courseId, Model model, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
@@ -116,7 +131,7 @@ public class TutorController {
 
     @PostMapping("/course/{courseId}/addUnit")
     public String addUnit(@PathVariable("courseId") int courseId, @RequestParam("description") String description, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
@@ -132,7 +147,7 @@ public class TutorController {
     @PostMapping("/unit/{unitId}/uploadVideo")
     public String uploadVideo(@PathVariable("unitId") int unitId, @RequestParam("description") String description,
                               @RequestParam("file") MultipartFile file, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
@@ -151,7 +166,7 @@ public class TutorController {
 
     @PostMapping("/unit/{unitId}/uploadQuiz")
     public String uploadQuiz(@PathVariable("unitId") int unitId, @RequestParam("quizzName") String quizzName, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
@@ -166,7 +181,7 @@ public class TutorController {
 
     @GetMapping("/quizz/{quizzId}/grades")
     public String viewQuizGrades(@PathVariable("quizzId") int quizzId, Model model, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
