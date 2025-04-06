@@ -2,19 +2,42 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Tutor Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/userHP.css}">
+  <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+  <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body>
-<h1>Tutor Dashboard</h1>
-<h2>Your Courses</h2>
-<ul>
-  <li th:each="course : ${courses}">
-    <span th:text="${course.courseName}"></span>
-    <a th:href="@{/tutor/course/{id}/edit(id=${course.courseId})}">Edit</a>
-    <form th:action="@{/tutor/course/{id}/delete(id=${course.courseId})}" method="post" style="display:inline;">
-      <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
-    </form>
-  </li>
-</ul>
-<a th:href="@{/tutor/course/new}">Create New Course</a>
+<body style="background-color: #f8f9fa;">
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<div  style="width: 80%; margin-inline: auto; background-color: white;box-sizing: border-box; height: fit-content; padding-bottom: 4%;">
+  <h1 class="cart-header title">Dashboard</h1>
+  <p class="cart-header course-num">Your Courses</p>
+  <a style="padding: 1%; margin-left: 4%; background-color: #0D74D7; border-radius: 8px; color: white; " th:href="@{/tutor/course/new}">Create New Course</a>
+
+    <div class="cart-item" th:each="course : ${courses}">
+      <p th:if="${!course}">No course created</p>
+      <span th:text="${course.courseName}"></span>
+      <a th:href="@{/tutor/course/{id}/edit(id=${course.courseId})}">Edit</a>
+      <form th:action="@{/tutor/course/{id}/delete(id=${course.courseId})}" method="post" style="display:inline;">
+        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+      </form>
+    </div>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
+<script>
+  function closePopup() {
+  let popup = document.getElementById("popup");
+  let overlay = document.getElementById("overlay");
+
+  if (popup) {
+  popup.style.display = "none";
+  overlay.style.display = "none"; // Hide overlay
+  window.history.replaceState({}, document.title, window.location.pathname); // Remove query params
+  }
+  }
+</script>
 </html>

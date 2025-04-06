@@ -30,7 +30,7 @@
                         Name</p>
                     <div class="remove-container">
                         <form method="post" th:action="@{/delete-cart-item(cartId=${course.cardId})}">
-                            <button class="remove-btn" type="submit">Remove</button>
+                            <button class="remove-btn" onclick="return confirm('Are you sure?')" type="submit">Remove</button>
                         </form>
                         <p class="related-course-price" th:text="'$ ' + ${course.getCourse.price}"></p>
                     </div>

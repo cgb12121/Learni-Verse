@@ -285,8 +285,10 @@ text-align: left;
     display: block;
 }
 .about-info {
+    display:flex;
     background-color: #ffffff;
     justify-content: space-between;
+    align-items: center;
 }
 .about img{
     width: 40%;
@@ -879,6 +881,7 @@ a {
     border-bottom: 1px solid rgba(60, 174, 255, 0.816);
     border-width: 50%;
     justify-self: center;
+    margin-bottom: 2%;
 }
 .modal {
             display: none; /* Hidden by default */
@@ -891,7 +894,7 @@ a {
             background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
         }
 
-        .modal-content {
+        .review-modal-content {
             background: white;
             margin: 10% auto;
             padding: 20px;
@@ -1450,19 +1453,17 @@ a {
         justify-content: center;
         align-items: center;
     }
-
+    .edit-form {
+        width: 60%;
+    }
     .modal-content {
         background-color: #fff;
         padding: 20px 30px;
         border-radius: 10px;
-        width: 400px;
-
-        /* Centering with flexbox */
+        width: 60%;
         display: flex;
         flex-direction: column;
         align-items: center;
-
-        /* Remove margin-based centering */
         position: relative;
     }
 
@@ -1484,4 +1485,11 @@ a {
         top: 10px;
         font-size: 24px;
         cursor: pointer;
+    }
+    .save-btn {
+        padding: 2%;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        background-color: #0D74D7;
     }
