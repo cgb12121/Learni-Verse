@@ -9,7 +9,7 @@ public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int enrollmentId;
-    private double price;
+    private int price;
     private Date createAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -17,9 +17,10 @@ public class Enrollment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course")
     private Course course;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_information_id", insertable = false, updatable = false)
-    private PaymentInformation paymentInformation;
+    private String transactionNumber;
+    private String orderInfo;
+    private String bank;
+    private String cardType;
 
     public Enrollment() {
     }
@@ -32,11 +33,11 @@ public class Enrollment {
         this.enrollmentId = enrollmentId;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -64,11 +65,35 @@ public class Enrollment {
         this.course = course;
     }
 
-    public PaymentInformation getPaymentInformation() {
-        return paymentInformation;
+    public String getTransactionNumber() {
+        return transactionNumber;
     }
 
-    public void setPaymentInformation(PaymentInformation paymentInformation) {
-        this.paymentInformation = paymentInformation;
+    public void setTransactionNumber(String transactionNumber) {
+        this.transactionNumber = transactionNumber;
+    }
+
+    public String getOrderInfo() {
+        return orderInfo;
+    }
+
+    public void setOrderInfo(String orderInfo) {
+        this.orderInfo = orderInfo;
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public String getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
     }
 }

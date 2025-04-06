@@ -10,14 +10,10 @@ public class PaymentInformation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentInfoId;
     private String cardType;
-    private String cardNumber;
-    private int ccv;
     private String bank;
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
-    @OneToMany(mappedBy = "paymentInformation", cascade = CascadeType.ALL)
-    private List<Enrollment> enrollments;
 
     public PaymentInformation() {
     }
@@ -38,21 +34,6 @@ public class PaymentInformation {
         this.cardType = cardType;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public int getCcv() {
-        return ccv;
-    }
-
-    public void setCcv(int ccv) {
-        this.ccv = ccv;
-    }
 
     public String getBank() {
         return bank;
@@ -70,11 +51,4 @@ public class PaymentInformation {
         this.user = user;
     }
 
-    public List<Enrollment> getEnrollments() {
-        return enrollments;
-    }
-
-    public void setEnrollments(List<Enrollment> enrollments) {
-        this.enrollments = enrollments;
-    }
 }
