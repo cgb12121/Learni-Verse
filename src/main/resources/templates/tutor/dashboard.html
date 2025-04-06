@@ -1,43 +1,109 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Tutor Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" th:href="@{/css/style.css}">
-  <link rel="stylesheet" th:href="@{/css/userHP.css}">
-  <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
-  <link rel="stylesheet" th:href="@{/css/course_overview.css}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Tutor Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body style="background-color: #f8f9fa;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
-<div  style="width: 80%; margin-inline: auto; background-color: white;box-sizing: border-box; height: fit-content; padding-bottom: 4%;">
-  <h1 class="cart-header title">Dashboard</h1>
-  <p class="cart-header course-num">Your Courses</p>
-  <a style="padding: 1%; margin-left: 4%; background-color: #0D74D7; border-radius: 8px; color: white; " th:href="@{/tutor/course/new}">Create New Course</a>
+<div class="dashboard-container">
 
-    <div class="cart-item" th:each="course : ${courses}">
-      <p th:if="${!course}">No course created</p>
-      <span th:text="${course.courseName}"></span>
-      <a th:href="@{/tutor/course/{id}/edit(id=${course.courseId})}">Edit</a>
-      <form th:action="@{/tutor/course/{id}/delete(id=${course.courseId})}" method="post" style="display:inline;">
-        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
-      </form>
+    <h1 class="cart-header title">Dashboard</h1>
+    <p class="cart-header course-num">Your Courses</p>
+    <button class="dashboard-button" id="addBtn">Create New Course</button>
+    <p th:if="${courses.isEmpty()}">No course created</p>
+
+    <div class="dashboard-course-item" th:each="course : ${courses}">
+        <strong th:text="${course.courseName}"></strong>
+        <div class="dashboard-btn-container">
+            <button id="editBtn" class="item-btn" th:href="@{/tutor/course/{id}/edit(id=${course.courseId})}">
+                Edit
+            </button>
+            <form th:action="@{/tutor/course/{id}/delete(courseId=${course.courseId})}" method="post"
+                  style="display:inline;">
+                <button class="item-btn" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+            </form>
+        </div>
+        <div class="edit-modal" id="editModal">
+            <div class="modal-content">
+                <span class="close" id="closeEditModal">x</span>
+                <h3>Edit Course</h3>
+                <form class="edit-form" th:action="@{/tutor/course/edit}" method="post">
+                    <input type="hidden" name="courseId" th:value="${course.courseId}">
+
+                    <label>Course name:</label>
+                    <input type="text" name="courseName" th:value="${course.courseName}" autocomplete="off"><br>
+
+                    <label>Description:</label>
+                    <input type="text" name="courseDetail" th:value="${course.courseDetail}" autocomplete="off"><br>
+
+                    <label>Price:</label>
+                    <input type="number" name="price" th:value="${course.price}" autocomplete="off"><br>
+
+                    <button type="submit" class="save-btn">Save Changes</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="edit-modal" id="addModal">
+        <div class="modal-content">
+            <span class="close" id="closeAddModal">&times;</span>
+            <h3>Add course</h3>
+            <form class="edit-form" th:action="@{/tutor/course}" th:object="${newCourse}" method="post">
+                <label>Course name:</label>
+                <input type="text" name="courseName" th:field="*{courseName}" autocomplete="off"><br>
+
+                <label>Description:</label>
+                <input type="text" name="courseDetail" th:field="*{courseDetail}" autocomplete="off"><br>
+
+                <label>Price:</label>
+                <input type="number" name="price" th:field="*{price}" autocomplete="off"><br>
+
+                <label>Category:</label>
+                <select name="categoryIds" multiple>
+                    <option th:each="category : ${categories}" th:value="${category.categoryId}"
+                            th:text="${category.name}"></option>
+                </select>
+
+                <br>
+
+                <button type="submit" class="save-btn" autocomplete="off">Save Changes</button>
+            </form>
+        </div>
     </div>
 </div>
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
 <script>
-  function closePopup() {
-  let popup = document.getElementById("popup");
-  let overlay = document.getElementById("overlay");
+    function closePopup() {
+    let popup = document.getElementById("popup");
+    let overlay = document.getElementById("overlay");
 
-  if (popup) {
-  popup.style.display = "none";
-  overlay.style.display = "none"; // Hide overlay
-  window.history.replaceState({}, document.title, window.location.pathname); // Remove query params
-  }
-  }
+    if (popup) {
+    popup.style.display = "none";
+    overlay.style.display = "none"; // Hide overlay
+    window.history.replaceState({}, document.title, window.location.pathname); // Remove query params
+    }
+    }
+    const addModal = document.getElementById("addModal");
+   const openAddBtn = document.getElementById("addBtn");
+   const closeAddBtn = document.getElementById("closeAddModal");
+
+   openAddBtn.onclick = () => addModal.style.display = "flex";
+   closeAddBtn.onclick = () => addModal.style.display = "none";
+
+   const modal = document.getElementById("editModal");
+   const openBtn = document.getElementById("editBtn");
+   const closeBtn = document.getElementById("closeEditModal");
+
+   openBtn.onclick = () => modal.style.display = "flex";
+   closeBtn.onclick = () => modal.style.display = "none";
 </script>
 </html>

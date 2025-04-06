@@ -118,8 +118,10 @@
             <div class="tutor-description">
                 <p th:text="${tutor.tutorDescribtion}"></p>
                 <p>
-                    <strong>Contact:</strong>
-                    <span th:text="${tutor.getUser.getUserSensitiveInformation != null ? tutor.getUser.getUserSensitiveInformation.getEmail : 'N/A'}"></span>
+                    <strong>Contact:</strong><br>
+                      Email: <span th:text="${tutor.getUser.getUserSensitiveInformation != null ? tutor.getUser.getUserSensitiveInformation.getEmail : 'N/A'}"></span><br>
+                      Phone number:<span th:text="${tutor.getUser.getUserSensitiveInformation != null ? tutor.getUser.getUserSensitiveInformation.getPhoneNumber : 'N/A'}"></span>
+
                 </p>
 
                 <ul style="padding: 0">

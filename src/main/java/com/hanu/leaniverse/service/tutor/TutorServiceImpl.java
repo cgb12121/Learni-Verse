@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +41,10 @@ public class TutorServiceImpl implements TutorService {
     private QuizzRepository quizzRepository;
     @Autowired
     private UserQuizzRepository userQuizzRepository;
+    @Autowired
+    private CourseCategoryRepository courseCategoryRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public Tutor getTutorFromAuthentication(User user) {
         return tutorRepository.findByUser(user);
@@ -50,14 +55,26 @@ public class TutorServiceImpl implements TutorService {
         return teaches.stream().map(Teach::getCourse).collect(Collectors.toList());
     }
 
-    public void createCourse(Course course, Tutor tutor) {
+    public void createCourse(Course course, Tutor tutor, List<Integer> categoryIds) {
         courseRepository.save(course);
+
+        List<CourseCategory> courseCategoryList = new ArrayList<>();
+        for (int categoryId : categoryIds) {
+            CourseCategory courseCategory = new CourseCategory();
+            courseCategory.setCourse(course);
+            courseCategory.setCategory(categoryRepository.findById(categoryId).orElse(null));
+            courseCategoryList.add(courseCategory);
+        }
+
+        courseCategoryRepository.saveAll(courseCategoryList);
+
         Teach teach = new Teach();
         teach.setTutor(tutor);
         teach.setCourse(course);
         teach.setTeachTime(new Date());
         teachRepository.save(teach);
-        System.out.println("yes");
+
+        System.out.println("Course and categories saved successfully!");
     }
 
     public Course getCourseById(int courseId) {

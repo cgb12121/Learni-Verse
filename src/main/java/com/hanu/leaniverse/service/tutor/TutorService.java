@@ -8,7 +8,7 @@ import java.util.List;
 public interface TutorService {
     Tutor getTutorFromAuthentication(User user);
     List<Course> getCoursesForTutor(Tutor tutor);
-    void createCourse(Course course, Tutor tutor);
+    void createCourse(Course course, Tutor tutor, List<Integer> categoryIds);
     Course getCourseById(int courseId);
     List<Unit> getUnitsForCourse(Course course);
     boolean hasAccessToCourse(Tutor tutor, Course course);
