@@ -33,8 +33,8 @@
             <button type="submit" class="btn purchasing-button">Add to Cart</button>
         </form>
         <div class="button-container">
-            <form class="btn gift-button">
-                <button type="submit">Purchase as Gift</button>
+            <form class="btn gift-button" th:action="@{/submit-order(amount=100000, orderInfo=${course.courseId}+':'+${course.courseName})}" th:method="post">
+                <button type="submit">Buy Now</button>
             </form>
             <form th:action="@{/add-to-wish-list(courseId=${course.courseId})}" class="btn favourite-button" method="post">
                 <button type="submit">
