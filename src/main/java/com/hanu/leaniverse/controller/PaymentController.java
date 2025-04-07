@@ -9,7 +9,6 @@ import com.hanu.leaniverse.service.UserService;
 import com.hanu.leaniverse.service.VNPayService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,9 +26,10 @@ public class PaymentController {
         @Autowired
         private UserService userService;
         @Autowired
-private EnrollmentRepository enrollmentRepository;
+        private EnrollmentRepository enrollmentRepository;
+
         @PostMapping("/submit-order")
-        public String submidOrder(@RequestParam("amount") int orderTotal,
+        public String submitOrder(@RequestParam("amount") int orderTotal,
                                   @RequestParam("orderInfo") String orderInfo,
                                   HttpServletRequest request
                                   ){
@@ -63,8 +63,9 @@ private EnrollmentRepository enrollmentRepository;
             }
             return paymentStatus == 1 ? "paymentSuccess" : "orderfail";
         }
+
         @GetMapping("/testPayment")
-    public String testPayment(Model model){
+        public String testPayment(Model model){
             return "paymentFail";
         }
 }

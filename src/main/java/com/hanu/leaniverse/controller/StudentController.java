@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -60,6 +61,67 @@ public class StudentController {
     @Autowired
     UserSensitiveInformationRepository userSensitiveInformationRepository;
 
+    @GetMapping("/my-courses")
+    public String showCourses(Model model, Authentication authentication) {
+        User currentUser = userService.getCurrentUser(authentication);
+
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        List<Enrollment> enrollments = enrollmentRepository.findByUser(currentUser);
+
+        List<Course> courses = enrollments.stream()
+                .map(Enrollment::getCourse)
+                .collect(Collectors.toList());
+
+        model.addAttribute("courses", courses);
+
+        return "my_courses";
+    }
+
+    @GetMapping("/course-detail")
+    public String showCourseDetail(@RequestParam("courseId") int courseId, Model model, Authentication authentication){
+        User currentUser = userService.getCurrentUser(authentication);
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        Course course = courseRepository.findById(courseId).orElse(null);
+        if (course == null) {
+            return "redirect:/home-page";
+        }
+
+        boolean isEnrolled = enrollmentRepository.isUserEnrolled(currentUser.getUserId(), courseId);
+        if (!isEnrolled) {
+            Map<String, Object> data = courseService.getCourseDetailData(courseId);
+            model.addAttribute("reviewDTO", new ReviewDTO());
+            model.addAttribute("course", data.get("course"));
+            model.addAttribute("tutor", data.get("tutor"));
+            model.addAttribute("reviews", data.get("reviews"));
+            model.addAttribute("averageRating", data.get("averageRating"));
+            model.addAttribute("relatedCourses", data.get("relatedCourses"));
+            return "courseDetail";
+        }
+
+        model.addAttribute("course", course);
+        model.addAttribute("units", course.getUnits());
+
+        return "course_overview";
+    }
+
+    @GetMapping("/course-overview")
+    public String showCourseOverview(@RequestParam("courseId") int courseId, Model model) {
+        Map<String, Object> data = courseService.getCourseDetailData(courseId);
+        model.addAttribute("course", data.get("course"));
+        model.addAttribute("tutor", data.get("tutor"));
+        model.addAttribute("reviews", data.get("reviews"));
+        model.addAttribute("averageRating", data.get("averageRating"));
+        model.addAttribute("relatedCourses", data.get("relatedCourses"));
+
+        return "course_overview";
+    }
+
     @GetMapping("/shopping-history")
     public String showHistoryPage(Model model, Authentication authentication){
         User currentUser = userService.getCurrentUser(authentication);
@@ -81,18 +143,18 @@ public class StudentController {
         return "homePage1";
     }
 
-    @GetMapping("/course-detail")
-    public String showCourseDetail(@RequestParam("courseId") int courseId, Model model) {
-
-        Map<String, Object> data = courseService.getCourseDetailData(courseId);
-        model.addAttribute("reviewDTO", new ReviewDTO());
-        model.addAttribute("course", data.get("course"));
-        model.addAttribute("tutor", data.get("tutor"));
-        model.addAttribute("reviews", data.get("reviews"));
-        model.addAttribute("averageRating", data.get("averageRating"));
-        model.addAttribute("relatedCourses", data.get("relatedCourses"));
-        return "courseDetail";
-    }
+//    @GetMapping("/course-detail")
+//    public String showCourseDetail(@RequestParam("courseId") int courseId, Model model) {
+//
+//        Map<String, Object> data = courseService.getCourseDetailData(courseId);
+//        model.addAttribute("reviewDTO", new ReviewDTO());
+//        model.addAttribute("course", data.get("course"));
+//        model.addAttribute("tutor", data.get("tutor"));
+//        model.addAttribute("reviews", data.get("reviews"));
+//        model.addAttribute("averageRating", data.get("averageRating"));
+//        model.addAttribute("relatedCourses", data.get("relatedCourses"));
+//        return "courseDetail";
+//    }
 
     @GetMapping("/quizz")
     public String showAllQuizzInAUnitPage(Model model,@RequestParam("unitId") int unitId){

@@ -20,9 +20,6 @@ public class AdminService {
     @Autowired
     private ReportRepository reportRepository;
 
-    public AdminService() {
-    }
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

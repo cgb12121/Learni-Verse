@@ -3,6 +3,7 @@ package com.hanu.leaniverse.model;
 import jakarta.persistence.*;
 
 import java.util.List;
+
 @Entity
 public class Course {
     @Id

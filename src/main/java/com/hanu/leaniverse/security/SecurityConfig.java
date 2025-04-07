@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -28,31 +29,24 @@ public class SecurityConfig {
         return daoAuthenticationProvider;
     }
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeHttpRequests(configurer -> configurer
-                                .requestMatchers( "/", "/login/**", "/logout/**", "/sign-up/**", "/img/**").permitAll()
-                                .requestMatchers("/quizz").permitAll()
-                                .requestMatchers("/question").permitAll()
-
-                                /// admin
-//                        .requestMatchers(HttpMethod.GET,"/api/admin/**").hasAuthority("ADMIN")
-//                        .requestMatchers(HttpMethod.POST,"/api/admin/**").hasAuthority("ADMIN")
-                              .anyRequest().permitAll()
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests(configurer -> configurer
+                .requestMatchers("/", "/login/**", "/logout/**", "/sign-up/**", "/img/**").permitAll()
+                .requestMatchers("/quizz").permitAll()
+                .requestMatchers("/question").permitAll()
+                .anyRequest().permitAll()
 
 
-                )
-                .formLogin(
-                        form -> form.loginPage("/login")
-                                .defaultSuccessUrl("/home-page", true)
-                                .permitAll()
-                )
-                .sessionManagement(session -> session.maximumSessions(1))
-                .httpBasic(Customizer.withDefaults());
+        );
+        http.formLogin(
+                form -> form.loginPage("/login")
+                        .defaultSuccessUrl("/home-page", true)
+                        .permitAll()
+        );
+        http.sessionManagement(session -> session.maximumSessions(1));
+        http.httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
