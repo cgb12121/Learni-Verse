@@ -9,7 +9,7 @@
   <link rel="stylesheet" th:href="@{/css/course_overview.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body style="background-color: #f8f9fa;">
+<body style="background-color: #f8f9fa;padding-bottom: 5%;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
 <!--<div>-->
 <!--  <div class="profile-card">-->
@@ -152,27 +152,6 @@
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
 <script>
-  const modal = document.getElementById("editModal");
-const openBtn = document.getElementById("editBtn");
-const closeBtn = document.getElementById("closeModal");
-
-openBtn.onclick = () => modal.style.display = "flex";
-closeBtn.onclick = () => modal.style.display = "none";
-document.addEventListener("DOMContentLoaded", function () {
-    const userIcon = document.getElementById("user-icon");
-    const userPopup = document.getElementById("user-popup");
-
-    userIcon.addEventListener("click", () => {
-        userPopup.classList.toggle("show");
-    });
-
-    // This part still closes the user popup when clicking outside (but not the modal)
-    document.addEventListener("click", function (event) {
-        if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
-            userPopup.classList.remove("show");
-        }
-    });
-});
   document.addEventListener("DOMContentLoaded", function () {
         const userIcon = document.getElementById("user-icon");
         const userPopup = document.getElementById("user-popup");
@@ -181,13 +160,20 @@ document.addEventListener("DOMContentLoaded", function () {
             userPopup.classList.toggle("show");
         });
 
-        // Close the popup when clicking outside
+
         document.addEventListener("click", function (event) {
             if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
                 userPopup.classList.remove("show");
             }
         });
     });
+  const modal = document.getElementById("editModal");
+const openBtn = document.getElementById("editBtn");
+const closeBtn = document.getElementById("closeModal");
+
+openBtn.onclick = () => modal.style.display = "flex";
+closeBtn.onclick = () => modal.style.display = "none";
+
 </script>
 </html>
 

@@ -25,7 +25,7 @@
             <button id="editBtn" class="item-btn" th:href="@{/tutor/course/{id}/edit(id=${course.courseId})}">
                 Edit
             </button>
-            <form th:action="@{/tutor/course/{id}/delete(courseId=${course.courseId})}" method="post"
+            <form th:action="@{/tutor/course/delete(courseId=${course.courseId})}" method="post"
                   style="display:inline;">
                 <button class="item-btn" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
             </form>
@@ -67,7 +67,7 @@
                 <input type="number" name="price" th:field="*{price}" autocomplete="off"><br>
 
                 <label>Category:</label>
-                <select name="categoryIds" multiple>
+                <select name="categoryIds" multiple class="custom-select">
                     <option th:each="category : ${categories}" th:value="${category.categoryId}"
                             th:text="${category.name}"></option>
                 </select>
@@ -82,16 +82,22 @@
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
 <script>
-    function closePopup() {
-    let popup = document.getElementById("popup");
-    let overlay = document.getElementById("overlay");
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
 
-    if (popup) {
-    popup.style.display = "none";
-    overlay.style.display = "none"; // Hide overlay
-    window.history.replaceState({}, document.title, window.location.pathname); // Remove query params
-    }
-    }
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
+
     const addModal = document.getElementById("addModal");
    const openAddBtn = document.getElementById("addBtn");
    const closeAddBtn = document.getElementById("closeAddModal");
@@ -99,11 +105,18 @@
    openAddBtn.onclick = () => addModal.style.display = "flex";
    closeAddBtn.onclick = () => addModal.style.display = "none";
 
-   const modal = document.getElementById("editModal");
-   const openBtn = document.getElementById("editBtn");
-   const closeBtn = document.getElementById("closeEditModal");
+    const editModal = document.getElementById("editModal");
+    const openEditBtns = document.querySelectorAll("#editBtn");
+    const closeEditBtn = document.getElementById("closeEditModal");
 
-   openBtn.onclick = () => modal.style.display = "flex";
-   closeBtn.onclick = () => modal.style.display = "none";
+
+openEditBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        editModal.style.display = "flex";
+    });
+    closeEditBtn.onclick = () => editModal.style.display = "none";
+});
+
+
 </script>
 </html>

@@ -64,26 +64,9 @@ public class TutorController {
             return "redirect:/tutor/dashboard";
         }
 
-        tutorService.createCourse(course, tutor, categoryIds); // Pass category list
+        tutorService.createCourse(course, tutor, categoryIds);
         return "redirect:/tutor/dashboard";
     }
-
-    @GetMapping("/course/{courseId}/edit")
-    public String showEditCourseForm(@PathVariable("courseId") int courseId, Model model, Authentication authentication) {
-        User user = userService.getCurrentUser(authentication);
-        Tutor tutor = tutorService.getTutorFromAuthentication(user);
-        if (tutor == null) {
-            return "redirect:/tutor/dashboard";
-        }
-        Course course = tutorService.getCourseById(courseId);
-        if (course == null || tutorService.hasAccessToCourse(tutor, course)) {
-            return "redirect:/tutor/dashboard";
-        }
-        model.addAttribute("course", course);
-        model.addAttribute("units", tutorService.getUnitsForCourse(course));
-        return "tutor/edit_course";
-    }
-
     @PostMapping("/course/edit")
     public String updateCourse(@RequestParam("courseId") int courseId, @ModelAttribute("course") Course updatedCourse, Authentication authentication) {
         User user = userService.getCurrentUser(authentication);
@@ -99,8 +82,8 @@ public class TutorController {
         return "redirect:/tutor/dashboard";
     }
 
-    @PostMapping("/course/{courseId}/delete")
-    public String deleteCourse(@PathVariable("courseId") int courseId, Authentication authentication) {
+    @PostMapping("/course/delete")
+    public String deleteCourse(@RequestParam("courseId") int courseId, Authentication authentication) {
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {

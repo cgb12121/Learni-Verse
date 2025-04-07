@@ -15,93 +15,10 @@
 
 <body>
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
-<div class="history" style="margin-top: 2px;">
-    <div class="history-category">
-        <h1 class="history-header title">History</h1>
-        <a href="show-shopping-history">Shopping history</a>
-        <a href="/show-gift-history">Gift history</a>
-    </div>
+<div class="history" style="margin-top: 2px;min-height: 80vh; padding-bottom: 5%;">
     <div class="history-list">
         <h1 class="history-header title">Shopping history</h1>
-
-        <!-- For loop to get history by date in Enrollment entity-->
-<!--        <div class="history-by-date-container">-->
-<!--            <div class="history-by-date-list">-->
-<!--                <div class="history-by-date">-->
-<!--                    <p class="history-text date">January 19th, 2025</p>-->
-<!--                    <div class="purchase-attempt">-->
-<!--                        <div>-->
-<!--                            <p class="history-text">Number of courses: 3</p>-->
-<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
-<!--                        </div>-->
-<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
-<!--                    </div>-->
-<!--                    <div class="purchase-attempt">-->
-<!--                        <div>-->
-<!--                            <p class="history-text">Number of courses: 3</p>-->
-<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
-<!--                        </div>-->
-<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="history-by-date-list">-->
-<!--                <div class="history-by-date">-->
-<!--                    <p class="history-text date">January 19th, 2025</p>-->
-<!--                    <div class="purchase-attempt">-->
-<!--                        <div>-->
-<!--                            <p class="history-text">Number of courses: 3</p>-->
-<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
-<!--                        </div>-->
-<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
-<!--                    </div>-->
-<!--                    <div class="purchase-attempt">-->
-<!--                        <div>-->
-<!--                            <p class="history-text">Number of courses: 3</p>-->
-<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
-<!--                        </div>-->
-<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="history-by-date-list">-->
-<!--                <div class="history-by-date">-->
-<!--                    <p class="history-text date">January 19th, 2025</p>-->
-<!--                    <div class="purchase-attempt">-->
-<!--                        <div>-->
-<!--                            <p class="history-text">Number of courses: 3</p>-->
-<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
-<!--                        </div>-->
-<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
-<!--                    </div>-->
-<!--                    <div class="purchase-attempt">-->
-<!--                        <div>-->
-<!--                            <p class="history-text">Number of courses: 3</p>-->
-<!--                            <p class="history-text">Price: đ 2.500.000</p>-->
-<!--                        </div>-->
-<!--                        <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="history-by-date-container">-->
-<!--            <div th:each="entry : ${enrollmentsByDate}">-->
-<!--                <div class="history-by-date-list">-->
-<!--                    <div class="history-by-date">-->
-<!--                        <p class="history-text date" th:text="${#temporals.format(entry.key, 'MMMM d, yyyy', T(java.util.Locale).ENGLISH)}"></p>-->
-<!--                        <div th:each="enrollment : ${entry.value}" class="purchase-attempt">-->
-<!--                            <div>-->
-<!--                                <p class="history-text">Number of courses: <span th:text="${#lists.size(entry.value)}"></span></p>-->
-<!--                                <p class="history-text">Price: đ <span th:text="${enrollment.price}"></span></p>-->
-<!--                            </div>-->
-<!--                            <button class="toggle-btn"><i class="fa-solid fa-ellipsis"></i></button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--    </div>-->
+        <p class="cart-header course-num" style="padding: 0;" th:text="'Total enrollments: ' + ${#lists.size(enrollmentsByDate)}"></p>
         <div class="history-by-date-container">
             <div th:each="entry : ${enrollmentsByDate}">
                 <div class="history-by-date-list">
@@ -143,35 +60,6 @@
             </div>
         </div>
 
-
-    <!-- After click "..." icon, the system display full info about the purchase attempt -->
-<!--    <div class="purchase-attempt-info-container">-->
-<!--        <div class="tittle-n-btn">-->
-<!--            <h1 class="history-header title">Payment detail</h1>-->
-<!--            <button>X</button>-->
-<!--        </div>-->
-<!--        <p class="history-text detail"><strong>Card number:</strong> *************099</p>-->
-<!--        <p class="history-text detail"><strong>Card type:</strong> VISA</p>-->
-<!--        <p class="history-text detail"><strong>CVC/CVV:</strong> **8</p>-->
-<!--        <p class="history-text detail"><strong>Bank:</strong> MB Bank</p>-->
-<!--        <p class="history-text detail"><strong>Price:</strong> đ 2.500.000</p>-->
-<!--        <div class="course-list">-->
-<!--            <p class="history-text detail"><strong>Courses:</strong></p>-->
-<!--            <div class="history-course-list">-->
-<!--                <div class="history-course">-->
-<!--                    <a href="">- Spring Boot for beginner</a>-->
-<!--                    <p>Tuyen Tom</p>-->
-<!--                </div>-->
-<!--                <div class="history-course">-->
-<!--                    <a href="">- Spring Boot advance</a>-->
-<!--                    <p>Tuyen Tom</p>-->
-<!--                </div>-->
-<!--                <div class="history-course">-->
-<!--                    <a href="">- Thymeleaf for beginner</a>-->
-<!--                    <p>Tuyen Tom</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 </div>
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
