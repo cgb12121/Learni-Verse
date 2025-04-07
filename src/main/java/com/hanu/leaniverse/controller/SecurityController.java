@@ -19,11 +19,6 @@ public class SecurityController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("")
-    public String homePage(Model model) {
-        return "homePage1";
-    }
-
     @GetMapping("/login")
     public String loginPage() {
         return "login";

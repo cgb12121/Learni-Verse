@@ -60,10 +60,6 @@ public class StudentController {
     EnrollmentService enrollmentService;
     @Autowired
     UserSensitiveInformationRepository userSensitiveInformationRepository;
-    @GetMapping("/")
-    public String showPage(){
-        return "redirect:/home-page";
-    }
 
     @GetMapping("/my-courses")
     public String showCourses(Model model, Authentication authentication) {
@@ -137,7 +133,7 @@ public class StudentController {
         model.addAttribute("enrollmentsByDate", enrollmentsByDate);
         return "shoppingHistory";
     }
-    @GetMapping("/home-page")
+    @GetMapping("")
     public String showHomePage(@RequestParam(value = "title", required = false) String title,
                                @RequestParam(value = "categoryId", required = false) Integer categoryId,
                                Model model) {
