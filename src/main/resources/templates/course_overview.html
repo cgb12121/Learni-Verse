@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Course Layout</title>
+  <title th:text="${course.courseName}">Course Overview</title>
 
-  <!-- Link đến các file CSS -->
+  <!-- CSS Links -->
   <link rel="stylesheet" href="/css/userHP.css">
   <link rel="stylesheet" href="/css/Header_Footer.css">
   <link rel="stylesheet" href="/css/course_overview.css">
@@ -14,74 +13,47 @@
 </head>
 
 <body class="body-bg">
-<!-- Header -->
-<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
 
+<!-- Header -->
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
 
 <div class="container">
-  <!-- Tiêu đề khóa học -->
-  <h1 class="course-title">How to Design & Prototype in Adobe XD?</h1>
+  <!-- Course Title -->
+  <h1 class="course-title" th:text="${course.courseName}">Course Title</h1>
 
-  <!-- Thanh thông tin về tiến độ khóa học -->
-  <div class="info-bar">
-    <span>🕒 1h 30m of video left</span>
-    <span>📖 30 min of readings left</span>
-    <span>📝 2 quizzes left</span>
-  </div>
-
-  <!-- Mô tả khóa học -->
-  <p class="course-description">
-    Adobe XD is a powerful design and prototyping tool developed by Adobe Inc.
-    This course will guide you through the fundamentals of UX/UI design,
-    helping you create interactive and visually appealing prototypes.
+  <!-- Course Description -->
+  <p class="course-description" th:text="${course.courseDetail}">
+    Description of the course goes here...
   </p>
 
-  <!-- Button mở rộng mô tả -->
+  <!-- Show More Button -->
   <button class="show-more">Show more</button>
 
-  <!-- Section 1: Basic Tools -->
-  <h2 class="section-title">Section 1: Basic Tools</h2>
-  <p class="section-description">
-    In this section, you will learn how to navigate Adobe XD and use its core tools effectively.
-  </p>
+  <!-- Loop through units (sections/modules) -->
+  <div th:each="unit : ${units}">
+    <h2 class="section-title" th:text="${unit.Description}">Unit Description</h2>
+    <ul class="lesson-list">
+      <li class="lesson-item" th:each="lesson : ${unit.video}">
+      <span class="lesson-icon">
+        <img th:src="@{/icons/play-icon.svg}" alt="Video" width="24">
+      </span>
+        <span class="lesson-text" th:text="${lesson.title}">Lesson Title</span>
+        <div class="lesson-meta">
+          <img src="/icons/time-icon.svg" alt="Time Icon" width="16">
+          <span th:text="${lesson.duration}">Duration</span>
+        </div>
+      </li>
+    </ul>
+  </div>
 
-  <!-- Danh sách bài học -->
-  <ul class="lesson-list">
-    <li class="lesson-item">
-      <span class="lesson-icon"><img src="/icons/video-icon.svg" alt="Video" width="24"></span>
-      <a href="#" class="lesson-text">1. Creating Artboards</a>
-      <div class="lesson-meta">
-        <img src="/icons/play-icon.svg" alt="Time Icon" width="16">
-        <span>1 min</span>
-      </div>
-    </li>
-
-    <li class="lesson-item">
-      <span class="lesson-icon"><img src="/icons/book-icon.svg" alt="Book" width="24"></span>
-      <a href="#" class="lesson-text">2. Line and Shapes</a>
-      <div class="lesson-meta">
-        <img src="/icons/read-icon.svg" alt="Time Icon" width="16">
-        <span>2 min</span>
-      </div>
-    </li>
-
-    <li class="lesson-item">
-      <span class="lesson-icon"><img src="/icons/video-icon.svg" alt="Video" width="24"></span>
-      <a href="#" class="lesson-text">3. Borders, Fills & Shadows</a>
-      <div class="lesson-meta">
-        <img src="/icons/play-icon.svg" alt="Time Icon" width="16">
-        <span>3 min</span>
-      </div>
-    </li>
-  </ul>
-
-  <!-- Button để bắt đầu học -->
-  <button class="start-learning">Start Learning Now</button>
+  <!-- Start Learning Button -->
+  <button class="start-learning" th:onclick="|window.location='@{/learning/start(courseId=${course.courseId})}'|">
+    Start Learning Now
+  </button>
 </div>
 
 <!-- Footer -->
-<div th:replace="/fragments/header_nav.html :: footer"></div>
-
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 
 </body>
 </html>

@@ -79,7 +79,7 @@
   <div class="profile-card">
     <div class="profile-photo">
       <img src="https://static.tvtropes.org/pmwiki/pub/images/11fbb437_bb86_43cf_b54c_75587a77da78.jpeg" alt="Profile">
-      <div class="section" th:if="${organization}">
+      <div class="section">
         <h4>Work</h4>
         <p>
           <span class="label" th:text="${organization}"></span>
@@ -112,7 +112,7 @@
         <p><span class="label">Gender:</span> <span th:text="${userInfo?.gender ?: 'N/A'}"></span></p>
       </div>
 
-      <button class="save-btn" id="editBtn" style="margin-top: 20px;">Edit Profile</button>
+      <button class="btn-primary" id="editBtn" style="margin-top: 20px;">Edit Profile</button>
     </div>
   </div>
 
@@ -121,29 +121,29 @@
     <div class="modal-content">
       <span class="close" id="closeModal">&times;</span>
       <h3>Edit Profile</h3>
-      <form class="edit-form" th:action="@{/edit-profile}" th:object="${userInfo}" method="post">
+      <form th:action="@{/edit-profile}" th:object="${userInfo}" method="post">
         <label>Name:</label>
-        <input type="text" name="fullName" th:value="${user?.fullName ?: ''}" autocomplete="off"><br>
+        <input type="text" name="fullName" th:value="${user?.fullName ?: ''}"><br>
 
         <label>Email:</label>
-        <input type="email" th:field="*{email}" autocomplete="off"><br>
+        <input type="email" th:field="*{email}"><br>
 
         <label>Birthday:</label>
-        <input type="date" th:field="*{dob}" autocomplete="off"><br>
+        <input type="date" th:field="*{dob}"><br>
         <label>Place of birth:</label>
-        <input type="text" th:field="*{pob}" autocomplete="off"><br>
+        <input type="text" th:field="*{pob}"><br>
         <label>Address:</label>
-        <input type="text" th:field="*{address}" autocomplete="off"><br>
+        <input type="text" th:field="*{address}"><br>
         <label>Phone:</label>
-        <input type="text" th:field="*{phoneNumber}" autocomplete="off"><br>
+        <input type="text" th:field="*{phoneNumber}"><br>
         <label>Gender:</label>
-        <input type="text" th:field="*{gender}" autocomplete="off"><br>
+        <input type="text" th:field="*{gender}"><br>
         <label>Position:</label>
-        <input type="text" th:field="*{position}" autocomplete="off"><br>
+        <input type="text" th:field="*{position}"><br>
         <label>Organization:</label>
-        <input type="text" th:field="*{organization}" autocomplete="off"><br>
+        <input type="text" th:field="*{organization}"><br>
 
-        <button type="submit" class="save-btn" autocomplete="off">Save Changes</button>
+        <button type="submit" class="btn-primary">Save Changes</button>
       </form>
     </div>
   </div>
