@@ -42,7 +42,14 @@
         <div class="cart-purchasing-section">
             <h2>Total:</h2>
             <p class="price"></p>
-            <button class="btn purchasing-button">Purchase</button>
+            <form th:method="post" th:action="@{/submit-order}">
+                <input type="hidden" name="amount"
+                       th:value="100000">
+                <input type="hidden" name="orderInfo"
+                       th:value="${#strings.listJoin(CartList.![getCourse().courseId + ':' + getCourse().courseName], ',')}">
+
+                <button type="submit" class="btn purchasing-button">Purchase</button>
+            </form>
         </div>
     </div>
 
