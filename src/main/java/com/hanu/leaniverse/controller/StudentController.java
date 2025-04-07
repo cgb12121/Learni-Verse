@@ -9,6 +9,7 @@ import com.hanu.leaniverse.repository.*;
 import com.hanu.leaniverse.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -112,11 +113,11 @@ public class StudentController {
         return "do_quizz_test";
     }
     @PostMapping("/grade")
-    public String gradeTheQuizz(Model model, @RequestBody List<QuestionDTO> questionDTOS, @RequestParam int quizzId, Authentication authentication){
+    public ResponseEntity<String> gradeTheQuizz(Model model, @RequestBody List<QuestionDTO> questionDTOS, @RequestParam int quizzId, Authentication authentication){
         double grade = gradingService.Grading(questionDTOS);
         userQuizzService.setUserQuizz(quizzId,grade,authentication);
         model.addAttribute("grade",grade);
-        return "hello" ;
+        return ResponseEntity.ok().body("success");
     }
 
     @GetMapping("/show-cart")

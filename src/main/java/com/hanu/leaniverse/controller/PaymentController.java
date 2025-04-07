@@ -61,7 +61,11 @@ private EnrollmentRepository enrollmentRepository;
                 enrollment.setOrderInfo(orderInfo);
                 enrollmentRepository.saveAndFlush(enrollment);
             }
-            return paymentStatus == 1 ? "ordersuccess" : "orderfail";
+            return paymentStatus == 1 ? "paymentSuccess" : "orderfail";
+        }
+        @GetMapping("/testPayment")
+    public String testPayment(Model model){
+            return "paymentFail";
         }
 }
 
