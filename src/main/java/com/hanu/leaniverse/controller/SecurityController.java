@@ -19,6 +19,10 @@ public class SecurityController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("")
+    public String homePage(Model model) {
+        return "homePage1";
+    }
 
     @GetMapping("/login")
     public String loginPage() {
@@ -30,9 +34,20 @@ public class SecurityController {
         try {
             User user = (User) userService.loadUserByUsername(userDTO.getUsername());
 
-            if (user != null) {
-                return "homePage"; // If success
+            if (user == null) {
+                model.addAttribute("error", "Wrong username or password!");
+                return "login";
             }
+
+            if (user.getRole().equals("TUTOR") || user.getRole().equals("ROLE_TUTOR")) {
+                return "tutor/dashboard";
+            }
+
+            if (user.getRole().equals("ADMIN") || user.getRole().equals("ROLE_ADMIN")) {
+                return "admin/users";
+            }
+
+            return "homePage1";
 
         } catch (UsernameNotFoundException e) {
             model.addAttribute("error", "Wrong username or password!");

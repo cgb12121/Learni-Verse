@@ -12,12 +12,12 @@
         <p th:text="${question.choice3}"></p>
         <p th:text="${question.choice4}"></p>
         <p th:text="${question.choice5}"></p>
-        <form th:action="@{/delete-question(questionId=${question.questionId}, quizzId=${param.quizzId})}" method="post" style="display:inline;">
+        <form th:action="@{/deleteQuestion(questionId=${question.questionId}, quizzId=${param.quizzId})}" method="post" style="display:inline;">
             <button type="submit" class="button">Delete</button>
         </form>
 
     </div>
-    <form th:action="@{/add-question}" method="post" th:object="${questionForm}">
+    <form th:action="@{/addQuestion}" method="post" th:object="${questionForm}">
         <!-- Hidden input to pass quizzId -->
         <input type="hidden" name="quizzId" th:value="${param.quizzId}" />
         <p>Question:</p>

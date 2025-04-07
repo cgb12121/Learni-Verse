@@ -1,0 +1,130 @@
+/* Thanh tiêu đề màu xanh */
+.course-header {
+    display: flex;
+    background-color: #87CEFA; /* Xanh nhạt */
+    padding: 10px 20px;
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+}
+
+.course-header h2 {
+    margin: 0;
+    flex-direction:left;
+    color: white;
+}
+
+.btn-back {
+    text-decoration: none;
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-back i {
+    margin-right: 5px;
+}
+
+.btn-back:hover {
+    color: #3367d6;
+}
+
+/* Video Container */
+.video-container {
+    max-width: 900px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Căn chỉnh video + nút chuyển */
+.video-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.video-wrapper video {
+    width: 100%;
+    border-radius: 5px;
+}
+
+/* Nút chuyển video */
+.video-nav {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.video-nav:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.video-nav.left {
+    left: 10px;
+}
+
+.video-nav.right {
+    right: 10px;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #ddd;
+    margin-top: 20px;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    background: none;
+    border-bottom: 3px solid transparent;
+    transition: 0.3s;
+}
+
+.tab-button:hover,
+.tab-button.active {
+    border-bottom: 3px solid #4285f4;
+    color: #4285f4;
+}
+
+/* Course Content */
+.course-content {
+    max-width: 900px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.course-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.course-content li {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.course-content li:hover {
+    background: #f0f0f0;
+}

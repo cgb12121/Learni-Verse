@@ -1,46 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
-
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" th:href="@{/css/userHP.css}">
-  <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
-  <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+  <title th:text="${course.courseName}">Course Overview</title>
+
+  <!-- CSS Links -->
+  <link rel="stylesheet" href="/css/userHP.css">
+  <link rel="stylesheet" href="/css/Header_Footer.css">
+  <link rel="stylesheet" href="/css/course_overview.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <title>Course Layout</title>
 </head>
+
 <body class="body-bg">
+
+<!-- Header -->
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
 
 <div class="container">
-  <h1 class="course-title" th:text="${courseTitle}">How to Design & Prototype in Adobe XD?</h1>
+  <!-- Course Title -->
+  <h1 class="course-title" th:text="${course.courseName}">Course Title</h1>
 
-  <div class="info-bar">
-    <span>🕒 <span th:text="${videoTimeLeft}">1h 30m</span> of video left</span>
-    <span>📖 <span th:text="${readingTimeLeft}">30 min</span> of readings left</span>
-    <span>📝 <span th:text="${quizzesLeft}">2</span> quizzes left</span>
-  </div>
-
-  <p class="course-description" th:text="${courseDescription}">
-    Adobe XD is a powerful design and prototyping tool developed by Adobe Inc.
+  <!-- Course Description -->
+  <p class="course-description" th:text="${course.courseDetail}">
+    Description of the course goes here...
   </p>
 
+  <!-- Show More Button -->
   <button class="show-more">Show more</button>
 
-  <h2 class="section-title">Section 1: Basic Tools</h2>
-  <ul class="lesson-list">
-    <li th:each="lesson : ${lessons}" class="lesson-item">
-      <span th:text="${lesson.icon}">📖</span>
-      <span class="lesson-text" th:text="|${lesson.index}. ${lesson.name} - ${lesson.duration} min|">
-        1. Creating artboards - 1 min
+  <!-- Loop through units (sections/modules) -->
+  <div th:each="unit : ${units}">
+    <h2 class="section-title" th:text="${unit.Description}">Unit Description</h2>
+    <ul class="lesson-list">
+      <li class="lesson-item" th:each="lesson : ${unit.video}">
+      <span class="lesson-icon">
+        <img th:src="@{/icons/play-icon.svg}" alt="Video" width="24">
       </span>
-    </li>
-  </ul>
+        <span class="lesson-text" th:text="${lesson.title}">Lesson Title</span>
+        <div class="lesson-meta">
+          <img src="/icons/time-icon.svg" alt="Time Icon" width="16">
+          <span th:text="${lesson.duration}">Duration</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Start Learning Button -->
+  <button class="start-learning" th:onclick="|window.location='@{/learning/start(courseId=${course.courseId})}'|">
+    Start Learning Now
+  </button>
 </div>
+
+<!-- Footer -->
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
-</body>
-</html>
 
 </body>
 </html>

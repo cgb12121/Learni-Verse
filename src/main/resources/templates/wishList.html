@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body style="background-color: #f8f9fa;">
-<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
 <div style="width: 90%;
     justify-self: center;padding-bottom: 5%;">
     <h1 class="cart-header title">Wish List</h1>
@@ -33,7 +33,7 @@
                         Name</p>
                     <div class="remove-container">
                         <form method="post" th:action="@{/delete-wish-list-item(WishListId=${course.wishListId})}">
-                            <button class="remove-btn" onclick="return confirm('Are you sure?')" type="submit">Remove</button>
+                            <button class="remove-btn" type="submit">Remove</button>
                         </form>
                         <p class="related-course-price" th:text="'$ ' + ${course.getCourse.price}"></p>
                     </div>

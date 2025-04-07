@@ -17,6 +17,7 @@ public class QuestionController {
     QuestionRepository questionRepository;
     @Autowired
     QuizzRepository quizzRepository;
+
     @GetMapping("/show-question-management")
     public String showAllQuestionEditPage(@RequestParam int quizzId, Model model){
         List<Question> list = questionRepository.findQuestionsByQuizzId(quizzId);
@@ -25,18 +26,20 @@ public class QuestionController {
         model.addAttribute("questionForm",question);
         return "questionManagePage";
     }
+
 //    @PostMapping("/addQuestion")
 //    public String addQuestion(@RequestBody Question question){
 //        questionRepository.save(question);
 //        return "redirect:/showQuestionManagement";
 //    }
-@PostMapping("/add-question")
-public String addQuestion(@ModelAttribute Question question, @RequestParam int quizzId) {
-    Quizz quizz = quizzRepository.findById(quizzId).orElseThrow(() -> new IllegalArgumentException("Invalid quizzId"));
-    question.setQuizz(quizz);
-    questionRepository.save(question);
-    return "redirect:/showQuestionManagement?quizzId=" + quizzId;
-}
+
+    @PostMapping("/add-question")
+    public String addQuestion(@ModelAttribute Question question, @RequestParam int quizzId) {
+        Quizz quizz = quizzRepository.findById(quizzId).orElseThrow(() -> new IllegalArgumentException("Invalid quizzId"));
+        question.setQuizz(quizz);
+        questionRepository.save(question);
+        return "redirect:/showQuestionManagement?quizzId=" + quizzId;
+    }
 
     @PostMapping("/delete-question")
     public String deleteQuestion(@RequestParam int questionId, @RequestParam int quizzId){

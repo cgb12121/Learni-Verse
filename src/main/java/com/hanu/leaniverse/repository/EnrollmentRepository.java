@@ -16,4 +16,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
     List<Enrollment> findByUser(@Param("user") User user);
 
     List<Enrollment> findByCourse(Course course);
+
+    @Query("SELECT COUNT(e) > 0 FROM Enrollment e WHERE e.user.userId = :userId AND e.course.courseId = :courseId")
+    boolean isUserEnrolled(@Param("userId") int userId, @Param("courseId") int courseId);
 }

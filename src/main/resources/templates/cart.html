@@ -30,7 +30,7 @@
                         Name</p>
                     <div class="remove-container">
                         <form method="post" th:action="@{/delete-cart-item(cartId=${course.cardId})}">
-                            <button class="remove-btn" onclick="return confirm('Are you sure?')" type="submit">Remove</button>
+                            <button class="remove-btn" type="submit">Remove</button>
                         </form>
                         <p class="related-course-price" th:text="'$ ' + ${course.getCourse.price}"></p>
                     </div>
@@ -42,7 +42,14 @@
         <div class="cart-purchasing-section">
             <h2>Total:</h2>
             <p class="price"></p>
-            <button class="btn purchasing-button">Purchase</button>
+            <form th:method="post" th:action="@{/submit-order}">
+                <input type="hidden" name="amount"
+                       th:value="100000">
+                <input type="hidden" name="orderInfo"
+                       th:value="${#strings.listJoin(CartList.![getCourse().courseId + ':' + getCourse().courseName], ',')}">
+
+                <button type="submit" class="btn purchasing-button">Purchase</button>
+            </form>
         </div>
     </div>
 

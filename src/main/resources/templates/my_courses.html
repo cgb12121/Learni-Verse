@@ -2,20 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>My Course</title>
+    <title>My Courses</title>
     <link rel="stylesheet" th:href="@{/css/userHP.css}">
     <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
 
+</head>
 <body>
-<!-- Import Header -->
-<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<!-- Header -->
+<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
 
 <!-- Main Content -->
 <div class="main-content">
     <div class="sub-menu-container">
-        <h2>My Course</h2>
+        <h2>My Courses</h2>
         <div class="sub-menu">
             <a href="#" class="menu-item highlight">All Courses</a>
             <a href="#" class="menu-item">My Lists</a>
@@ -25,47 +25,23 @@
         </div>
     </div>
 
-    <!-- Courses List -->
+    <!-- My Courses List -->
     <div class="courses-container">
         <div class="course-card" th:each="course : ${courses}">
-            <a th:href="@{/course/overview/{name}(name=${course.title})}" class="block">
-                <img th:src="${course.imageUrl}" alt="Course Image" class="rounded-lg">
-                <h3 th:text="${course.title}" class="text-lg font-semibold">Course Title</h3>
-                <p th:text="${course.university}" class="text-gray-600">University Name</p>
-                <p class="text-blue-600"><span th:text="${course.progress}"></span>% complete</p>
+            <img th:src="@{/images/{courseimg}(courseimg=${course.courseName})}" alt="Course image" class="course-image">
+
+            <h3 th:text="${course.courseName}" class="course-title"></h3>
+
+            <a th:href="@{/course-detail(courseId=${course.courseId})}" class="course-title">
+                <p th:text="${course.courseDetail}" class="course-detail"></p>
+                <p class="course-price">Price: $<span th:text="${course.price}"></span></p>
             </a>
         </div>
-        <div class="courses-container">
-            <div class="course-card">
-                <a th:href="@{/course/overview/xd}">
-                    <img src="https://example.com/xd.jpg" alt="Adobe XD" class="course-image">
-                    <h3 class="course-title">How to Design & Prototype in Adobe XD?</h3>
-                    <p class="course-university">Adobe Inc.</p>
-                    <p class="course-progress">Progress: 80%</p>
-                </a>
-            </div>
-        </div>
-
     </div>
 </div>
 
-<!-- Import Footer -->
-<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
+<!-- Footer -->
+<div th:replace="/fragments/header_nav.html :: footer"></div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll(".menu-item").forEach(item => {
-            item.addEventListener("click", function(event) {
-                event.preventDefault(); // Ngăn chặn link chuyển trang
-
-                // Xóa class highlight khỏi tất cả các menu-item
-                document.querySelectorAll(".menu-item").forEach(el => el.classList.remove("highlight"));
-
-                // Thêm class highlight vào mục được click
-                this.classList.add("highlight");
-            });
-        });
-    });
-</script>
 </body>
 </html>
