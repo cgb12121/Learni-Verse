@@ -17,7 +17,7 @@
     <h1 class="cart-header title">Dashboard</h1>
     <p class="cart-header course-num">Your Courses</p>
     <button class="dashboard-button" id="addBtn">Create New Course</button>
-    <p th:if="${courses.isEmpty()}">No course created</p>
+    <p class="dashboard-course-item" th:if="${courses.isEmpty()}">No course created</p>
 
     <div class="dashboard-course-item" th:each="course : ${courses}">
         <strong th:text="${course.courseName}"></strong>

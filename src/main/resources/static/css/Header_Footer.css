@@ -261,4 +261,36 @@ footer {
 .show {
     display: block ;
 }
+.login-btn, .signup-btn {
+justify-content: center;
+    width: 50px;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    margin: 0 5px;
+    display: inline-block;
+}
 
+/* Login Button */
+.login-btn {
+    background-color: #007bff;
+}
+
+.login-btn:hover {
+    opacity: 0.6;
+        transition: 0.3s;
+}
+
+/* Signup Button */
+.signup-btn {
+    background-color: white;
+    border: 1px solid #007bff;
+    color: #007bff;
+}
+
+.signup-btn:hover {
+    opacity: 0.6;
+    transition: 0.3s;
+}

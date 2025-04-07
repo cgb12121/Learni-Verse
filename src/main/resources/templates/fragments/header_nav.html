@@ -29,7 +29,14 @@
                 <i class="fa-solid fa-chalkboard-teacher"></i>
             </a>
 
-            <div class="user-menu">
+            <!-- For unauthenticated users: Show login and sign-up buttons -->
+            <div style="display: flex; gap: 10px;" sec:authorize="isAnonymous()">
+                <a class="btn login-btn" href="/login">Login</a>
+                <a class="btn signup-btn" href="/sign-up">Sign Up</a>
+            </div>
+
+            <!-- For authenticated users: Show user icon -->
+            <div class="user-menu" sec:authorize="isAuthenticated()">
                 <div id="user-icon">
                     <i class="fa fa-user"></i>
                 </div>

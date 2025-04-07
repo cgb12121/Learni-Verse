@@ -4,80 +4,128 @@
     <title>Sign Up</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(to right, #000988, #2575fc);
-            font-family: Arial, sans-serif;
-        }
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #000988, #2575fc);
+    font-family: Arial, sans-serif;
+}
 
-        .signup-container {
-            background: #fff;
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
+.signup-container {
+    background: #fff;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
 
-        h2 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
+.left-side {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    height: 100vh;
+}
 
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: none;
-            border-bottom: 1px solid #ccc;
-            background: transparent;
-            font-size: 14px;
-        }
+.right-side {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        input[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(to right, #000988, #2575fc);
-            border: none;
-            border-radius: 20px;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+.right-side img {
+    border-radius: 20px;
+}
 
-        button:hover {
-            opacity: 0.9;
+h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
+    font-size: 14px;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #000988, #2575fc);
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+input[type="submit"]:hover {
+    opacity: 0.9;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+}
+        .btn {
+        width: 100%;
+    padding: 12px;
+    background: #007bff;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-block: 20px;
         }
 
     </style>
 </head>
 <body>
+<div class="right-side">
+    <img src="/img/stock.jpg" alt="Welcome Image">
+</div>
+<div class="left-side">
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form th:action="@{/sign-up}" th:object="${userDTO}" method="post">
+            <input type="text" th:field="*{username}" placeholder="Username" required
+                   pattern="^[a-zA-Z0-9_]{5,20}$"
+                   title="Username must be 5-20 characters long, letters, numbers, and underscores only."/>
 
-<div class="signup-container">
-    <h2>Sign Up</h2>
-    <form th:action="@{/sign-up}" th:object="${userDTO}" method="post">
-        <input type="text" th:field="*{username}" placeholder="Username" required />
-        <input type="text" th:field="*{fullName}" placeholder="Full Name" required />
-        <input type="password" th:field="*{password}" placeholder="Password" required />
-        <div class="role-selection">
-            <label>
-                <input type="radio" th:field="*{role}" value="TUTOR" /> Tutor
-            </label>
-            <label>
-                <input type="radio" th:field="*{role}" value="STUDENT" checked /> User
-            </label>
-        </div>
-        <input type="submit" value="Sign Up" />
-    </form>
-    <div th:if="${error}" th:text="${error}" style="color: red;"></div>
+            <input type="text" th:field="*{fullName}" placeholder="Full Name" required
+                   pattern="^[a-zA-Z\s]{3,50}$"
+                   title="Full Name must be 3-50 characters long and only contain letters and spaces."/>
+
+            <input type="password" th:field="*{password}" placeholder="Password" required
+                   pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=.*[a-z]).{8,}$"
+                   title="Password must be at least 8 characters long, including one uppercase letter, one lowercase letter, one number, and one special character."/>
+
+            <div class="role-selection">
+                <label>
+                    <input type="radio" th:field="*{role}" value="TUTOR"/> Tutor
+                </label>
+                <label>
+                    <input type="radio" th:field="*{role}" value="STUDENT" checked/> User
+                </label>
+            </div>
+            <button class="btn" type="submit">Sign Up</button>
+        </form>
+        <div th:if="${error}" th:text="${error}" class="error-message"></div>
+    </div>
 </div>
 
 </body>

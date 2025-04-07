@@ -58,6 +58,10 @@ public class StudentController {
     EnrollmentService enrollmentService;
     @Autowired
     UserSensitiveInformationRepository userSensitiveInformationRepository;
+    @GetMapping("/")
+    public String showPage(){
+        return "redirect:/home-page";
+    }
 
     @GetMapping("/shopping-history")
     public String showHistoryPage(Model model, Authentication authentication){
