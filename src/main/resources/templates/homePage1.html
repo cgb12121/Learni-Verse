@@ -38,7 +38,7 @@
 
     <div style="box-sizing: border-box;
     background-color: #f8f9fa;
-    transition: opacity 0.3s ease-in-out;width: 100%;">
+    transition: opacity 0.3s ease-in-out;width: 100%;padding-bottom: 5%;">
         <div class="hero-section">
             <img src="/img/cover.jpg" alt="Hero Image" class="hero-image">
             <div class="hero-text">
@@ -73,7 +73,9 @@
                             <img src="" alt="Course image" class="course-image">
                             <a th:href="@{/course-detail(courseId=${course.courseId})}" class="course-title"
                                style="font-size: 16px;" th:text="${course.courseName}"></a>
-                            <p class="course-instructor" th:text="${course.teaches[0].tutor.user.fullName}"></p>
+                            <p class="course-instructor" th:if="${not #lists.isEmpty(course.teaches)}"
+                               th:text="${course.teaches[0].tutor.user.fullName}">
+                            </p>
                             <div class="course-rating">
                                 <span class="rating-stars" th:text="${courseRatings.get(course.courseId)}"></span>
                                 <span class="stars">★</span>

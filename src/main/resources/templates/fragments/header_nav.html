@@ -1,6 +1,6 @@
 <!-- src/main/resources/templates/fragments/header_nav.html -->
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>LearniVerse</title>
@@ -25,7 +25,18 @@
             <a class="action" href="/show-cart">
                 <i class="fa fa-shopping-cart"></i>
             </a>
-            <div class="user-menu">
+            <a class="action" href="/tutor/dashboard" sec:authorize="hasRole('TUTOR')">
+                <i class="fa-solid fa-chalkboard-teacher"></i>
+            </a>
+
+            <!-- For unauthenticated users: Show login and sign-up buttons -->
+            <div style="display: flex; gap: 10px;" sec:authorize="isAnonymous()">
+                <a class="btn login-btn" href="/login">Login</a>
+                <a class="btn signup-btn" href="/sign-up">Sign Up</a>
+            </div>
+
+            <!-- For authenticated users: Show user icon -->
+            <div class="user-menu" sec:authorize="isAuthenticated()">
                 <div id="user-icon">
                     <i class="fa fa-user"></i>
                 </div>

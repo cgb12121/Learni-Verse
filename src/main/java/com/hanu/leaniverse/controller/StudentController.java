@@ -60,6 +60,10 @@ public class StudentController {
     EnrollmentService enrollmentService;
     @Autowired
     UserSensitiveInformationRepository userSensitiveInformationRepository;
+    @GetMapping("/")
+    public String showPage(){
+        return "redirect:/home-page";
+    }
 
     @GetMapping("/my-courses")
     public String showCourses(Model model, Authentication authentication) {
@@ -125,6 +129,9 @@ public class StudentController {
     @GetMapping("/shopping-history")
     public String showHistoryPage(Model model, Authentication authentication){
         User currentUser = userService.getCurrentUser(authentication);
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
         Map<LocalDate, List<Enrollment>> enrollmentsByDate = enrollmentService.getEnrollmentsGroupedByDate(currentUser);
         model.addAttribute("user", currentUser);
         model.addAttribute("enrollmentsByDate", enrollmentsByDate);

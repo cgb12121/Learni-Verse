@@ -97,10 +97,16 @@ public class TutorServiceImpl implements TutorService {
     }
 
     public void deleteCourseAssociation(Tutor tutor, Course course) {
+
+        List<CourseCategory> courseCategories = courseCategoryRepository.findByCourse(course);
+        courseCategoryRepository.deleteAll(courseCategories); // Delete categories linked to this course
+
         Teach teach = teachRepository.findByTutorAndCourse(tutor, course);
         if (teach != null) {
             teachRepository.delete(teach);
         }
+        courseRepository.delete(course);
+
     }
 
     public List<User> getStudentsForCourse(Course course) {

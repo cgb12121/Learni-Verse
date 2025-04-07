@@ -11,71 +11,7 @@
 </head>
 <body style="background-color: #f8f9fa;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
-<!--<div>-->
-<!--  <div class="profile-card">-->
-<!--    <div class="profile-photo">-->
-<!--      <img src="https://static.tvtropes.org/pmwiki/pub/images/11fbb437_bb86_43cf_b54c_75587a77da78.jpeg" alt="Profile">-->
-<!--      <div class="section">-->
-<!--        <h4>Work</h4>-->
-<!--        <p><span class="label">Spotify New York</span> <span class="tag">Primary</span><br><span class="addr">170 William Street, New York, NY 10038</span>-->
-<!--        </p>-->
-<!--        <p><span class="label">Metropolitan Museum</span> <span class="tag">Secondary</span><br><span class="addr">525 E 68th Street, New York, NY 10065</span>-->
-<!--        </p>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="profile-info">-->
-<!--      <div class="name-title">-->
-<!--        <div>-->
-<!--          <h2>Jeremy Rose</h2>-->
-<!--          <div class="job">Product Designer</div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="tabs">-->
-<!--        <div class="active">About</div>-->
-<!--      </div>-->
-<!--      <div class="section">-->
-<!--        <h4>Skills</h4>-->
-<!--        <p><strong>Branding, UI/UX, Web Design, Packaging, Print & Editorial</strong></p>-->
-<!--      </div>-->
-
-<!--      <div class="section">-->
-<!--        <h4>Contact Information</h4>-->
-<!--        <p><span class="label">Phone:</span> +1 123 456 7890</p>-->
-<!--        <p><span class="label">Address:</span> 525 E 68th Street, New York, NY 10065</p>-->
-<!--        <p><span class="label">E-mail:</span> hello@jeremyrose.com</p>-->
-<!--        <p><span class="label">Site:</span> www.jeremyrose.com</p>-->
-<!--      </div>-->
-
-<!--      <div class="section">-->
-<!--        <h4>Basic Information</h4>-->
-<!--        <p><span class="label">Birthday:</span> June 5, 1992</p>-->
-<!--        <p><span class="label">Gender:</span> Male</p>-->
-<!--      </div>-->
-<!--      <button class="btn-primary" id="editBtn" style="margin-top: 20px;">Edit Profile</button>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <div class="edit-modal" id="editModal">-->
-<!--    <div class="modal-content">-->
-<!--      <span class="close" id="closeModal">&times;</span>-->
-<!--      <h3>Edit Profile</h3>-->
-<!--      <form id="editForm">-->
-<!--        <label>Name:</label>-->
-<!--        <input type="text" value="Jeremy Rose"><br>-->
-<!--        <label>Email:</label>-->
-<!--        <input type="email" value="hello@jeremyrose.com"><br>-->
-<!--        <label>Birthday:</label>-->
-<!--        <input type="date" value="1992-06-05"><br>-->
-<!--        <label>Phone:</label>-->
-<!--        <input type="text" value="+1 123 456 7890"><br>-->
-<!--        <label>Website:</label>-->
-<!--        <input type="text" value="www.jeremyrose.com"><br>-->
-<!--        <button type="submit" class="btn-primary">Save Changes</button>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-<div>
+<div style="padding-bottom: 5%;">
   <div class="profile-card">
     <div class="profile-photo">
       <img src="https://static.tvtropes.org/pmwiki/pub/images/11fbb437_bb86_43cf_b54c_75587a77da78.jpeg" alt="Profile">
@@ -152,27 +88,6 @@
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
 <script>
-  const modal = document.getElementById("editModal");
-const openBtn = document.getElementById("editBtn");
-const closeBtn = document.getElementById("closeModal");
-
-openBtn.onclick = () => modal.style.display = "flex";
-closeBtn.onclick = () => modal.style.display = "none";
-document.addEventListener("DOMContentLoaded", function () {
-    const userIcon = document.getElementById("user-icon");
-    const userPopup = document.getElementById("user-popup");
-
-    userIcon.addEventListener("click", () => {
-        userPopup.classList.toggle("show");
-    });
-
-    // This part still closes the user popup when clicking outside (but not the modal)
-    document.addEventListener("click", function (event) {
-        if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
-            userPopup.classList.remove("show");
-        }
-    });
-});
   document.addEventListener("DOMContentLoaded", function () {
         const userIcon = document.getElementById("user-icon");
         const userPopup = document.getElementById("user-popup");
@@ -181,13 +96,20 @@ document.addEventListener("DOMContentLoaded", function () {
             userPopup.classList.toggle("show");
         });
 
-        // Close the popup when clicking outside
+
         document.addEventListener("click", function (event) {
             if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
                 userPopup.classList.remove("show");
             }
         });
     });
+  const modal = document.getElementById("editModal");
+const openBtn = document.getElementById("editBtn");
+const closeBtn = document.getElementById("closeModal");
+
+openBtn.onclick = () => modal.style.display = "flex";
+closeBtn.onclick = () => modal.style.display = "none";
+
 </script>
 </html>
 

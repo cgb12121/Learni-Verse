@@ -1,3 +1,4 @@
+
 html {
     scroll-behavior: smooth;
 }
@@ -1156,7 +1157,7 @@ a {
 -------------------------------------------- */
 .history {
     display: flex;
-    background-color: #e1e1e1a4;
+    background-color: #f8f9fa;
 }
 
 .history-category {
@@ -1222,7 +1223,6 @@ a {
     display: flex;
     width: 100%;
     background-color: #ffffff;
-    border-radius: 8px;
     margin-bottom: 2%;
 }
 
@@ -1524,4 +1524,48 @@ a {
     .item-btn {
         padding: 10px; background-color: #0D74D7; border-radius: 8px; color: white;
         border:none; font-size: 18px; margin-left: 10px;cursor: pointer;
+    }
+    .custom-select {
+        width: 104%;
+        padding: 12px;
+        border: 1px solid #dddddd;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        cursor: pointer;
+        appearance: none;
+        margin-block: 2%;
+    }
+
+    /* Style for multiple select */
+    .custom-select[multiple] {
+        height: auto;
+        min-height: 160px;
+        overflow-y: auto;
+    }
+
+    /* Option styles */
+    .custom-select option {
+        padding: 8px;
+        font-size: 14px;
+        background-color: #fff;
+        color: #000;
+    }
+    /* Focus effect */
+    .custom-select:focus {
+        outline: none;
+        box-shadow: 0 0 6px rgba(0, 123, 255, 0.6);
+    }
+
+    /* Scrollbar styling for better appearance */
+    .custom-select::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .custom-select::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+    }
+
+    .custom-select::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
     }
