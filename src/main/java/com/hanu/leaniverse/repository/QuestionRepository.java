@@ -14,4 +14,5 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
   public List<Question> findQuestionsByQuizzId(int quizzId);
 
 
+    List<Question> getQuestionsByQuizz_QuizzId(int quizzId);
 }

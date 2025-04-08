@@ -13,9 +13,9 @@
 <body>
     <div class="unit-detail-container">
         <div class="unit-header">
-            <h1 class="unit-title">Unit 3: Lịch sử Đảng Cộng sản Việt Nam</h1>
+            <h1 class="unit-title" th:text="'Unit: ' + ${unit.Description}"></h1>
             <div class="unit-meta">
-                <span class="unit-author">By: Giảng viên Nguyễn Văn A</span>
+                <span class="unit-author" th:text="${unit.course.getTeaches[0].getTutor.getUser.getFullName}"></span>
             </div>
         </div>
 
@@ -25,8 +25,8 @@
                 <button class="upload-button">Upload New Video</button>
             </div>
             
-            <div th:each="video : ${unit.video}" class="video-list">
-                <div class="video-card">
+            <div class="video-list">
+                <div th:each="video : ${unit.video}" class="video-card">
                     <div class="video-thumbnail">
                         <img src="image/stock.jpg" alt="Video thumbnail">
                         <span class="video-duration" th:text="${video.length}"></span>
@@ -54,11 +54,13 @@
                     <div class="quiz-info">
                         <a th:href="@{/tutor/}" class="quiz-title" th:text="${quizz.quizzName}"></a>
                         <div class="quiz-meta">
-                            <span class="quiz-date" th:text="${quizz.createAt}">Created: </span>
-                            <span class="quiz-questions" >15 questions</span>
+                            <span class="quiz-date" th:text="'Created: ' + ${#dates.format(quizz.createAt, 'dd-MM-yyyy')}"></span>
+                            <span class="quiz-questions" th:text="${quizz.questions.size()} + ' questions'"></span>
                         </div>
                     </div>
-                    <button class="delete-button">Delete</button>
+                    <form th:action="@{/tutor/quiz/{quizId}/delete(quizId=${quizz.quizzId})}" method="post">
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
                 </div>
 
             </div>
