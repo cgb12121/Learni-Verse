@@ -2,6 +2,8 @@ package com.hanu.leaniverse.controller;
 
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.CategoryRepository;
+import com.hanu.leaniverse.repository.CourseRepository;
+import com.hanu.leaniverse.repository.UnitRepository;
 import com.hanu.leaniverse.service.QuizzService;
 import com.hanu.leaniverse.service.UserService;
 import com.hanu.leaniverse.service.tutor.TutorService;
@@ -26,6 +28,12 @@ public class TutorController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private UnitRepository unitRepository;
 
     @Autowired
     private QuizzService quizzService;
@@ -85,7 +93,12 @@ public class TutorController {
         tutorService.updateCourse(course, updatedCourse);
         return "redirect:/tutor/dashboard";
     }
-
+    @GetMapping("/course")
+    public String showCourse(@RequestParam("courseId") int courseId, Model model) {
+        Course course = courseRepository.findById(courseId).get();
+        model.addAttribute("course", course);
+        return "tutor/courseDetail";
+    }
 
     @PostMapping("/course/delete")
     public String deleteCourse(@RequestParam("courseId") int courseId, Authentication authentication) {
@@ -118,6 +131,13 @@ public class TutorController {
         model.addAttribute("students", tutorService.getStudentsForCourse(course));
         model.addAttribute("course", course);
         return "tutor/student_list";
+    }
+
+    @GetMapping("/course/unit")
+    public String showUnit(@RequestParam("unitId") int unitId, Model model) {
+        Unit unit = unitRepository.findById(unitId).get();
+        model.addAttribute("unit", unit);
+        return "tutor/unit-detail";
     }
 
     @PostMapping("/course/{courseId}/addUnit")

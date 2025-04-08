@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Detail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+</head>
+<body>
+    <div class="unit-detail-container">
+        <div class="unit-header">
+            <h1 class="unit-title">Unit 3: Lịch sử Đảng Cộng sản Việt Nam</h1>
+            <div class="unit-meta">
+                <span class="unit-author">By: Giảng viên Nguyễn Văn A</span>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <div class="section-header">
+                <h2 class="section-title">Video Lectures</h2>
+                <button class="upload-button">Upload New Video</button>
+            </div>
+            
+            <div th:each="video : ${unit.video}" class="video-list">
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="image/stock.jpg" alt="Video thumbnail">
+                        <span class="video-duration" th:text="${video.length}"></span>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">NA</h3>
+                        <div class="video-meta">
+                            <span class="video-date" th:text="${video.createAt}"></span>
+                            <button class="delete-button">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="quiz-section">
+            <div class="section-header">
+                <h2 class="section-title">Quizzes</h2>
+                <button class="add-button">Add New Quiz</button>
+            </div>
+            
+            <div th:each="quizz : ${unit.quizzes}" class="quiz-list">
+                <div class="quiz-card">
+                    <div class="quiz-info">
+                        <a th:href="@{/tutor/}" class="quiz-title" th:text="${quizz.quizzName}"></a>
+                        <div class="quiz-meta">
+                            <span class="quiz-date" th:text="${quizz.createAt}">Created: </span>
+                            <span class="quiz-questions" >15 questions</span>
+                        </div>
+                    </div>
+                    <button class="delete-button">Delete</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

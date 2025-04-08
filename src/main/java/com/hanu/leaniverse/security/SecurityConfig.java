@@ -42,7 +42,7 @@ public class SecurityConfig {
         );
         http.formLogin(
                 form -> form.loginPage("/login")
-                        .defaultSuccessUrl("/home-page", true)
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
         );
         http.sessionManagement(session -> session.maximumSessions(1));
