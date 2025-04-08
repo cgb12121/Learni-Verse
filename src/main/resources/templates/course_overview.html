@@ -6,9 +6,8 @@
   <title th:text="${course.courseName}">Course Overview</title>
 
   <!-- CSS Links -->
-  <link rel="stylesheet" href="/css/userHP.css">
-  <link rel="stylesheet" href="/css/Header_Footer.css">
-  <link rel="stylesheet" href="/css/course_overview.css">
+  <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+  <link rel="stylesheet" th:href="@{/css/course_overview.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -37,10 +36,10 @@
       <span class="lesson-icon">
         <img th:src="@{/icons/play-icon.svg}" alt="Video" width="24">
       </span>
-        <span class="lesson-text" th:text="${lesson.title}">Lesson Title</span>
+        <span class="lesson-text" th:text="${lesson.description}">Lesson Title</span>
         <div class="lesson-meta">
           <img src="/icons/time-icon.svg" alt="Time Icon" width="16">
-          <span th:text="${lesson.duration}">Duration</span>
+          <span th:text="${lesson.length}">Duration</span>
         </div>
       </li>
     </ul>

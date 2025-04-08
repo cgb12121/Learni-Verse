@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -60,6 +58,9 @@ public class StudentController {
     EnrollmentService enrollmentService;
     @Autowired
     UserSensitiveInformationRepository userSensitiveInformationRepository;
+
+    @Autowired
+    QuizzRepository quizzRepository;
 
     @GetMapping("/my-courses")
     public String showCourses(Model model, Authentication authentication) {
@@ -177,13 +178,13 @@ public class StudentController {
         model.addAttribute("quizzId",quizzId);
         return "do_quizz_test";
     }
-    @PostMapping("/grade")
-    public ResponseEntity<String> gradeTheQuizz(Model model, @RequestBody List<QuestionDTO> questionDTOS, @RequestParam int quizzId, Authentication authentication){
-        double grade = gradingService.Grading(questionDTOS);
-        userQuizzService.setUserQuizz(quizzId,grade,authentication);
-        model.addAttribute("grade",grade);
-        return ResponseEntity.ok().body("success");
-    }
+//    @PostMapping("/grade")
+//    public ResponseEntity<String> gradeTheQuizz(Model model, @RequestBody List<QuestionDTO> questionDTOS, @RequestParam int quizzId, Authentication authentication){
+//        double grade = gradingService.Grading(questionDTOS);
+//        userQuizzService.setUserQuizz(quizzId,grade,authentication);
+//        model.addAttribute("grade",grade);
+//        return ResponseEntity.ok().body("success");
+//    }
 
     @GetMapping("/show-cart")
     public String showCart(Model model, Authentication authentication){
@@ -289,5 +290,87 @@ public class StudentController {
                                     Authentication authentication) {
         userService.updateUserProfile(userInfo, fullName, authentication);
         return "redirect:/profile";
+    }
+
+    @GetMapping("/learning/start")
+    public String startCourse(@RequestParam("courseId") int courseId, Model model) {
+        Course course = courseRepository.findById(courseId).orElse(null);
+
+        // Gán videoLink mặc định nếu không tìm thấy
+        String videoLink = ""; // Ví dụ: ID video mặc định
+
+        // Nếu course không null và có units, lấy unit đầu tiên và video đầu tiên
+        if (course != null && course.getUnits() != null && !course.getUnits().isEmpty()) {
+            Unit firstUnit = course.getUnits().get(0);
+            if (firstUnit.getVideo() != null && !firstUnit.getVideo().isEmpty()) {
+                Video firstVideo = firstUnit.getVideo().get(0);
+                videoLink = firstVideo.getFilePath();
+                System.out.println(videoLink); // Giả sử filePath chứa link YouTube (ID video)
+            }
+        }
+
+        model.addAttribute("course", course);
+        model.addAttribute("currentVideoId", videoLink);
+
+        return "video_page"; // Tên file template
+    }
+    @GetMapping("/unit-test/{quizzId}")
+    public String showAllQuestionInAQuizz(@PathVariable("quizzId") int quizzId, Model model) {
+        List<Question> questions = questionRepository.findQuestionsByQuizzId(quizzId);
+        model.addAttribute("questions", questions);
+        model.addAttribute("quizzId", quizzId);
+
+        // Lấy quiz title từ DB
+        Optional<Quizz> quizOptional = quizzRepository.findById(quizzId);
+        if (quizOptional.isPresent()) {
+            String quizTitle = quizOptional.get().getQuizzName();
+            model.addAttribute("quizTitle", quizTitle);
+        } else {
+            model.addAttribute("quizTitle", "Quiz"); // fallback nếu không có
+        }
+
+        return "do_quizz_test";
+    }
+    @PostMapping("/grade")
+    public ResponseEntity<List<Map<String, Object>>> gradeTheQuizz(@RequestBody List<QuestionDTO> submittedAnswers, @RequestParam int quizzId, Authentication authentication) {
+        List<Question> originalQuestions = questionRepository.getQuestionsByQuizz_QuizzId(quizzId);
+
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        int correctCount = 0;
+
+        for (QuestionDTO userAnswer : submittedAnswers) {
+            Question q = originalQuestions.stream()
+                    .filter(question -> question.getQuestionId() == userAnswer.getQuestionId())
+                    .findFirst()
+                    .orElse(null);
+
+            if (q == null) continue;
+
+            boolean isCorrect =
+                    userAnswer.isChoice1() == q.getIsChoice1() &&
+                            userAnswer.isChoice2() == q.getIsChoice2() &&
+                            userAnswer.isChoice3() == q.getIsChoice3() &&
+                            userAnswer.isChoice4() == q.getIsChoice4() &&
+                            userAnswer.isChoice5() == q.getIsChoice5();
+
+            if (isCorrect) correctCount++;
+
+            Map<String, Object> qResult = new HashMap<>();
+            qResult.put("questionId", q.getQuestionId());
+            qResult.put("userAnswer", userAnswer);
+            qResult.put("correctAnswer", Map.of(
+                    "choice1", q.getIsChoice1(),
+                    "choice2", q.getIsChoice2(),
+                    "choice3", q.getIsChoice3(),
+                    "choice4", q.getIsChoice4(),
+                    "choice5", q.getIsChoice5()
+            ));
+            resultList.add(qResult);
+        }
+
+        double grade = (double) correctCount / originalQuestions.size() * 100;
+        userQuizzService.setUserQuizz(quizzId, grade, authentication);
+
+        return ResponseEntity.ok(resultList);
     }
 }
