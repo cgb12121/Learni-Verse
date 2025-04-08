@@ -1,130 +1,117 @@
-/* Thanh tiêu đề màu xanh */
-.course-header {
-    display: flex;
-    background-color: #87CEFA; /* Xanh nhạt */
-    padding: 10px 20px;
-    font-size: 14px;
-    color: white;
-    font-weight: bold;
-}
-
-.course-header h2 {
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
-    flex-direction:left;
-    color: white;
+    padding: 0;
+    background: #f9f9f9;
 }
 
-.btn-back {
-    text-decoration: none;
-    font-size: 14px;
-    color: white;
-    font-weight: bold;
-}
-
-.btn-back i {
-    margin-right: 5px;
-}
-
-.btn-back:hover {
-    color: #3367d6;
-}
-
-/* Video Container */
-.video-container {
-    max-width: 900px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* Căn chỉnh video + nút chuyển */
-.video-wrapper {
+.course-wrapper {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
 }
 
-.video-wrapper video {
+.left-panel {
+    flex: 3;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.right-sidebar {
+    flex: 1.3;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    height: fit-content;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+iframe {
     width: 100%;
-    border-radius: 5px;
+    height: 360px;
+    border-radius: 8px;
 }
 
-/* Nút chuyển video */
-.video-nav {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 20px;
-    padding: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.video-nav:hover {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.video-nav.left {
-    left: 10px;
-}
-
-.video-nav.right {
-    right: 10px;
-}
-
-/* Tabs */
 .tabs {
     display: flex;
-    justify-content: space-between;
-    border-bottom: 2px solid #ddd;
-    margin-top: 20px;
-}
-
-.tab-button {
-    flex: 1;
-    padding: 12px;
-    text-align: center;
-    cursor: pointer;
-    font-weight: bold;
-    border: none;
-    background: none;
-    border-bottom: 3px solid transparent;
-    transition: 0.3s;
-}
-
-.tab-button:hover,
-.tab-button.active {
-    border-bottom: 3px solid #4285f4;
-    color: #4285f4;
-}
-
-/* Course Content */
-.course-content {
-    max-width: 900px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.course-content ul {
-    list-style: none;
-    padding: 0;
-}
-
-.course-content li {
-    padding: 12px;
+    margin-top: 15px;
     border-bottom: 1px solid #ddd;
-    cursor: pointer;
-    transition: 0.3s;
 }
 
-.course-content li:hover {
-    background: #f0f0f0;
+.tabs button {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px 0;
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+
+.tabs button.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+}
+
+.note-section {
+    margin-top: 15px;
+}
+
+.note-section input {
+    width: 80%;
+    padding: 8px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.note-section button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.note {
+    background: #f1f1f1;
+    padding: 10px;
+    margin-top: 10px;
+    border-left: 4px solid #007bff;
+    border-radius: 4px;
+}
+
+.note .timestamp {
+    font-weight: bold;
+    margin-right: 6px;
+}
+
+.section-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.section-list > li {
+    margin-bottom: 15px;
+}
+
+.section-list strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #333;
+}
+
+.section-list ul {
+    list-style: none;
+    padding-left: 15px;
+}
+
+.section-list li {
+    font-size: 14px;
+    margin-bottom: 5px;
 }

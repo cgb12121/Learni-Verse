@@ -1,85 +1,146 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Course Page</title>
-    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
-    <link rel="stylesheet" th:href="@{/css/VideoPage.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <title>Learniverse Course</title>
+    <link rel="stylesheet" href="/css/Header_Footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+        }
+        .course-wrapper {
+            display: flex;
+            max-width: 1200px;
+            margin: 20px auto;
+            gap: 20px;
+        }
+        .left-panel {
+            flex: 3;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .right-sidebar {
+            flex: 1.3;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            height: fit-content;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        iframe {
+            width: 100%;
+            height: 360px;
+            border-radius: 8px;
+        }
+        h4 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        .section-title {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+        }
+        .lesson-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        .lesson-item:hover {
+            background-color: #f0f0f0;
+        }
+        .lesson-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .lesson-text {
+            font-weight: 500;
+            color: #333;
+        }
+        .lesson-test {
+            color: #28a745;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
 
-<div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
+<!-- Header -->
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
 
-<main>
-    <!-- Thanh tiêu đề màu xanh -->
-    <div class="course-header">
-        <a th:href="@{/courses}" class="btn-back"><i class="fa fa-arrow-left"></i></a>
-        <h2 th:text="${course.title}"></h2>
+<main class="course-wrapper">
+    <!-- Video Panel -->
+    <div class="left-panel">
+        <iframe id="main-video"
+                th:src="'https://www.youtube.com/embed/' + ${currentVideoId} + '?autoplay=1'"
+                title="YouTube video player"
+                allowfullscreen></iframe>
+        <h1 class="course-title" th:text="${course.courseName}">Course Title</h1>
+
+        <!-- Course Description -->
+        <p class="course-description" th:text="${course.courseDetail}">
+            Description of the course goes here...
+        </p>
     </div>
 
-    <div class="video-container">
-        <!-- Trình phát video với nút chuyển -->
-        <div class="video-wrapper">
-            <button class="video-nav left" onclick="previousVideo()"><i class="fa fa-chevron-left"></i></button>
-            <video id="videoPlayer" autoplay loop>
-                <source th:src="${course.videoUrl}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <button class="video-nav right" onclick="nextVideo()"><i class="fa fa-chevron-right"></i></button>
+    <!-- Right Sidebar --><!-- Right Sidebar -->
+    <div class="right-sidebar">
+        <h4>All Lectures</h4>
+        <div th:each="unit : ${course.units}">
+            <h2 class="section-title" th:text="${unit.description}">Unit Description</h2>
+            <ul class="lesson-list">
+                <!-- Video Lessons -->
+                <li class="lesson-item"
+                    th:each="lesson : ${unit.video}"
+                    th:attr="data-video-id=${lesson.filePath}"
+                    onclick="changeVideo(this)">
+                <span class="lesson-left">
+                    <i class="fas fa-play-circle" style="color: #007bff;"></i>
+                    <span class="lesson-text" th:text="${lesson.title}">Lesson Title</span>
+                </span>
+                </li>
+
+                <!-- Quizzes in Unit -->
+                <li class="lesson-item"
+                    th:each="quiz : ${unit.quizzes}"
+                    th:onclick="'location.href=\'/unit-test/' + ${quiz.quizzId} + '\''">
+    <span class="lesson-left">
+        <i class="fas fa-clipboard-check" style="color: #28a745;"></i>
+        <span class="lesson-text lesson-test" th:text="'Quiz: ' + ${quiz.quizzName}">Unit Quiz</span>
+    </span>
+                </li>
+
+            </ul>
         </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-        <button class="tab-button active">Course Content</button>
-        <button class="tab-button">Overview</button>
-        <button class="tab-button">Notes</button>
-        <button class="tab-button">Reviews</button>
-        <button class="tab-button">Discussion</button>
-    </div>
-
-    <!-- Nội dung khóa học -->
-    <div class="course-content">
-        <ul>
-            <li th:each="section, iterStat : ${sections}" th:data-index="${iterStat.index}">
-                <strong th:text="${section.title}"></strong> - <span th:text="${section.description}"></span>
-                (<span th:text="${section.lectures}"></span> lectures, <span th:text="${section.duration}"></span>)
-            </li>
-        </ul>
     </div>
 </main>
 
-<div th:replace="/fragments/header_nav.html :: footer"></div>
+<!-- Footer -->
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 
-<!-- JavaScript điều khiển video -->
 <script>
-    let videos = [];
-    let currentVideoIndex = 0;
-
-    document.addEventListener("DOMContentLoaded", function() {
-        videos = [...document.querySelectorAll(".course-content li")].map(li => li.dataset.index);
-        if (videos.length > 0) {
-            currentVideoIndex = 0;
-        }
-    });
-
-    function previousVideo() {
-        if (currentVideoIndex > 0) {
-            currentVideoIndex--;
-            updateVideo();
-        }
-    }
-
-    function nextVideo() {
-        if (currentVideoIndex < videos.length - 1) {
-            currentVideoIndex++;
-            updateVideo();
-        }
-    }
-
-    function updateVideo() {
-        let newVideoUrl = `/videos/video${videos[currentVideoIndex]}.mp4`;
-        document.getElementById("videoPlayer").src = newVideoUrl;
+    function changeVideo(element) {
+        const videoId = element.getAttribute("data-video-id");
+        const iframe = document.getElementById("main-video");
+        iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
     }
 </script>
 
