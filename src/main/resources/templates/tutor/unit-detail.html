@@ -10,61 +10,64 @@
     <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
     <link rel="stylesheet" th:href="@{/css/course_overview.css}">
 </head>
-<body>
-    <div class="unit-detail-container">
-        <div class="unit-header">
-            <h1 class="unit-title" th:text="'Unit: ' + ${unit.Description}"></h1>
-            <div class="unit-meta">
-                <span class="unit-author" th:text="${unit.course.getTeaches[0].getTutor.getUser.getFullName}"></span>
-            </div>
+<body style="background-color: #f8f9fa;">
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<div class="unit-detail-container">
+    <div class="unit-header">
+        <h1 class="unit-title" th:text="'Unit: ' + ${unit.Description}"></h1>
+        <div class="unit-meta">
+            <span class="unit-author" th:text="${unit.course.getTeaches[0].getTutor.getUser.getFullName}"></span>
+        </div>
+    </div>
+
+    <div class="video-section">
+        <div class="section-header">
+            <h2 class="section-title">Video Lectures</h2>
+            <button class="upload-button">Upload New Video</button>
         </div>
 
-        <div class="video-section">
-            <div class="section-header">
-                <h2 class="section-title">Video Lectures</h2>
-                <button class="upload-button">Upload New Video</button>
-            </div>
-            
-            <div class="video-list">
-                <div th:each="video : ${unit.video}" class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="image/stock.jpg" alt="Video thumbnail">
-                        <span class="video-duration" th:text="${video.length}"></span>
-                    </div>
-                    <div class="video-info">
-                        <h3 class="video-title">NA</h3>
-                        <div class="video-meta">
-                            <span class="video-date" th:text="${video.createAt}"></span>
-                            <button class="delete-button">Delete</button>
-                        </div>
+        <div class="video-list">
+            <div th:each="video : ${unit.video}" class="video-card">
+                <div class="video-thumbnail">
+                    <img src="image/stock.jpg" alt="Video thumbnail">
+                    <span class="video-duration" th:text="${video.length}"></span>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">NA</h3>
+                    <div class="video-meta">
+                        <span class="video-date" th:text="${video.createAt}"></span>
+                        <button class="delete-button">Delete</button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-
-        <div class="quiz-section">
-            <div class="section-header">
-                <h2 class="section-title">Quizzes</h2>
-                <button class="add-button">Add New Quiz</button>
-            </div>
-            
-            <div th:each="quizz : ${unit.quizzes}" class="quiz-list">
-                <div class="quiz-card">
-                    <div class="quiz-info">
-                        <a th:href="@{/tutor/}" class="quiz-title" th:text="${quizz.quizzName}"></a>
-                        <div class="quiz-meta">
-                            <span class="quiz-date" th:text="'Created: ' + ${#dates.format(quizz.createAt, 'dd-MM-yyyy')}"></span>
-                            <span class="quiz-questions" th:text="${quizz.questions.size()} + ' questions'"></span>
-                        </div>
-                    </div>
-                    <form th:action="@{/tutor/quiz/{quizId}/delete(quizId=${quizz.quizzId})}" method="post">
-                        <button type="submit" class="delete-button">Delete</button>
-                    </form>
-                </div>
-
             </div>
         </div>
     </div>
+
+
+    <div class="quiz-section">
+        <div class="section-header">
+            <h2 class="section-title">Quizzes</h2>
+            <button class="add-button">Add New Quiz</button>
+        </div>
+
+        <div th:each="quizz : ${unit.quizzes}" class="quiz-list">
+            <div class="quiz-card">
+                <div class="quiz-info">
+                    <a th:href="@{/tutor/}" class="quiz-title" th:text="${quizz.quizzName}"></a>
+                    <div class="quiz-meta">
+                        <span class="quiz-date"
+                              th:text="'Created: ' + ${#dates.format(quizz.createAt, 'dd-MM-yyyy')}"></span>
+                        <span class="quiz-questions" th:text="${quizz.questions.size()} + ' questions'"></span>
+                    </div>
+                </div>
+                <form th:action="@{/tutor/quiz/{quizId}/delete(quizId=${quizz.quizzId})}" method="post">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
 </html>

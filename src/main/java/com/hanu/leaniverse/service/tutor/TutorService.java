@@ -21,4 +21,5 @@ public interface TutorService {
     void uploadQuiz(Unit unit, String quizzName);
     Quizz getQuizzById(int quizzId);
     List<UserQuizz> getQuizGrades(Quizz quizz);
+    public void deleteUnit(int unitId);
 }

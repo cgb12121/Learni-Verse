@@ -19,7 +19,7 @@
     <p class="dashboard-course-item" th:if="${courses.isEmpty()}">No course created</p>
 
     <div class="dashboard-course-item" th:each="course : ${courses}">
-        <strong th:text="${course.courseName}"></strong>
+        <a th:href="@{/tutor/course/{courseId}/detail(courseId=${course.courseId})}" th:text="${course.courseName}"></a>
         <div class="dashboard-btn-container">
             <button id="editBtn" class="item-btn" th:href="@{/tutor/course/{id}/edit(id=${course.courseId})}">
                 Edit
