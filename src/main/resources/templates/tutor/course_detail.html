@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background-color: #f8f9fa;">
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
+<div class="dashboard-container">
+    <h1 class="cart-header title" th:text="'Course: ' + ${course.courseName}"></h1>
+    <button th:action="@{/tutor/course/{courseId}/addUnit(courseId=${courseId})}" class="dashboard-button" id="addBtn">Create New Unit</button>
+
+<!--    <div class="dashboard-course-item" th:each="unit : ${course.units}">-->
+<!--        <strong th:text="${unit.Description}"></strong>-->
+<!--        <div class="dashboard-btn-container">-->
+<!--            <button id="editBtn" class="item-btn" th:href="@{/tutor/course/unit(unitId=${unit.unitId})}">-->
+<!--                Edit-->
+<!--            </button>-->
+<!--            <form th:action="@{/tutor/course/delete(courseId=${course.courseId})}" method="post"-->
+<!--                  style="display:inline;">-->
+<!--                <button class="item-btn" type="submit" onclick="return confirm('Are you sure?')">Delete</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="quiz-section">
+        <div class="section-header" style="margin-inline: 4%;">
+            <h2 class="section-title">Units</h2>
+            <button th:action="@{/tutor/course/{courseId}/addUnit(courseId=${courseId})}" class="add-button">Add New Quiz</button>
+        </div>
+        <p class="dashboard-course-item" th:if="${course.units.isEmpty()}">No unit created</p>
+        <div th:each="unit : ${course.units}" class="quiz-list">
+            <div class="quiz-card">
+                <div class="quiz-info">
+                    <a  class="quiz-title" th:text="${unit.Description}"></a>
+                    <div class="quiz-meta">
+                        <span class="quiz-questions" th:text="${unit.video.size()} + ' videos'"></span>
+                        <span class="quiz-questions" th:text="${unit.questions.size()} + ' questions'"></span>
+                    </div>
+                </div>
+                <form th:action="@{/tutor/course/{courseId}/detail/delete-unit(courseId=${course.courseId},unitId=${unit.unitId})}" method="post">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
+</body>
+</html>

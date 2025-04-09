@@ -33,10 +33,13 @@
             <button type="submit" class="btn purchasing-button">Add to Cart</button>
         </form>
         <div class="button-container">
-            <form class="btn gift-button" th:action="@{/submit-order(amount=100000, orderInfo=${course.courseId}+':'+${course.courseName})}" th:method="post">
+            <form class="btn gift-button"
+                  th:action="@{/submit-order(amount=100000, orderInfo=${course.courseId}+':'+${course.courseName})}"
+                  th:method="post">
                 <button type="submit">Buy Now</button>
             </form>
-            <form th:action="@{/add-to-wish-list(courseId=${course.courseId})}" class="btn favourite-button" method="post">
+            <form th:action="@{/add-to-wish-list(courseId=${course.courseId})}" class="btn favourite-button"
+                  method="post">
                 <button type="submit">
                     <i class="fa-regular fa-heart"></i>
                 </button>
@@ -124,7 +127,8 @@
 
                 <ul style="padding: 0">
                     <p style="padding: 0"><strong style="padding: 0">Some courses:</strong></p>
-                    <li style="padding-block: 1%" th:each="teach, iterStat : ${tutor.getTeaches}" th:if="${iterStat.index < 4}">
+                    <li style="padding-block: 1%" th:each="teach, iterStat : ${tutor.getTeaches}"
+                        th:if="${iterStat.index < 4}">
                         <a th:href="@{course-detail(courseId=${teach.getCourse.courseId})}"
                            th:text="${teach.getCourse.courseName}"></a>
                     </li>
@@ -150,12 +154,13 @@
             </div>
         </div>
     </div>
-    <div id="reviewModal" class="modal">
+    <div id="reviewModal" class="review-modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeReviewPopup()">&times;</span>
+            <span class="review-close-btn" onclick="closeReviewPopup()">&times;</span>
             <h2>Submit Your Review</h2>
 
-            <form th:action="@{/submit-review(courseId=${course.courseId})}+'#reviews'" th:object="${reviewDTO}" method="post">
+            <form style="width: 80%; justify-content: center; display: flex; flex-direction: column;" th:action="@{/submit-review(courseId=${course.courseId})}+'#reviews'" th:object="${reviewDTO}"
+                  method="post">
                 <div class="form-group">
                     <label for="rating">Rating:</label>
                     <select id="rating" th:field="*{star}" required>
@@ -170,7 +175,8 @@
 
                 <div class="form-group">
                     <label for="comment">Your Review:</label>
-                    <textarea id="comment" th:field="*{content}" placeholder="Write your review here..."
+                    <textarea class="review-textarea" id="comment" th:field="*{content}"
+                              placeholder="Write your review here..."
                               required></textarea>
                 </div>
 
@@ -217,7 +223,7 @@
     });
 });
     function openReviewPopup() {
-            document.getElementById("reviewModal").style.display = "block";
+            document.getElementById("reviewModal").style.display = "flex";
         }
 
         function closeReviewPopup() {

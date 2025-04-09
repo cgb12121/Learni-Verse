@@ -111,8 +111,8 @@ input[type="submit"]:hover {
                    title="Full Name must be 3-50 characters long and only contain letters and spaces."/>
 
             <input type="password" th:field="*{password}" placeholder="Password" required
-                   pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])(?=.*[a-z]).{8,}$"
-                   title="Password must be at least 8 characters long, including one uppercase letter, one lowercase letter, one number, and one special character."/>
+                   pattern="^[a-zA-Z0-9@#_.-]{8,}$"
+                   title="Password must be at least 8 characters long and can contain letters, numbers, and the special characters @, #, _, ., and -."/>
 
             <div class="role-selection">
                 <label>

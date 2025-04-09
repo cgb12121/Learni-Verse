@@ -152,7 +152,9 @@ public class TutorServiceImpl implements TutorService {
         quizz.setUnit(unit);
         quizzRepository.save(quizz);
     }
-
+    public void deleteUnit(int unitId){
+        unitRepository.deleteById(unitId);
+    }
     public Quizz getQuizzById(int quizzId) {
         return quizzRepository.findById(quizzId).orElse(null);
     }
