@@ -12,12 +12,9 @@
 </head>
 <body style="background-color: #f8f9fa;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
-<div class="unit-detail-container">
+<div class="unit-detail-container" style="margin-top: 5%;">
     <div class="unit-header">
         <h1 class="unit-title" th:text="'Unit: ' + ${unit.Description}"></h1>
-        <div class="unit-meta">
-            <span class="unit-author" th:text="${unit.course.getTeaches[0].getTutor.getUser.getFullName}"></span>
-        </div>
     </div>
 
     <div class="video-section">
@@ -25,7 +22,7 @@
             <h2 class="section-title">Video Lectures</h2>
             <button class="upload-button">Upload New Video</button>
         </div>
-
+        <p style="margin-inline: 4%;" class="quiz-card" th:if="${unit.video.isEmpty()}">No video uploaded</p>
         <div class="video-list">
             <div th:each="video : ${unit.video}" class="video-card">
                 <div class="video-thumbnail">
@@ -36,7 +33,9 @@
                     <h3 class="video-title">NA</h3>
                     <div class="video-meta">
                         <span class="video-date" th:text="${video.createAt}"></span>
-                        <button class="delete-button">Delete</button>
+                        <form method="post" >
+                            <button class="delete-button">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -47,13 +46,27 @@
     <div class="quiz-section">
         <div class="section-header">
             <h2 class="section-title">Quizzes</h2>
-            <button class="add-button">Add New Quiz</button>
+            <button id="addBtn" class="add-button">Add New Quiz</button>
         </div>
-
+        <div class="edit-modal" id="addModal">
+            <div class="modal-content">
+                <span class="close" id="closeAddModal">&times;</span>
+                <h3>Add New Unit</h3>
+                <form class="edit-form" th:action="@{/tutor/unit/{unitId}/upload-quiz(unitId=${unit.unitId})}" method="post">
+                    <label>Title:</label>
+                    <input type="text" name="quizzName" autocomplete="off" required
+                           minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+                           title="Only letters and numbers are allowed" placeholder="Unit title"
+                    ><br>
+                    <button type="submit" class="save-btn">Save</button>
+                </form>
+            </div>
+        </div>
+        <p style="margin-inline: 4%;" class="dashboard-course-item" th:if="${unit.quizzes.isEmpty()}">No quiz created</p>
         <div th:each="quizz : ${unit.quizzes}" class="quiz-list">
             <div class="quiz-card">
                 <div class="quiz-info">
-                    <a th:href="@{/tutor/}" class="quiz-title" th:text="${quizz.quizzName}"></a>
+                    <a th:href="@{/tutor/course/unit/quizz/{quizzId}(quizzId=${quizz.quizzId})}" class="quiz-title" th:text="${quizz.quizzName}"></a>
                     <div class="quiz-meta">
                         <span class="quiz-date"
                               th:text="'Created: ' + ${#dates.format(quizz.createAt, 'dd-MM-yyyy')}"></span>
@@ -70,4 +83,27 @@
 </div>
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
+    const addModal = document.getElementById("addModal");
+   const openAddBtn = document.getElementById("addBtn");
+   const closeAddBtn = document.getElementById("closeAddModal");
+
+   openAddBtn.onclick = () => addModal.style.display = "flex";
+   closeAddBtn.onclick = () => addModal.style.display = "none";
+</script>
 </html>

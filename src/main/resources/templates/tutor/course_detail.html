@@ -11,40 +11,61 @@
 </head>
 <body style="background-color: #f8f9fa;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
-<div class="dashboard-container">
-    <h1 class="cart-header title" th:text="'Course: ' + ${course.courseName}"></h1>
-    <button th:action="@{/tutor/course/{courseId}/addUnit(courseId=${courseId})}" class="dashboard-button" id="addBtn">Create New Unit</button>
-
-<!--    <div class="dashboard-course-item" th:each="unit : ${course.units}">-->
-<!--        <strong th:text="${unit.Description}"></strong>-->
-<!--        <div class="dashboard-btn-container">-->
-<!--            <button id="editBtn" class="item-btn" th:href="@{/tutor/course/unit(unitId=${unit.unitId})}">-->
-<!--                Edit-->
-<!--            </button>-->
-<!--            <form th:action="@{/tutor/course/delete(courseId=${course.courseId})}" method="post"-->
-<!--                  style="display:inline;">-->
-<!--                <button class="item-btn" type="submit" onclick="return confirm('Are you sure?')">Delete</button>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-    <div class="quiz-section">
-        <div class="section-header" style="margin-inline: 4%;">
-            <h2 class="section-title">Units</h2>
-            <button th:action="@{/tutor/course/{courseId}/addUnit(courseId=${courseId})}" class="add-button">Add New Quiz</button>
+<div class="unit-detail-container" style="margin-top: 5%;">
+    <div class="unit-header" style="display: flex;justify-content: space-between;">
+        <h1 class="unit-title" th:text="'Course: ' + ${course.courseName}"></h1>
+        <button th:action="@{/tutor/course/{courseId}/addUnit(courseId=${courseId})}" class="dashboard-button"
+                id="addBtn">Add Unit
+        </button>
+    </div>
+    <div class="edit-modal" id="addModal" >
+        <div class="modal-content" style="width: 40%;">
+            <span class="close" id="closeAddModal">&times;</span>
+            <h3>Add New Unit</h3>
+            <form style="width: 80%;" class="edit-form" th:action="@{/tutor/course/{courseId}/add-unit(courseId=${courseId})}" method="post">
+                <label style="margin-bottom: 5px;"><strong>Title:</strong></label>
+                <input type="text" name="description" autocomplete="off" required
+                       minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+                       title="Only letters and numbers are allowed" placeholder="Unit title"
+                ><br>
+                <button type="submit" class="save-btn">Save</button>
+            </form>
         </div>
-        <p class="dashboard-course-item" th:if="${course.units.isEmpty()}">No unit created</p>
+    </div>
+    <div class="quiz-section">
+        <p style="margin-inline: 4%;" class="dashboard-course-item" th:if="${course.units.isEmpty()}">No unit created</p>
         <div th:each="unit : ${course.units}" class="quiz-list">
-            <div class="quiz-card">
+            <div class="dashboard-course-item">
                 <div class="quiz-info">
-                    <a  class="quiz-title" th:text="${unit.Description}"></a>
-                    <div class="quiz-meta">
+                    <a th:href="@{/tutor/course/unit/{unitId}(unitId=${unit.unitId})}" class="quiz-title" th:text="${unit.Description}"></a>
+                    <div class="quiz-meta" style="margin-top: 5px;">
                         <span class="quiz-questions" th:text="${unit.video.size()} + ' videos'"></span>
-                        <span class="quiz-questions" th:text="${unit.questions.size()} + ' questions'"></span>
+                        <span class="quiz-questions" th:text="${unit.quizzes.size()} + ' quizzes'"></span>
                     </div>
                 </div>
-                <form th:action="@{/tutor/course/{courseId}/detail/delete-unit(courseId=${course.courseId},unitId=${unit.unitId})}" method="post">
-                    <button type="submit" class="delete-button">Delete</button>
-                </form>
+                <div class="dashboard-btn-container">
+<!--                    <div>-->
+<!--                        <button id="editBtn" type="submit" class="item-btn">Edit</button>-->
+<!--                    </div>-->
+                    <form th:action="@{/tutor/course/{courseId}/detail/delete-unit(courseId=${course.courseId},unitId=${unit.unitId})}"
+                          method="post">
+                        <button type="submit" class="item-btn">Delete</button>
+                    </form>
+                </div>
+<!--                <div class="edit-modal" id="editModal">-->
+<!--                    <div class="modal-content">-->
+<!--                        <span class="close" id="closeEditModal">&times;</span>-->
+<!--                        <h3>Edit Unit</h3>-->
+<!--                        <label>Title:</label>-->
+<!--                        <form th:action="@{}" method="post"></form>-->
+<!--                        <input type="text" name="description" autocomplete="off" required-->
+<!--                               minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"-->
+<!--                               title="Only letters and numbers are allowed" placeholder="new title"-->
+<!--                        ><br>-->
+<!--                        <button type="submit" class="save-btn">Save Changes</button>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
 
         </div>
@@ -52,4 +73,51 @@
 </div>
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>
+<script>
+    const addModal = document.getElementById("addModal");
+   const openAddBtn = document.getElementById("addBtn");
+   const closeAddBtn = document.getElementById("closeAddModal");
+
+   openAddBtn.onclick = () => addModal.style.display = "flex";
+   closeAddBtn.onclick = () => addModal.style.display = "none";
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const editModal = document.getElementById("editModal");
+    const openEditBtns = document.querySelectorAll("#editBtn"); // Use class instead of ID for multiple buttons
+    const closeEditBtn = document.getElementById("closeEditModal");
+
+    if (!editModal || !closeEditBtn) {
+        console.error("Modal or close button not found in the document.");
+        return;
+    }
+
+    // Open modal when any "edit" button is clicked
+    openEditBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            editModal.style.display = "flex";
+        });
+    });
+
+    // Close modal when close button is clicked
+    closeEditBtn.addEventListener("click", () => {
+        editModal.style.display = "none";
+    });
+
+});
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
+</script>
 </html>

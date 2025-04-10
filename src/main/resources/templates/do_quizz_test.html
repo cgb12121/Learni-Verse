@@ -135,7 +135,7 @@
             <h3 th:text="'Câu ' + ${questionStat.index + 1} + ': ' + ${question.requirement}"></h3>
             <input type="hidden" th:value="${question.questionId}" class="question-id">
 
-            <div th:if="${question.choice1 != null}" class="form-check">
+            <div th:if="${not #strings.isEmpty(question.choice1)}" class="form-check">
                 <input type="checkbox" class="form-check-input"
                        th:name="${'question-' + question.questionId}"
                        th:id="${'choice1-' + question.questionId}"
@@ -145,7 +145,7 @@
                        th:text="${question.choice1}"></label>
             </div>
 
-            <div th:if="${question.choice2 != null}" class="form-check">
+            <div th:if="${not #strings.isEmpty(question.choice2)}" class="form-check">
                 <input type="checkbox" class="form-check-input"
                        th:name="${'question-' + question.questionId}"
                        th:id="${'choice2-' + question.questionId}"
@@ -155,7 +155,7 @@
                        th:text="${question.choice2}"></label>
             </div>
 
-            <div th:if="${question.choice3 != null}" class="form-check">
+            <div th:if="${not #strings.isEmpty(question.choice3)}" class="form-check">
                 <input type="checkbox" class="form-check-input"
                        th:name="${'question-' + question.questionId}"
                        th:id="${'choice3-' + question.questionId}"
@@ -165,7 +165,7 @@
                        th:text="${question.choice3}"></label>
             </div>
 
-            <div th:if="${question.choice4 != null}" class="form-check">
+            <div th:if="${not #strings.isEmpty(question.choice4)}" class="form-check">
                 <input type="checkbox" class="form-check-input"
                        th:name="${'question-' + question.questionId}"
                        th:id="${'choice4-' + question.questionId}"
@@ -175,7 +175,7 @@
                        th:text="${question.choice4}"></label>
             </div>
 
-            <div th:if="${question.choice5 != null}" class="form-check">
+            <div th:if="${not #strings.isEmpty(question.choice5)}" class="form-check">
                 <input type="checkbox" class="form-check-input"
                        th:name="${'question-' + question.questionId}"
                        th:id="${'choice5-' + question.questionId}"
