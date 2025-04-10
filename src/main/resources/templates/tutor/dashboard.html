@@ -11,15 +11,23 @@
 </head>
 <body style="background-color: #f8f9fa;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
-<div class="dashboard-container">
+<div class="unit-detail-container">
 
-    <h1 class="cart-header title">Dashboard</h1>
-    <p class="cart-header course-num">Your Courses</p>
-    <button class="dashboard-button" id="addBtn">Create New Course</button>
-    <p class="dashboard-course-item" th:if="${courses.isEmpty()}">No course created</p>
-
+    <div class="unit-header" style="display: flex;justify-content: space-between;">
+        <h1 class="unit-title">Dashboard</h1>
+        <button class="dashboard-button"
+                id="addBtn">Add Course
+        </button>
+    </div>
+    <p style="margin-inline: 4%;" class="quiz-card" th:if="${courses.isEmpty()}">No course created</p>
     <div class="dashboard-course-item" th:each="course : ${courses}">
-        <a th:href="@{/tutor/course/{courseId}/detail(courseId=${course.courseId})}" th:text="${course.courseName}"></a>
+        <div class="quiz-info">
+            <a class="quiz-title" th:href="@{/tutor/course/{courseId}/detail(courseId=${course.courseId})}"
+              th:text="${course.courseName}"></a>
+            <div class="quiz-meta">
+                <span class="quiz-questions" th:text="${course.units.size()} + ' units'"></span>
+            </div>
+        </div>
         <div class="dashboard-btn-container">
             <button id="editBtn" class="item-btn" th:href="@{/tutor/course/{id}/edit(id=${course.courseId})}">
                 Edit
@@ -73,7 +81,7 @@
 
                 <br>
 
-                <button type="submit" class="save-btn" autocomplete="off">Save Changes</button>
+                <button type="submit" class="save-btn" autocomplete="off">Save</button>
             </form>
         </div>
     </div>

@@ -38,6 +38,7 @@ public class TutorController {
     @Autowired
     private QuizzService quizzService;
 
+
     @GetMapping("/dashboard")
     public String dashboard(Model model, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -93,12 +94,6 @@ public class TutorController {
         tutorService.updateCourse(course, updatedCourse);
         return "redirect:/tutor/dashboard";
     }
-    @GetMapping("/course")
-    public String showCourse(@RequestParam("courseId") int courseId, Model model) {
-        Course course = courseRepository.findById(courseId).get();
-        model.addAttribute("course", course);
-        return "tutor/courseDetail";
-    }
 
     @PostMapping("/course/delete")
     public String deleteCourse(@RequestParam("courseId") int courseId, Authentication authentication) {
@@ -144,8 +139,8 @@ public class TutorController {
         return "tutor/course_detail";
     }
 
-    @GetMapping("/course/unit")
-    public String showUnit(@RequestParam("unitId") int unitId, Model model, Authentication authentication) {
+    @GetMapping("/course/unit/{unitId}")
+    public String showUnit(@PathVariable("unitId") int unitId, Model model, Authentication authentication) {
         User user = userService.getCurrentUser(authentication);
         if (user == null) {
             return "redirect:/login";
@@ -155,7 +150,7 @@ public class TutorController {
         return "tutor/unit-detail";
     }
 
-    @PostMapping("/course/{courseId}/addUnit")
+    @PostMapping("/course/{courseId}/add-unit")
     public String addUnit(@PathVariable("courseId") int courseId,
                           @RequestParam("description") String description,
                           Authentication authentication) {
@@ -169,7 +164,7 @@ public class TutorController {
             return "redirect:/tutor/dashboard";
         }
         tutorService.addUnit(course, description);
-        return "redirect:/tutor/course/" + courseId + "/edit";
+        return "redirect:/tutor/course/" + courseId + "/detail";
     }
     @PostMapping("/course/{courseId}/detail/delete-unit")
     public String deleteUnit(@RequestParam("unitId") int unitId,
@@ -181,7 +176,7 @@ public class TutorController {
             return "redirect:/login";
         }
         tutorService.deleteUnit(unitId);
-        return "redirect:/tutor/" + courseId + "/course/detail=";
+        return "redirect:/tutor/course/" + courseId + "/detail";
     }
 
     @PostMapping("/unit/{unitId}/uploadVideo")
@@ -206,7 +201,7 @@ public class TutorController {
         }
     }
 
-    @PostMapping("/unit/{unitId}/uploadQuiz")
+    @PostMapping("/unit/{unitId}/upload-quiz")
     public String uploadQuiz(@PathVariable("unitId") int unitId,
                              @RequestParam("quizzName") String quizzName,
                              Authentication authentication) {
@@ -220,8 +215,20 @@ public class TutorController {
             return "redirect:/tutor/dashboard";
         }
         tutorService.uploadQuiz(unit, quizzName);
-        return "redirect:/tutor/course/" + unit.getCourse().getCourseId() + "/edit";
+        return "redirect:/tutor/course/unit/" + unitId;
     }
+//    @GetMapping("/course/unit/{unitId}/quizz/{quizzId}")
+//    public String showQuizzManagePage(@PathVariable("unitId") int unitId,
+//                                      @PathVariable("quizzId") int quizzId,
+//                                      Model model, Authentication authentication){
+//        User user = userService.getCurrentUser(authentication);
+//        if (user == null) {
+//            return "redirect:/login";
+//        }
+//        Quizz quizz = quizzService.getQuizzById(quizzId);
+//        model.addAttribute("quiz", quizz);
+//        return "/tutor/quizz";
+//    }
 
     @GetMapping("/quizz/{quizzId}/grades")
     public String viewQuizGrades(@PathVariable("quizzId") int quizzId,
@@ -271,24 +278,24 @@ public class TutorController {
         return "redirect:/tutor/quiz_form";
     }
 
-    @GetMapping("/quiz/{quizId}/edit")
-    public String showEditQuizForm(@PathVariable("quizId") int quizId,
-                                   Model model,
-                                   Authentication authentication) {
-        User user = userService.getCurrentUser(authentication);
-        if (user == null) {
-            return "redirect:/tutor/dashboard";
-        }
-
-        Quizz quiz = quizzService.findQuizzByUnitId(
-                        quizzService.findQuizzByUnitId(quizId).get(0).getUnit().getUnitId()
-                ).stream().filter(q -> q.getQuizzId() == quizId).findFirst()
-                .orElseThrow(() -> new RuntimeException("Quiz not found"));
-
-        model.addAttribute("quiz", quiz);
-        model.addAttribute("courseId", quiz.getUnit().getCourse().getCourseId());
-        return "tutor/quiz_edit_form";
-    }
+//    @GetMapping("/quiz/{quizId}/edit")
+//    public String showEditQuizForm(@PathVariable("quizId") int quizId,
+//                                   Model model,
+//                                   Authentication authentication) {
+//        User user = userService.getCurrentUser(authentication);
+//        if (user == null) {
+//            return "redirect:/tutor/dashboard";
+//        }
+//
+//        Quizz quiz = quizzService.findQuizzByUnitId(
+//                        quizzService.findQuizzByUnitId(quizId).get(0).getUnit().getUnitId()
+//                ).stream().filter(q -> q.getQuizzId() == quizId).findFirst()
+//                .orElseThrow(() -> new RuntimeException("Quiz not found"));
+//
+//        model.addAttribute("quiz", quiz);
+//        model.addAttribute("courseId", quiz.getUnit().getCourse().getCourseId());
+//        return "tutor/quiz_edit_form";
+//    }
 
     @PostMapping("/quiz/{quizId}")
     public String updateQuiz(@PathVariable("quizId") int quizId,
@@ -303,21 +310,15 @@ public class TutorController {
         return "redirect:/tutor/quiz_edit_form";
     }
 
-    @PostMapping("/quiz/{quizId}/delete")
+    @PostMapping("/course/unit/{unitId}/quiz/{quizId}/delete")
     public String deleteQuiz(@PathVariable("quizId") int quizId,
+                             @PathVariable("unitId") int unitId,
                              Authentication authentication) {
         User user = userService.getCurrentUser(authentication);
         if (user == null) {
             return "redirect:/login";
         }
-//
-//        Quizz quiz = quizzService.findQuizzByUnitId(
-//                        quizzService.findQuizzByUnitId(quizId).get(0).getUnit().getUnitId()
-//                ).stream().filter(q -> q.getQuizzId() == quizId).findFirst()
-//                .orElseThrow(() -> new RuntimeException("Quiz not found"));
-//
-//        int courseId = quiz.getUnit().getCourse().getCourseId();
         quizzService.deleteQuiz(quizId);
-        return "redirect:/tutor/dashboard";
+        return "redirect:/tutor/course/unit?unitId=" + unitId;
     }
 }

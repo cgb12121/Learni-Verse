@@ -4,131 +4,114 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Quizz</title>
-    <style>
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60%;
-            max-width: 800px;
-            border: 2px solid #444;
-            border-radius: 10px;
-            padding: 30px;
-            background-color: white;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
-            z-index: 1001;
-        }
-
-        input[type="text"] {
-            width: 95%;
-            padding: 8px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        .button {
-            margin-top: 10px;
-            padding: 8px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body>
-
+<body style="background-color: #f8f9fa;">
+<div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
     <!-- Xem các câu hỏi hiện có -->
-    <div th:each="question : ${questions}">
-        <h3 th:text="${question.requirement}"></h3>
-        <p th:text="${question.choice1}"></p>
-        <p th:text="${question.choice2}"></p>
-        <p th:text="${question.choice3}"></p>
-        <p th:text="${question.choice4}"></p>
-        <p th:text="${question.choice5}"></p>
-        <form th:action="@{/deleteQuestion(questionId=${question.questionId}, quizzId=${param.quizzId})}" method="post"
-            style="display:inline;">
-            <button type="submit" class="button">Delete</button>
-        </form>
+<div class="unit-detail-container">
+    <div class="unit-header">
+        <h1 class="unit-title" th:text="'Quiz: ' + ${quizz.quizzName}"></h1>
     </div>
-
-    <!-- Nút mở form thêm câu hỏi -->
-    <button class="button" onclick="openPopup()">Create question form</button>
-
-    <!-- Overlay và form pop-up -->
-    <div class="overlay" id="overlay" onclick="closePopup()"></div>
-    <div class="popup" id="popupForm">
-        <form th:action="@{/addQuestion}" method="post" th:object="${questionForm}">
-            <input type="hidden" name="quizzId" th:value="${param.quizzId}" />
-            <p>Question:</p>
-            <input th:field="*{requirement}" type="text" required />
-            <p>Choice 1:</p>
-            <input th:field="*{choice1}" type="text" />
-            <select th:field="*{isChoice1}">
-                <option th:value="true">True</option>
-                <option th:value="false">False</option>
-            </select>
-            <p>Choice 2:</p>
-            <input th:field="*{choice2}" type="text" />
-            <select th:field="*{isChoice2}">
-                <option th:value="true">True</option>
-                <option th:value="false">False</option>
-            </select>
-            <p>Choice 3:</p>
-            <input th:field="*{choice3}" type="text" />
-            <select th:field="*{isChoice3}">
-                <option th:value="true">True</option>
-                <option th:value="false">False</option>
-            </select>
-            <p>Choice 4:</p>
-            <input th:field="*{choice4}" type="text" />
-            <select th:field="*{isChoice4}">
-                <option th:value="true">True</option>
-                <option th:value="false">False</option>
-            </select>
-            <p>Choice 5:</p>
-            <input th:field="*{choice5}" type="text" />
-            <select th:field="*{isChoice5}">
-                <option th:value="true">True</option>
-                <option th:value="false">False</option>
-            </select>
-
+    <div class="video-section">
+        <div class="section-header">
+            <h2 class="section-title">Question List</h2>
+            <button id="addBtn" class="upload-button">Add New Question</button>
+        </div>
+        <p style="margin-inline: 4%;" class="quiz-card" th:if="${quizz.questions.isEmpty()}">No question created</p>
+        <div class="quiz-card" style="display: block;" th:each="question : ${quizz.questions}">
+            <div style="display: flex; justify-content: space-between;">
+                <h3 th:text="'Question: ' + ${question.requirement} + '?'"></h3>
+                <form method="post"
+                      style="display:inline;">
+                    <button type="submit" class="item-btn">Delete</button>
+                </form>
+            </div>
             <br>
-            <button class="button" type="submit">Add question</button>
-            <button class="button" type="button" onclick="closePopup()">Cancel</button>
-        </form>
+            <p th:if="${not #strings.isEmpty(question.choice1)}" th:text="'Answer: ' + ${question.choice1}"></p><br>
+            <p th:if="${not #strings.isEmpty(question.choice2)}" th:text="'Answer: ' + ${question.choice2}"></p><br>
+            <p th:if="${not #strings.isEmpty(question.choice3)}" th:text="'Answer: ' + ${question.choice3}"></p><br>
+            <p th:if="${not #strings.isEmpty(question.choice4)}" th:text="'Answer: ' + ${question.choice4}"></p><br>
+            <p th:if="${not #strings.isEmpty(question.choice5)}" th:text="'Answer: ' + ${question.choice5}"></p>
+        </div>
     </div>
+
+    <div class="edit-modal" id="addModal">
+        <div class="modal-content">
+            <span class="close" id="closeAddModal">&times;</span>
+            <form style="display: flex; flex-direction: column;" class="edit-form" th:action="@{/tutor/course/unit/quizz/{quizzId}/add-question(quizzId=${quizz.quizzId})}" method="post"
+                  th:object="${questionForm}">
+                <h3 style="justify-self: center; text-align: center;">New Question</h3>
+                <input type="hidden" name="quizzId" th:value="${quizz.quizzId}"/>
+                <p><strong>Question:</strong></p>
+                <input th:field="*{requirement}" type="text" required autocomplete="off" placeholder="Answer"/>
+                <p><strong>Choice 1:</strong></p>
+                <input th:field="*{choice1}" type="text" autocomplete="off" placeholder="Answer"/>
+                <select th:field="*{isChoice1}">
+                    <option th:value="true">True</option>
+                    <option th:value="false">False</option>
+                </select>
+                <p><strong>Choice 2:</strong></p>
+                <input th:field="*{choice2}" type="text" autocomplete="off" placeholder="Answer"/>
+                <select th:field="*{isChoice2}">
+                    <option th:value="true">True</option>
+                    <option th:value="false">False</option>
+                </select>
+                <p><strong>Choice 3:</strong></p>
+                <input th:field="*{choice3}" type="text" autocomplete="off" placeholder="Answer"/>
+                <select th:field="*{isChoice3}">
+                    <option th:value="true">True</option>
+                    <option th:value="false">False</option>
+                </select>
+                <p><strong>Choice 4:</strong></p>
+                <input th:field="*{choice4}" type="text" autocomplete="off" placeholder="Answer"/>
+                <select th:field="*{isChoice4}">
+                    <option th:value="true">True</option>
+                    <option th:value="false">False</option>
+                </select>
+                <p><strong>Choice 5:</strong></p>
+                <input th:field="*{choice5}" type="text" autocomplete="off" placeholder="Answer"/>
+                <select th:field="*{isChoice5}">
+                    <option th:value="true">True</option>
+                    <option th:value="false">False</option>
+                </select>
+
+                <br>
+                <button style="margin: 0;" class="item-btn" type="submit">Add question</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 
     <!-- Script xử lý popup -->
     <script>
-        function openPopup() {
-            document.getElementById("popupForm").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-        }
+        const addModal = document.getElementById("addModal");
+   const openAddBtn = document.getElementById("addBtn");
+   const closeAddBtn = document.getElementById("closeAddModal");
 
-        function closePopup() {
-            document.getElementById("popupForm").style.display = "none";
-            document.getElementById("overlay").style.display = "none";
-        }
+   openAddBtn.onclick = () => addModal.style.display = "flex";
+   closeAddBtn.onclick = () => addModal.style.display = "none";
+        document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
     </script>
 </body>
 
