@@ -123,6 +123,62 @@ public class StudentController {
         return "course_overview";
     }
 
+    @GetMapping("/learning/start")
+    public String startCourse(@RequestParam("courseId") int courseId, Model model, Authentication authentication) {
+        Course course = courseRepository.findById(courseId).orElse(null);
+        String videoLink = "";
+
+        if (course != null && course.getUnits() != null && !course.getUnits().isEmpty()) {
+            System.out.println("✅ Course found: " + course.getCourseName());
+            Unit firstUnit = course.getUnits().get(0);
+
+            if (firstUnit.getVideo() != null && !firstUnit.getVideo().isEmpty()) {
+                Video firstVideo = firstUnit.getVideo().get(0);
+                videoLink = firstVideo.getFilePath();
+            }
+
+            List<Quizz> allQuizzes = new ArrayList<>();
+            for (Unit unit : course.getUnits()) {
+                System.out.println("🔹 Unit: " + unit.getDescription());
+                List<Quizz> quizzes = quizzService.findQuizzByUnitId(unit.getUnitId());
+                System.out.println("   📘 Found " + quizzes.size() + " quizzes");
+                allQuizzes.addAll(quizzes);
+            }
+
+            Map<Integer, Double> userGrades = new HashMap<>();
+            User currentUser = userService.getCurrentUser(authentication);
+            System.out.println("👤 Current user: " + (currentUser != null ? currentUser.getUsername() : "null"));
+
+            if (currentUser != null) {
+                for (Quizz quiz : allQuizzes) {
+                    System.out.println("➡ Checking grade for quizId: " + quiz.getQuizzId());
+                    Optional<UserQuizz> optionalUserQuizz = userQuizzService.getUserQuizzByUsernameAndQuizzId(currentUser.getUsername(), quiz.getQuizzId());
+                    System.out.println("➡ Optional for quiz " + quiz.getQuizzId() + ": " + optionalUserQuizz);
+
+                    if (optionalUserQuizz.isPresent()) {
+                        UserQuizz userQuizz = optionalUserQuizz.get();
+                        System.out.println("   ✅ Grade found: " + userQuizz.getGrade());
+                        userGrades.put(quiz.getQuizzId(), userQuizz.getGrade());
+                    } else {
+                        System.out.println("   ❌ No UserQuizz found for user=" + currentUser.getUsername() + " quizId=" + quiz.getQuizzId());
+                    }
+                }
+            }
+
+            System.out.println("🎯 Final userGrades: " + userGrades);
+
+            model.addAttribute("quizzes", allQuizzes);
+            model.addAttribute("userGrades", userGrades);
+        } else {
+            System.out.println("⚠️ Course not found or has no units");
+        }
+
+        model.addAttribute("course", course);
+        model.addAttribute("currentVideoId", videoLink);
+
+        return "video_page";
+    }
+
     @GetMapping("/shopping-history")
     public String showHistoryPage(Model model, Authentication authentication){
         User currentUser = userService.getCurrentUser(authentication);
@@ -147,19 +203,6 @@ public class StudentController {
         return "homePage1";
     }
 
-//    @GetMapping("/course-detail")
-//    public String showCourseDetail(@RequestParam("courseId") int courseId, Model model) {
-//
-//        Map<String, Object> data = courseService.getCourseDetailData(courseId);
-//        model.addAttribute("reviewDTO", new ReviewDTO());
-//        model.addAttribute("course", data.get("course"));
-//        model.addAttribute("tutor", data.get("tutor"));
-//        model.addAttribute("reviews", data.get("reviews"));
-//        model.addAttribute("averageRating", data.get("averageRating"));
-//        model.addAttribute("relatedCourses", data.get("relatedCourses"));
-//        return "courseDetail";
-//    }
-
     @GetMapping("/quizz")
     public String showAllQuizzInAUnitPage(Model model,@RequestParam("unitId") int unitId){
 
@@ -178,13 +221,6 @@ public class StudentController {
         model.addAttribute("quizzId",quizzId);
         return "do_quizz_test";
     }
-//    @PostMapping("/grade")
-//    public ResponseEntity<String> gradeTheQuizz(Model model, @RequestBody List<QuestionDTO> questionDTOS, @RequestParam int quizzId, Authentication authentication){
-//        double grade = gradingService.Grading(questionDTOS);
-//        userQuizzService.setUserQuizz(quizzId,grade,authentication);
-//        model.addAttribute("grade",grade);
-//        return ResponseEntity.ok().body("success");
-//    }
 
     @GetMapping("/show-cart")
     public String showCart(Model model, Authentication authentication){
@@ -331,6 +367,7 @@ public class StudentController {
 
         return "do_quizz_test";
     }
+
     @PostMapping("/grade")
     public ResponseEntity<List<Map<String, Object>>> gradeTheQuizz(@RequestBody List<QuestionDTO> submittedAnswers, @RequestParam int quizzId, Authentication authentication) {
         List<Question> originalQuestions = questionRepository.getQuestionsByQuizz_QuizzId(quizzId);

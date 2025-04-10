@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Write Review</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .review-form { max-width: 600px; margin: 0 auto; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; }
+    select, textarea { width: 100%; padding: 8px; }
+    textarea { height: 150px; }
+    .error { color: red; font-size: 14px; }
+    button { background-color: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+    button:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+<div class="review-form">
+  <h2>Write Your Review</h2>
+  <form th:action="@{/submit-review}" th:object="${reviewDTO}" method="post">
+    <input type="hidden" th:field="*{courseId}" th:value="${courseId}">
+    <div class="form-group">
+      <label for="star">Rating:</label>
+      <select th:field="*{star}" id="star" required>
+        <option value="">Select rating</option>
+        <option value="1">1 Star</option>
+        <option value="2">2 Stars</option>
+        <option value="3">3 Stars</option>
+        <option value="4">4 Stars</option>
+        <option value="5">5 Stars</option>
+      </select>
+      <span th:errors="*{star}" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="content">Your Review:</label>
+      <textarea th:field="*{content}" id="content" required placeholder="Write your review here..."></textarea>
+      <span th:errors="*{content}" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <button type="submit">Submit Review</button>
+      <a th:href="@{/course-detail(courseId=${courseId})}">Cancel</a>
+    </div>
+  </form>
+</div>
+</body>
+</html>
