@@ -328,28 +328,6 @@ public class StudentController {
         return "redirect:/profile";
     }
 
-    @GetMapping("/learning/start")
-    public String startCourse(@RequestParam("courseId") int courseId, Model model) {
-        Course course = courseRepository.findById(courseId).orElse(null);
-
-        // Gán videoLink mặc định nếu không tìm thấy
-        String videoLink = ""; // Ví dụ: ID video mặc định
-
-        // Nếu course không null và có units, lấy unit đầu tiên và video đầu tiên
-        if (course != null && course.getUnits() != null && !course.getUnits().isEmpty()) {
-            Unit firstUnit = course.getUnits().get(0);
-            if (firstUnit.getVideo() != null && !firstUnit.getVideo().isEmpty()) {
-                Video firstVideo = firstUnit.getVideo().get(0);
-                videoLink = firstVideo.getFilePath();
-                System.out.println(videoLink); // Giả sử filePath chứa link YouTube (ID video)
-            }
-        }
-
-        model.addAttribute("course", course);
-        model.addAttribute("currentVideoId", videoLink);
-
-        return "video_page"; // Tên file template
-    }
     @GetMapping("/unit-test/{quizzId}")
     public String showAllQuestionInAQuizz(@PathVariable("quizzId") int quizzId, Model model) {
         List<Question> questions = questionRepository.findQuestionsByQuizzId(quizzId);
