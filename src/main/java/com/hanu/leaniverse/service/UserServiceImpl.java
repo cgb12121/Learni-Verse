@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +33,10 @@ public class UserServiceImpl implements UserService {
     private TutorRepository tutorRepository;
     @Autowired
     private UserSensitiveInformationRepository userSensitiveInformationRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
@@ -68,23 +73,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User signUpAccount(UserDTO userDTO) {
 
-        System.out.println("Signing up user with role: " + userDTO.getRole());
-
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setFullName(userDTO.getFullName());
-        user.setPassword("{noop}" + userDTO.getPassword());
-
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setRole("STUDENT");
 
         User savedUser = userRepository.save(user);
-
-
-        if ("TUTOR".equals(userDTO.getRole())) {
-            Tutor tutor = new Tutor();
-            tutor.setUser(savedUser);
-
-            tutorRepository.save(tutor);
-        }
 
         return savedUser;
     }
@@ -95,6 +90,8 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+
     public void updateUserProfile(UserSensitiveInformation userInfo, String fullName, Authentication authentication) {
         // Get the current authenticated user
         User currentUser = getCurrentUser(authentication);
