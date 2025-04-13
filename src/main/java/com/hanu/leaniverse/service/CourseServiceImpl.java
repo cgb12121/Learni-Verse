@@ -111,4 +111,8 @@ public class CourseServiceImpl implements CourseService{
                 .orElse(0.0);
     }
 
+    public Course getCourseById(int courseId) {
+        return courseRepository.findById(courseId).orElse(null);
+    }
+
 }

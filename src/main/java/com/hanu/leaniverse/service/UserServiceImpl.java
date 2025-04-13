@@ -2,6 +2,7 @@ package com.hanu.leaniverse.service;
 
 
 import com.hanu.leaniverse.dto.UserDTO;
+import com.hanu.leaniverse.model.Cart;
 import com.hanu.leaniverse.model.User;
 import com.hanu.leaniverse.model.UserSensitiveInformation;
 import com.hanu.leaniverse.repository.TutorRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

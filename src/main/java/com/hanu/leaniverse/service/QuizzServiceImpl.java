@@ -1,7 +1,9 @@
 package com.hanu.leaniverse.service;
 
+import com.hanu.leaniverse.model.Question;
 import com.hanu.leaniverse.model.Quizz;
 import com.hanu.leaniverse.model.Unit;
+import com.hanu.leaniverse.repository.QuestionRepository;
 import com.hanu.leaniverse.repository.QuizzRepository;
 import com.hanu.leaniverse.repository.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuizzServiceImpl implements QuizzService {
@@ -17,6 +20,9 @@ public class QuizzServiceImpl implements QuizzService {
 
     @Autowired
     private UnitRepository unitRepository;
+
+    @Autowired
+    private QuestionRepository questionRepository;
 
 
     @Override
@@ -49,5 +55,23 @@ public class QuizzServiceImpl implements QuizzService {
         Quizz quizz = quizzRepository.findById(quizId)
                 .orElseThrow(() -> new RuntimeException("Quiz not found"));
         quizzRepository.delete(quizz);
+    }
+
+    public Quizz getQuizzById(int quizzId) {
+        return quizzRepository.findById(quizzId).get();
+    }
+
+    public Optional<Quizz> getQuizzOptionalById(int quizzId) {
+        return quizzRepository.findById(quizzId);
+    }
+
+    public Question addQuestionToQuiz(int quizzId, Question question) {
+        Quizz quizz = quizzRepository.findById(quizzId).orElseThrow(() -> new IllegalArgumentException("Invalid quizzId"));
+        question.setQuizz(quizz);
+        return questionRepository.save(question);
+    }
+
+    public void deleteQuestion(int questionId) {
+       questionRepository.deleteById(questionId);
     }
 }

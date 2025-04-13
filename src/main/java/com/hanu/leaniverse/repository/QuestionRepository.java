@@ -12,7 +12,4 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     @Query(value = "SELECT * FROM question WHERE quizz_id = ?1",
            nativeQuery = true)
   public List<Question> findQuestionsByQuizzId(int quizzId);
-
-
-    List<Question> getQuestionsByQuizz_QuizzId(int quizzId);
 }

@@ -3,8 +3,9 @@ package com.hanu.leaniverse.controller;
 
 import com.hanu.leaniverse.model.Course;
 import com.hanu.leaniverse.model.Enrollment;
-import com.hanu.leaniverse.repository.CourseRepository;
 import com.hanu.leaniverse.repository.EnrollmentRepository;
+import com.hanu.leaniverse.service.CourseService;
+import com.hanu.leaniverse.service.EnrollmentService;
 import com.hanu.leaniverse.service.UserService;
 import com.hanu.leaniverse.service.VNPayService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,11 +23,12 @@ public class PaymentController {
         @Autowired
         private VNPayService vnPayService;
         @Autowired
-        private CourseRepository courseRepository;
+        private CourseService courseService;
+
         @Autowired
         private UserService userService;
         @Autowired
-        private EnrollmentRepository enrollmentRepository;
+        private EnrollmentService enrollmentService;
 
         @PostMapping("/submit-order")
         public String submitOrder(@RequestParam("amount") int orderTotal,
@@ -49,7 +51,7 @@ public class PaymentController {
             String cardType = request.getParameter("vnp_CardType");
             for(int i= 0; i<orderInfo.split(",").length;i++) {
                 String id = orderInfo.split(",")[i].split(":")[0];
-                Course course = courseRepository.findById(Integer.parseInt(id)).get();
+                Course course = courseService.getCourseById(Integer.parseInt(id));
                 Enrollment enrollment = new Enrollment();
                 enrollment.setBank(bank);
                 enrollment.setPrice(Integer.parseInt(totalPrice)/100);
@@ -59,14 +61,14 @@ public class PaymentController {
                 enrollment.setCourse(course);
                 enrollment.setUser(userService.getCurrentUser(SecurityContextHolder.getContext().getAuthentication()));
                 enrollment.setOrderInfo(orderInfo);
-                enrollmentRepository.saveAndFlush(enrollment);
+                enrollmentService.saveAndFlush(enrollment);
             }
             return paymentStatus == 1 ? "paymentSuccess" : "orderfail";
         }
-
-        @GetMapping("/testPayment")
-        public String testPayment(Model model){
-            return "paymentFail";
-        }
+//
+//        @GetMapping("/testPayment")
+//        public String testPayment(Model model){
+//            return "paymentFail";
+//        }
 }
 

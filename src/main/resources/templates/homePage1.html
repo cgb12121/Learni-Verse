@@ -70,7 +70,7 @@
                         <!-- Course 1 -->
                         <div class="course-card" th:each="course : ${courses}">
                             <div class="course-badge bestseller">Recommended</div>
-                            <img src="" alt="Course image" class="course-image">
+                            <img th:src="@{'/courseImg/' + ${course.courseImage}}" alt="Course image" class="course-image"/>
                             <a th:href="@{/course-detail(courseId=${course.courseId})}" class="course-title"
                                style="font-size: 16px;" th:text="${course.courseName}"></a>
                             <p class="course-instructor" th:if="${not #lists.isEmpty(course.teaches)}"
