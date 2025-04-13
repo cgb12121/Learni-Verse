@@ -12,6 +12,7 @@ public class Course {
     private String courseName;
     private String courseDetail;
     private double price;
+    private String courseImage;
     @OneToMany(mappedBy = "course")
     private List<WishList> wishLists;
     @OneToMany(mappedBy = "course")
@@ -126,5 +127,13 @@ public class Course {
 
     public void setUnits(List<Unit> units) {
         this.units = units;
+    }
+
+    public String getCourseImage() {
+        return courseImage;
+    }
+
+    public void setCourseImage(String courseImage) {
+        this.courseImage = courseImage;
     }
 }

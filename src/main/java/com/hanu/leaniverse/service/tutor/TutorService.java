@@ -1,8 +1,10 @@
 package com.hanu.leaniverse.service.tutor;
 
+import com.hanu.leaniverse.dto.CourseDTO;
 import com.hanu.leaniverse.model.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TutorService {
@@ -22,4 +24,14 @@ public interface TutorService {
     Quizz getQuizzById(int quizzId);
     List<UserQuizz> getQuizGrades(Quizz quizz);
     public void deleteUnit(int unitId);
+
+    String saveCourseImage(MultipartFile imageFile) throws IOException;
+
+    void createCourseWithImage(Course course, Tutor tutor, List<Integer> categoryIds, MultipartFile courseImage) throws IOException;
+
+    void updateCourseWithImage(Course existingCourse, Course updatedCourse, MultipartFile courseImage) throws IOException;
+
+    void createCourseFromDTO(CourseDTO courseDTO, Tutor tutor, List<Integer> categoryIds) throws IOException;
+
+    void updateCourseFromDTO(int courseId, CourseDTO courseDTO, Tutor tutor) throws IOException, IllegalAccessException;
 }
