@@ -2,13 +2,13 @@ package com.hanu.leaniverse.service;
 
 
 import com.hanu.leaniverse.dto.UserDTO;
-import com.hanu.leaniverse.model.Tutor;
 import com.hanu.leaniverse.model.User;
 import com.hanu.leaniverse.model.UserSensitiveInformation;
 import com.hanu.leaniverse.repository.TutorRepository;
 import com.hanu.leaniverse.repository.UserRepository;
 import com.hanu.leaniverse.repository.UserSensitiveInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,10 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -90,6 +87,7 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
 
 
     public void updateUserProfile(UserSensitiveInformation userInfo, String fullName, Authentication authentication) {

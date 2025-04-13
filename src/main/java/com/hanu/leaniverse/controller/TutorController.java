@@ -1,5 +1,6 @@
 package com.hanu.leaniverse.controller;
 
+import com.hanu.leaniverse.dto.CourseDTO;
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.CategoryRepository;
 import com.hanu.leaniverse.repository.CourseRepository;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -51,7 +53,8 @@ public class TutorController {
         }
         model.addAttribute("courses", tutorService.getCoursesForTutor(tutor));
         model.addAttribute("tutor", tutor);
-        model.addAttribute("newCourse", new Course());
+//        model.addAttribute("newCourse", new Course());
+        model.addAttribute("courseDTO", new CourseDTO());
         model.addAttribute("categories", categoryRepository.findAll());
         return "tutor/dashboard";
     }
@@ -59,13 +62,15 @@ public class TutorController {
     @GetMapping("/course/new")
     public String showCreateCourseForm(Model model) {
         model.addAttribute("course", new Course());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "tutor/course_form";
     }
 
     @PostMapping("/course")
-    public String createCourse(@ModelAttribute("course") Course course,
+    public String createCourse(@ModelAttribute("courseDTO") CourseDTO courseDTO,
                                @RequestParam("categoryIds") List<Integer> categoryIds,
-                               Authentication authentication) {
+                               Authentication authentication,
+                               Model model) {
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
 
@@ -73,27 +78,44 @@ public class TutorController {
             return "redirect:/tutor/dashboard";
         }
 
-        tutorService.createCourse(course, tutor, categoryIds);
+        try {
+            tutorService.createCourseFromDTO(courseDTO, tutor, categoryIds);
+        } catch (IOException e) {
+            model.addAttribute("error", "Error when saving: " + e.getMessage());
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("courseDTO", courseDTO);
+            return "tutor/course_form";
+        }
+
         return "redirect:/tutor/dashboard";
     }
-
 
     @PostMapping("/course/edit")
     public String updateCourse(@RequestParam("courseId") int courseId,
-                               @ModelAttribute("course") Course updatedCourse,
-                               Authentication authentication) {
+                               @ModelAttribute("courseDTO") CourseDTO courseDTO,
+                               Authentication authentication,
+                               Model model) {
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
+
         if (tutor == null) {
             return "redirect:/tutor/dashboard";
         }
-        Course course = tutorService.getCourseById(courseId);
-        if (course == null || tutorService.hasAccessToCourse(tutor, course)) {
+
+        try {
+            tutorService.updateCourseFromDTO(courseId, courseDTO, tutor);
+        } catch (IOException e) {
+            model.addAttribute("error", "Error uploading image: " + e.getMessage());
+            model.addAttribute("course", tutorService.getCourseById(courseId));
+            model.addAttribute("courseDTO", courseDTO);
+            return "tutor/dashboard";
+        } catch (IllegalAccessException e) {
             return "redirect:/tutor/dashboard";
         }
-        tutorService.updateCourse(course, updatedCourse);
+
         return "redirect:/tutor/dashboard";
     }
+
 
     @PostMapping("/course/delete")
     public String deleteCourse(@RequestParam("courseId") int courseId, Authentication authentication) {

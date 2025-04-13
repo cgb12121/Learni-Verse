@@ -1,5 +1,6 @@
 package com.hanu.leaniverse.service.tutor;
 
+import com.hanu.leaniverse.dto.CourseDTO;
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,6 +48,9 @@ public class TutorServiceImpl implements TutorService {
     private CourseCategoryRepository courseCategoryRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Value("${upload.dir.courses}")
+    private String courseUploadDir;
 
     public Tutor getTutorFromAuthentication(User user) {
         return tutorRepository.findByUser(user);
@@ -161,5 +167,97 @@ public class TutorServiceImpl implements TutorService {
 
     public List<UserQuizz> getQuizGrades(Quizz quizz) {
         return userQuizzRepository.findByQuizz(quizz);
+    }
+
+    @Override
+    public String saveCourseImage(MultipartFile imageFile) throws IOException {
+        if (imageFile == null || imageFile.isEmpty()) {
+            return null;
+        }
+
+        Date createdAt = new Date();
+        String storageFileName = createdAt.getTime() + "_" + imageFile.getOriginalFilename();
+
+        Path uploadPath = Paths.get(courseUploadDir);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = imageFile.getInputStream()) {
+            Files.copy(inputStream, Paths.get(courseUploadDir + storageFileName),
+                    StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        return storageFileName;
+    }
+
+    private void deleteCourseImage(String fileName) throws IOException {
+        if (fileName == null || fileName.isEmpty()) {
+            return;
+        }
+
+        Path filePath = Paths.get(courseUploadDir + fileName);
+        if (Files.exists(filePath)) {
+            Files.delete(filePath);
+        }
+    }
+
+    @Override
+    public void createCourseWithImage(Course course, Tutor tutor, List<Integer> categoryIds, MultipartFile courseImage) throws IOException {
+        if (courseImage != null && !courseImage.isEmpty()) {
+            String fileName = saveCourseImage(courseImage);
+            course.setCourseImage(fileName);
+        }
+
+        createCourse(course, tutor, categoryIds);
+    }
+
+    @Override
+    public void updateCourseWithImage(Course existingCourse, Course updatedCourse, MultipartFile courseImage) throws IOException {
+        if (courseImage != null && !courseImage.isEmpty()) {
+            if (existingCourse.getCourseImage() != null) {
+                deleteCourseImage(existingCourse.getCourseImage());
+            }
+
+            String fileName = saveCourseImage(courseImage);
+            updatedCourse.setCourseImage(fileName);
+        } else {
+            updatedCourse.setCourseImage(existingCourse.getCourseImage());
+        }
+
+
+        existingCourse.setCourseName(updatedCourse.getCourseName());
+        existingCourse.setCourseDetail(updatedCourse.getCourseDetail());
+        existingCourse.setPrice(updatedCourse.getPrice());
+
+        courseRepository.save(existingCourse);
+    }
+
+    @Override
+    public void createCourseFromDTO(CourseDTO courseDTO, Tutor tutor, List<Integer> categoryIds) throws IOException {
+        Course course = new Course();
+        course.setCourseName(courseDTO.getCourseName());
+        course.setCourseDetail(courseDTO.getCourseDetail());
+        course.setPrice(courseDTO.getPrice());
+
+        MultipartFile courseImageFile = courseDTO.getCourseImage();
+        createCourseWithImage(course, tutor, categoryIds, courseImageFile);
+    }
+
+    @Override
+    public void updateCourseFromDTO(int courseId, CourseDTO courseDTO, Tutor tutor) throws IOException, IllegalAccessException {
+        Course existingCourse = getCourseById(courseId);
+        if (existingCourse == null || hasAccessToCourse(tutor, existingCourse)) {
+            throw new IllegalAccessException("Tutor does not have access to this course or course does not exist");
+        }
+
+        Course updatedCourse = new Course();
+        updatedCourse.setCourseName(courseDTO.getCourseName());
+        updatedCourse.setCourseDetail(courseDTO.getCourseDetail());
+        updatedCourse.setPrice(courseDTO.getPrice());
+
+        MultipartFile courseImage = courseDTO.getCourseImage();
+        updateCourseWithImage(existingCourse, updatedCourse, courseImage);
     }
 }
