@@ -29,4 +29,16 @@ public class EnrollmentServiceImpl implements EnrollmentService{
                                 .toLocalDate()
                 ));
     }
+
+    public List<Enrollment> getAllEnrollmentsByUser(User user) {
+        return enrollmentRepository.findByUser(user);
+    }
+
+    public boolean isEnrolled(int userId, int courseId) {
+        return enrollmentRepository.isUserEnrolled(userId, courseId);
+    }
+
+    public void saveAndFlush(Enrollment enrollment) {
+        enrollmentRepository.saveAndFlush(enrollment);
+    }
 }

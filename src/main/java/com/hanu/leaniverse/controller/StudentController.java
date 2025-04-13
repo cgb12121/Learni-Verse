@@ -26,41 +26,25 @@ import java.util.stream.Collectors;
 @Controller
 public class StudentController {
     @Autowired
-    ReviewService reviewService;
+    private ReviewService reviewService;
     @Autowired
-    GradingService gradingService;
+    private GradingService gradingService;
     @Autowired
-    QuizzService quizzService;
+    private QuizzService quizzService;
     @Autowired
-    QuestionRepository questionRepository;
+    private QuestionService questionService;
     @Autowired
-    CartService cartService;
+    private CartService cartService;
     @Autowired
-    UserRepository userRepository;
+    private WishListService wishListService;
     @Autowired
-    CartRepository cartRepository;
+    private UserQuizzService userQuizzService;
     @Autowired
-    CourseRepository courseRepository;
+    private UserService userService;
     @Autowired
-    WishListService wishListService;
+    private CourseService courseService;
     @Autowired
-    UserQuizzService userQuizzService;
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    CourseService courseService;
-
-    @Autowired
-    EnrollmentRepository enrollmentRepository;
-
-    @Autowired
-    EnrollmentService enrollmentService;
-    @Autowired
-    UserSensitiveInformationRepository userSensitiveInformationRepository;
-
-    @Autowired
-    QuizzRepository quizzRepository;
+    private EnrollmentService enrollmentService;
 
     @GetMapping("/my-courses")
     public String showCourses(Model model, Authentication authentication) {
@@ -70,7 +54,7 @@ public class StudentController {
             return "redirect:/login";
         }
 
-        List<Enrollment> enrollments = enrollmentRepository.findByUser(currentUser);
+        List<Enrollment> enrollments = enrollmentService.getAllEnrollmentsByUser(currentUser);
 
         List<Course> courses = enrollments.stream()
                 .map(Enrollment::getCourse)
@@ -88,12 +72,12 @@ public class StudentController {
             return "redirect:/login";
         }
 
-        Course course = courseRepository.findById(courseId).orElse(null);
+        Course course = courseService.getCourseById(courseId);
         if (course == null) {
             return "redirect:/home-page";
         }
 
-        boolean isEnrolled = enrollmentRepository.isUserEnrolled(currentUser.getUserId(), courseId);
+        boolean isEnrolled = enrollmentService.isEnrolled(currentUser.getUserId(), courseId);
         if (!isEnrolled) {
             Map<String, Object> data = courseService.getCourseDetailData(courseId);
             model.addAttribute("reviewDTO", new ReviewDTO());
@@ -125,11 +109,11 @@ public class StudentController {
 
     @GetMapping("/learning/start")
     public String startCourse(@RequestParam("courseId") int courseId, Model model, Authentication authentication) {
-        Course course = courseRepository.findById(courseId).orElse(null);
+        Course course = courseService.getCourseById(courseId);
         String videoLink = "";
 
         if (course != null && course.getUnits() != null && !course.getUnits().isEmpty()) {
-            System.out.println("✅ Course found: " + course.getCourseName());
+
             Unit firstUnit = course.getUnits().get(0);
 
             if (firstUnit.getVideo() != null && !firstUnit.getVideo().isEmpty()) {
@@ -139,40 +123,31 @@ public class StudentController {
 
             List<Quizz> allQuizzes = new ArrayList<>();
             for (Unit unit : course.getUnits()) {
-                System.out.println("🔹 Unit: " + unit.getDescription());
                 List<Quizz> quizzes = quizzService.findQuizzByUnitId(unit.getUnitId());
-                System.out.println("   📘 Found " + quizzes.size() + " quizzes");
                 allQuizzes.addAll(quizzes);
             }
 
             Map<Integer, Double> userGrades = new HashMap<>();
             User currentUser = userService.getCurrentUser(authentication);
-            System.out.println("👤 Current user: " + (currentUser != null ? currentUser.getUsername() : "null"));
 
             if (currentUser != null) {
                 for (Quizz quiz : allQuizzes) {
-                    System.out.println("➡ Checking grade for quizId: " + quiz.getQuizzId());
+
                     Optional<UserQuizz> optionalUserQuizz = userQuizzService.getUserQuizzByUsernameAndQuizzId(currentUser.getUsername(), quiz.getQuizzId());
-                    System.out.println("➡ Optional for quiz " + quiz.getQuizzId() + ": " + optionalUserQuizz);
+
 
                     if (optionalUserQuizz.isPresent()) {
                         UserQuizz userQuizz = optionalUserQuizz.get();
-                        System.out.println("   ✅ Grade found: " + userQuizz.getGrade());
+
                         userGrades.put(quiz.getQuizzId(), userQuizz.getGrade());
-                    } else {
-                        System.out.println("   ❌ No UserQuizz found for user=" + currentUser.getUsername() + " quizId=" + quiz.getQuizzId());
                     }
                 }
             }
 
-            System.out.println("🎯 Final userGrades: " + userGrades);
 
             model.addAttribute("quizzes", allQuizzes);
             model.addAttribute("userGrades", userGrades);
-        } else {
-            System.out.println("⚠️ Course not found or has no units");
         }
-
         model.addAttribute("course", course);
         model.addAttribute("currentVideoId", videoLink);
 
@@ -203,19 +178,23 @@ public class StudentController {
         return "homePage1";
     }
 
-    @GetMapping("/quizz")
-    public String showAllQuizzInAUnitPage(Model model,@RequestParam("unitId") int unitId){
-
-        List<Quizz> quizzes = quizzService.findQuizzByUnitId(unitId);
-        if(quizzes != null) {
-            model.addAttribute("quizzes", quizzes);
-        }
-
-        return "quizz-test";
-    }
+//    @GetMapping("/quizz")
+//    public String showAllQuizzInAUnitPage(Model model,@RequestParam("unitId") int unitId){
+//
+//        List<Quizz> quizzes = quizzService.findQuizzByUnitId(unitId);
+//        if(quizzes != null) {
+//            model.addAttribute("quizzes", quizzes);
+//        }
+//
+//        return "quizz-test";
+//    }
     @GetMapping("/question")
-    public String showAllQuestionInAQuizz(Model model, @RequestParam("quizzId") int quizzId){
-        List<Question> questions = questionRepository.findQuestionsByQuizzId(quizzId);
+    public String showAllQuestionInAQuizz(Model model, @RequestParam("quizzId") int quizzId, Authentication authentication){
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
+        List<Question> questions = questionService.getAllQuestionByQuizId(quizzId);
         List<QuestionDTO> questionDTOS = new ArrayList<QuestionDTO>();
         model.addAttribute("questions",questions);
         model.addAttribute("quizzId",quizzId);
@@ -228,12 +207,16 @@ public class StudentController {
         if (user == null) {
             return "redirect:/login";
         }
-        model.addAttribute("CartList",cartRepository.findAllCartByUser(userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUserId()));
+        model.addAttribute("CartList", cartService.getAllCartByUserId(user.getUserId()));
         return "cart";
     }
 
     @PostMapping("/add-to-cart")
     public String addCart(Model model, @RequestParam("courseId") int courseId, Authentication authentication ) throws Exception{
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
         if(cartService.addCartService(courseId, authentication)){
             String message = "Course successfully added to cart!";
             boolean success = true;
@@ -246,18 +229,26 @@ public class StudentController {
         }
     }
     @PostMapping("/delete-cart-item")
-    public String deleteCart(Model model, @RequestParam("cartId") int cartId){
-        cartRepository.deleteById(cartId);
+    public String deleteCart(Model model, @RequestParam("cartId") int cartId, Authentication authentication){
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
+        cartService.deleteByCartId(cartId);
         String message = "Course was deleted successfully!";
         boolean success = true;
         return "redirect:/show-cart?message=" + message + "&success=" +success;
     }
-    @GetMapping("/delete-cart-item")
-    public String updateAfterDeleteCart(Model model){
-        String message = "Course was deleted successfully!";
-        boolean success = true;
-        return "redirect:/showCart?message=" +message + "&success="+success;
-    }
+//    @GetMapping("/delete-cart-item")
+//    public String updateAfterDeleteCart(Model model, Authentication authentication){
+//        User user = userService.getCurrentUser(authentication);
+//        if (user == null) {
+//            return "redirect:/login";
+//        }
+//        String message = "Course was deleted successfully!";
+//        boolean success = true;
+//        return "redirect:/show-cart?message=" +message + "&success="+success;
+//    }
     @GetMapping("/show-wish-list")
     public String showWishList(Model model,Authentication authentication){
         User user = userService.getCurrentUser(authentication);
@@ -330,12 +321,12 @@ public class StudentController {
 
     @GetMapping("/unit-test/{quizzId}")
     public String showAllQuestionInAQuizz(@PathVariable("quizzId") int quizzId, Model model) {
-        List<Question> questions = questionRepository.findQuestionsByQuizzId(quizzId);
+        List<Question> questions = questionService.getAllQuestionByQuizId(quizzId);
         model.addAttribute("questions", questions);
         model.addAttribute("quizzId", quizzId);
 
         // Lấy quiz title từ DB
-        Optional<Quizz> quizOptional = quizzRepository.findById(quizzId);
+        Optional<Quizz> quizOptional = quizzService.getQuizzOptionalById(quizzId);
         if (quizOptional.isPresent()) {
             String quizTitle = quizOptional.get().getQuizzName();
             model.addAttribute("quizTitle", quizTitle);
@@ -348,7 +339,7 @@ public class StudentController {
 
     @PostMapping("/grade")
     public ResponseEntity<List<Map<String, Object>>> gradeTheQuizz(@RequestBody List<QuestionDTO> submittedAnswers, @RequestParam int quizzId, Authentication authentication) {
-        List<Question> originalQuestions = questionRepository.getQuestionsByQuizz_QuizzId(quizzId);
+        List<Question> originalQuestions = questionService.getAllQuestionByQuizId(quizzId);
 
         List<Map<String, Object>> resultList = new ArrayList<>();
         int correctCount = 0;

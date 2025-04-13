@@ -2,11 +2,9 @@ package com.hanu.leaniverse.controller;
 
 import com.hanu.leaniverse.dto.CourseDTO;
 import com.hanu.leaniverse.model.*;
-import com.hanu.leaniverse.repository.CategoryRepository;
-import com.hanu.leaniverse.repository.CourseRepository;
-import com.hanu.leaniverse.repository.UnitRepository;
-import com.hanu.leaniverse.service.QuizzService;
-import com.hanu.leaniverse.service.UserService;
+
+
+import com.hanu.leaniverse.service.*;
 import com.hanu.leaniverse.service.tutor.TutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,13 +27,13 @@ public class TutorController {
     private UserService userService;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     @Autowired
-    private CourseRepository courseRepository;
+    private CourseService courseService;
 
     @Autowired
-    private UnitRepository unitRepository;
+    private UnitService unitService;
 
     @Autowired
     private QuizzService quizzService;
@@ -53,18 +51,17 @@ public class TutorController {
         }
         model.addAttribute("courses", tutorService.getCoursesForTutor(tutor));
         model.addAttribute("tutor", tutor);
-//        model.addAttribute("newCourse", new Course());
         model.addAttribute("courseDTO", new CourseDTO());
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "tutor/dashboard";
     }
 
-    @GetMapping("/course/new")
-    public String showCreateCourseForm(Model model) {
-        model.addAttribute("course", new Course());
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "tutor/course_form";
-    }
+//    @GetMapping("/course/new")
+//    public String showCreateCourseForm(Model model) {
+//        model.addAttribute("course", new Course());
+//        model.addAttribute("categories", categoryRepository.findAll());
+//        return "tutor/course_form";
+//    }
 
     @PostMapping("/course")
     public String createCourse(@ModelAttribute("courseDTO") CourseDTO courseDTO,
@@ -75,16 +72,16 @@ public class TutorController {
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
 
         if (tutor == null) {
-            return "redirect:/tutor/dashboard";
+            return "redirect:/";
         }
 
         try {
             tutorService.createCourseFromDTO(courseDTO, tutor, categoryIds);
         } catch (IOException e) {
             model.addAttribute("error", "Error when saving: " + e.getMessage());
-            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("courseDTO", courseDTO);
-            return "tutor/course_form";
+            return "redirect:/tutor/dashboard";
         }
 
         return "redirect:/tutor/dashboard";
@@ -156,7 +153,7 @@ public class TutorController {
         if (user == null) {
             return "redirect:/login";
         }
-        Course course = courseRepository.findById(courseId).get();
+        Course course = courseService.getCourseById(courseId);
         model.addAttribute("course", course);
         return "tutor/course_detail";
     }
@@ -167,7 +164,7 @@ public class TutorController {
         if (user == null) {
             return "redirect:/login";
         }
-        Unit unit = unitRepository.findById(unitId).get();
+        Unit unit = unitService.getUnitById(unitId);
         model.addAttribute("unit", unit);
         return "tutor/unit-detail";
     }
@@ -186,7 +183,7 @@ public class TutorController {
             return "redirect:/tutor/dashboard";
         }
         tutorService.addUnit(course, description);
-        return "redirect:/course/" + courseId + "/detail";
+        return "redirect:/tutor/course/" + courseId + "/detail";
     }
     @PostMapping("/course/{courseId}/detail/delete-unit")
     public String deleteUnit(@RequestParam("unitId") int unitId,
@@ -295,5 +292,37 @@ public class TutorController {
         }
         quizzService.deleteQuiz(quizId);
         return "redirect:/tutor/course/unit?unitId=" + unitId;
+    }
+
+    @GetMapping("/tutor/course/unit/quizz/{quizzId}")
+    public String showAllQuestionEditPage(@PathVariable("quizzId") int quizzId, Model model, Authentication authentication){
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
+        Quizz quizz = quizzService.getQuizzById(quizzId);
+        Question question = new Question();
+        model.addAttribute("quizz",quizz);
+        model.addAttribute("questionForm", question);
+        return "/tutor/quizz";
+    }
+    @PostMapping("/tutor/course/unit/quizz/{quizzId}/add-question")
+    public String addQuestion(@ModelAttribute Question question, @PathVariable("quizzId") int quizzId, Authentication authentication) {
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
+        Question q = quizzService.addQuestionToQuiz(quizzId, question);
+        return "redirect:/tutor/course/unit/quizz/" + quizzId;
+    }
+
+    @PostMapping("/tutor/course/unit/quizz/{quizzId}/delete-question/{questionId}")
+    public String deleteQuestion(@PathVariable int questionId, @PathVariable int quizzId, Authentication authentication){
+        User user = userService.getCurrentUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
+        quizzService.deleteQuiz(questionId);
+        return "redirect:/tutor/course/unit/quizz/" + quizzId;
     }
 }

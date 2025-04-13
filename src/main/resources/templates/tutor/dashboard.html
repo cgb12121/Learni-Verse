@@ -47,17 +47,17 @@
                     <input type="hidden" name="courseId" th:value="${course.courseId}">
 
                     <label>Course name:</label>
-                    <input type="text" name="courseName" th:field="*{courseName}" autocomplete="off"><br>
+                    <input type="text" name="courseName" th:field="*{courseName}" autocomplete="off" required><br>
 
                     <label>Description:</label>
-                    <input type="text" name="courseDetail" th:field="*{courseDetail}" autocomplete="off"><br>
+                    <input type="text" name="courseDetail" th:field="*{courseDetail}" autocomplete="off" required><br>
 
                     <label>Price:</label>
-                    <input type="number" name="price" th:field="*{price}" autocomplete="off"><br>
+                    <input type="number" name="price" th:field="*{price}" autocomplete="off" required><br>
 
                     <div class="form-group">
                         <label for="courseImage">Course Image</label>
-                        <input type="file" class="form-control" id="courseImage" name="courseImage" th:field="*{courseImage}">
+                        <input type="file" class="form-control" id="courseImage" name="courseImage" th:field="*{courseImage}" required>
                         <small th:if="${course.courseImage} != null">Current image: <span th:text="${course.courseImage}"></span></small>
                         <small class="text-danger" th:if="${error} != null" th:text="${error}"></small>
                     </div>

@@ -22,6 +22,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     /// Trong JPQL không thể sử dụng LIMIT trực tiếp như trong SQL
     // --> Sử dụng nativeQuery để viết truy vấn SQL thuần túy và sử dụng LIMIT.
     // --> Phải sử dụng tên table giống trong MySQL
-    @Query(value = "SELECT c.course_id, c.course_name, c.course_detail, c.price, c.courseimg FROM Course c JOIN Course_Category cc ON c.course_id = cc.course_id WHERE cc.category_id = :categoryId AND c.course_id <> :courseId ORDER BY c.course_id DESC LIMIT 5", nativeQuery = true)
+    @Query(value = "SELECT c.course_id, c.course_name, c.course_detail, c.price, c.course_image FROM Course c JOIN Course_Category cc ON c.course_id = cc.course_id WHERE cc.category_id = :categoryId AND c.course_id <> :courseId ORDER BY c.course_id DESC LIMIT 5", nativeQuery = true)
     List<Course> findRelatedCourses(@Param("categoryId") int categoryId, @Param("courseId") int courseId);
 }
