@@ -20,21 +20,42 @@
     <div class="video-section">
         <div class="section-header">
             <h2 class="section-title">Video Lectures</h2>
-            <button class="upload-button">Upload New Video</button>
+            <button id="addVideoBtn" class="upload-button">Upload New Video</button>
+        </div>
+        <div class="edit-modal" id="addVideoModal">
+            <div class="modal-content">
+                <span class="close" id="closeAddVideoModal">&times;</span>
+                <h3>Add New Video</h3>
+                <form th:action="@{/tutor/unit/{unitId}/upload-video(unitId=${unitId})}" method="post">
+                    <label for="filePath">YouTube Video URL:</label>
+                    <input type="text" id="filePath" name="filePath" required placeholder="Enter YouTube URL" autocomplete="off">
+
+                    <label for="description">Description:</label>
+                    <input id="description" name="description" required
+                              minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+                              placeholder="Enter video description"/>
+
+                    <button class="dashboard-button" style="padding:10px;" type="submit">Upload Video</button>
+                </form>
+            </div>
         </div>
         <p style="margin-inline: 4%;" class="quiz-card" th:if="${unit.video.isEmpty()}">No video uploaded</p>
         <div class="video-list">
             <div th:each="video : ${unit.video}" class="video-card">
                 <div class="video-thumbnail">
-                    <img src="image/stock.jpg" alt="Video thumbnail">
+<!--                    <img th:src="'https://img.youtube.com/vi/' + ${video.filePath} + '/0.jpg'" alt="Video Thumbnail">-->
+                    <iframe
+                            th:src="'https://www.youtube.com/embed/' + ${video.filePath}"
+                            allowfullscreen>
+                    </iframe>
                     <span class="video-duration" th:text="${video.length}"></span>
                 </div>
                 <div class="video-info">
-                    <h3 class="video-title">NA</h3>
+                    <h3 class="video-title" th:text="${video.description}">NA</h3>
                     <div class="video-meta">
-                        <span class="video-date" th:text="${video.createAt}"></span>
-                        <form method="post" >
-                            <button class="delete-button">Delete</button>
+                        <span class="video-date" th:text="'Uploaded: ' + ${#dates.format(video.createAt, 'dd-MM-yyyy')}"></span>
+                        <form th:action="@{/tutor/unit/{unitId}/delete-video/{videoId}(unitId=${unit.unitId}, videoId=${video.videoId})}" method="post" >
+                            <button class="delete-button" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </div>
                 </div>
@@ -73,8 +94,8 @@
                         <span class="quiz-questions" th:text="${quizz.questions.size()} + ' questions'"></span>
                     </div>
                 </div>
-                <form th:action="@{/tutor/quiz/{quizId}/delete(quizId=${quizz.quizzId})}" method="post">
-                    <button type="submit" class="delete-button">Delete</button>
+                <form th:action="@{/tutor/course/unit/{unitId}/quiz/{quizId}/delete(unitId=${unit.unitId}, quizId=${quizz.quizzId})}" method="post">
+                    <button type="submit" class="delete-button" onclick="return confirm('Are you sure?')">Delete</button>
                 </form>
             </div>
 
@@ -105,5 +126,11 @@
 
    openAddBtn.onclick = () => addModal.style.display = "flex";
    closeAddBtn.onclick = () => addModal.style.display = "none";
+    const addVideoModal = document.getElementById("addVideoModal");
+   const openVideoAddBtn = document.getElementById("addVideoBtn");
+   const closeAddVideoBtn = document.getElementById("closeAddVideoModal");
+
+   openVideoAddBtn.onclick = () => addVideoModal.style.display = "flex";
+   closeAddVideoBtn.onclick = () => addVideoModal.style.display = "none";
 </script>
 </html>

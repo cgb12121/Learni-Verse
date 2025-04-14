@@ -101,6 +101,7 @@ header {
     margin-left: 15px;
     padding: 5px;
 }
+
 #user-icon:hover {
     color: #fff;
         background-color: var(--primary-color);
@@ -112,7 +113,12 @@ header {
     background-color: var(--primary-color);
     border-radius: 5px;
 }
-
+.popup-menu i {
+    width: 100%
+        font-size: 20px;
+        cursor: pointer;
+        padding: 5px;
+}
 /* Nếu có link <a> trong user-actions */
 .action {
     margin-left: 15px;

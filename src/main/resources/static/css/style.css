@@ -806,11 +806,14 @@ a {
     padding-inline: 2%;
     justify-content: center;
     text-align: center;
+    box-sizing: border-box;
 }
 
 .img img {
-    width: 70%;
+
     border-radius: 80%;
+    max-width: 40%;
+    max-height: 400px;
 }
 
 .img .name {
@@ -876,8 +879,8 @@ a {
     overflow-y: auto;
     width: 100%;
     background-color: white;
-    min-height: 200px;
-    padding-block: 5%;
+    min-height: 0;
+    box-sizing: border-box;
 }
 .review-item {
     width: 80%;
@@ -1703,7 +1706,7 @@ a {
         position: relative;
     }
 
-    .video-thumbnail img {
+    .video-thumbnail iframe {
         width: 100%;
         height: 180px;
         object-fit: cover;

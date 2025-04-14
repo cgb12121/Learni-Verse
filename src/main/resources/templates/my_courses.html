@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>My Courses</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/userHP.css}">
     <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
-<body>
+<body style="background-color: #f8f9fa;">
 <!-- Header -->
 <div th:replace="/fragments/header_nav.html :: headerNavCombo"></div>
 
 
 <!-- Main Content -->
-<div class="main-content">
-    <div class="sub-menu-container">
-        <h2>My Courses</h2>
-        <div class="sub-menu">
-            <a href="#" class="menu-item highlight">All Courses</a>
-            <a href="#" class="menu-item">My Lists</a>
-            <a href="#" class="menu-item">Wishlist</a>
-            <a href="#" class="menu-item">Archived</a>
-            <a href="#" class="menu-item">Learning Tools</a>
-        </div>
+<div class="unit-detail-container" style="margin-top: 5%;">
+    <div class="unit-header">
+        <h2 class="unit-title">My Courses</h2>
+<!--        <div class="sub-menu">-->
+<!--            <a href="#" class="menu-item highlight">All Courses</a>-->
+<!--            <a href="#" class="menu-item">My Lists</a>-->
+<!--            <a href="#" class="menu-item">Wishlist</a>-->
+<!--            <a href="#" class="menu-item">Archived</a>-->
+<!--            <a href="#" class="menu-item">Learning Tools</a>-->
+<!--        </div>-->
     </div>
 
     <!-- My Courses List -->
-    <div class="courses-container">
+    <div class="video-section">
         <div class="course-card" th:each="course : ${courses}">
-            <img th:src="@{/images/{courseimg}(courseimg=${course.courseName})}" alt="Course image" class="course-image">
-
-            <h3 th:text="${course.courseName}" class="course-title"></h3>
-
-            <a th:href="@{/course-detail(courseId=${course.courseId})}" class="course-title">
-                <p th:text="${course.courseDetail}" class="course-detail"></p>
-                <p class="course-price">Price: $<span th:text="${course.price}"></span></p>
-            </a>
+            <img th:src="@{'/courseImg/' + ${course.courseImage}}" alt="Course image" class="course-image">
+            <a th:href="@{/course-detail(courseId=${course.courseId})}" class="course-title"
+               style="font-size: 16px;" th:text="${course.courseName}"></a>
+            <p class="course-instructor" th:if="${not #lists.isEmpty(course.teaches)}"
+               th:text="${course.teaches[0].tutor.user.fullName}">
+            </p>
+            <p class="course-price">Price: $<span th:text="${course.price}"></span></p>
         </div>
     </div>
 </div>
@@ -45,4 +45,25 @@
 <div th:replace="/fragments/header_nav.html :: footer"></div>
 
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded",()=>{
+        updateCartTotal();
+        updateWishListCount();
+     });
+        document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
+</script>
 </html>

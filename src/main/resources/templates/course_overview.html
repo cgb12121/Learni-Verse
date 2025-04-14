@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${course.courseName}">Course Overview</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${course.courseName}">Course Overview</title>
 
-  <!-- CSS Links -->
-  <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
-  <link rel="stylesheet" th:href="@{/css/course_overview.css}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- CSS Links -->
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body class="body-bg">
@@ -16,39 +17,40 @@
 <!-- Header -->
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
 
-<div class="container">
-  <!-- Course Title -->
-  <h1 class="course-title" th:text="${course.courseName}">Course Title</h1>
+<div class="unit-detail-container" style="margin-top: 5%;">
+    <!-- Course Title -->
+    <div class="unit-header">
+        <h1 class="unit-title" th:text="${course.courseName}">Course Title</h1>
+        <p class="course-description" th:text="${course.courseDetail}"></p>
+    </div>
 
-  <!-- Course Description -->
-  <p class="course-description" th:text="${course.courseDetail}">
-    Description of the course goes here...
-  </p>
-
-  <!-- Show More Button -->
-  <button class="show-more">Show more</button>
-
-  <!-- Loop through units (sections/modules) -->
-  <div th:each="unit : ${units}">
-    <h2 class="section-title" th:text="${unit.Description}">Unit Description</h2>
-    <ul class="lesson-list">
-      <li class="lesson-item" th:each="lesson : ${unit.video}">
+    <!-- Loop through units (sections/modules) -->
+    <div class="quiz-section">
+        <div class="section-header">
+            <h2 class="section-title">Units:</h2>
+        </div>
+        <div class="quiz-card" style="display: block;" th:each="unit : ${units}">
+            <h2 class="quiz-title" th:text="'Unit: ' + ${unit.Description}">Unit Description</h2>
+            <ul class="lesson-list">
+                <li th:if="${unit.video.isEmpty()}">No video uploaded yet</li>
+                <li class="lesson-item" th:each="lesson : ${unit.video}">
       <span class="lesson-icon">
         <img th:src="@{/icons/play-icon.svg}" alt="Video" width="24">
       </span>
-        <span class="lesson-text" th:text="${lesson.description}">Lesson Title</span>
-        <div class="lesson-meta">
-          <img src="/icons/time-icon.svg" alt="Time Icon" width="16">
-          <span th:text="${lesson.length}">Duration</span>
+                    <span class="lesson-text" th:text="${lesson.description}">Lesson Title</span>
+                    <div class="lesson-meta">
+                        <img src="/icons/time-icon.svg" alt="Time Icon" width="16">
+                        <span th:text="${lesson.length}">Duration</span>
+                    </div>
+                </li>
+            </ul>
         </div>
-      </li>
-    </ul>
-  </div>
+    </div>
 
-  <!-- Start Learning Button -->
-  <button class="start-learning" th:onclick="|window.location='@{/learning/start(courseId=${course.courseId})}'|">
-    Start Learning Now
-  </button>
+    <!-- Start Learning Button -->
+    <button class="dashboard-button" style="margin-inline: 0;" th:onclick="|window.location='@{/learning/start(courseId=${course.courseId})}'|">
+        Start Learning Now
+    </button>
 </div>
 
 <!-- Footer -->
@@ -56,4 +58,25 @@
 
 
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded",()=>{
+        updateCartTotal();
+        updateWishListCount();
+     });
+        document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
+</script>
 </html>

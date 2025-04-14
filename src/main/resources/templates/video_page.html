@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Learniverse Course</title>
-    <link rel="stylesheet" href="/css/Header_Footer.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/userHP.css}">
+    <link rel="stylesheet" th:href="@{/css/Header_Footer.css}">
+    <link rel="stylesheet" th:href="@{/css/course_overview.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
@@ -16,6 +19,7 @@
             display: flex;
             max-width: 1200px;
             margin: 20px auto;
+            margin-block: 5%;
             gap: 20px;
         }
         .left-panel {
@@ -93,7 +97,7 @@
                 th:src="'https://www.youtube.com/embed/' + ${currentVideoId} + '?autoplay=1'"
                 title="YouTube video player"
                 allowfullscreen></iframe>
-        <h1 class="course-title" th:text="${course.courseName}">Course Title</h1>
+        <h1 class="course-title" style="margin: 0;" th:text="${course.courseName}">Course Title</h1>
 
         <!-- Course Description -->
         <p class="course-description" th:text="${course.courseDetail}">
@@ -143,6 +147,25 @@
         const iframe = document.getElementById("main-video");
         iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
     }
+    document.addEventListener("DOMContentLoaded",()=>{
+        updateCartTotal();
+        updateWishListCount();
+     });
+        document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
 </script>
 
 </body>

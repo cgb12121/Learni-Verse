@@ -66,7 +66,7 @@ public class StudentController {
     }
 
     @GetMapping("/course-detail")
-    public String showCourseDetail(@RequestParam("courseId") int courseId, Model model, Authentication authentication){
+    public String showCourseDetail(@RequestParam("courseId") int courseId, Model model, Authentication authentication) {
         User currentUser = userService.getCurrentUser(authentication);
         if (currentUser == null) {
             return "redirect:/login";
@@ -109,6 +109,10 @@ public class StudentController {
 
     @GetMapping("/learning/start")
     public String startCourse(@RequestParam("courseId") int courseId, Model model, Authentication authentication) {
+        User currentUser = userService.getCurrentUser(authentication);
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
         Course course = courseService.getCourseById(courseId);
         String videoLink = "";
 
@@ -128,19 +132,18 @@ public class StudentController {
             }
 
             Map<Integer, Double> userGrades = new HashMap<>();
-            User currentUser = userService.getCurrentUser(authentication);
-
-            if (currentUser != null) {
-                for (Quizz quiz : allQuizzes) {
-
-                    Optional<UserQuizz> optionalUserQuizz = userQuizzService.getUserQuizzByUsernameAndQuizzId(currentUser.getUsername(), quiz.getQuizzId());
 
 
-                    if (optionalUserQuizz.isPresent()) {
-                        UserQuizz userQuizz = optionalUserQuizz.get();
+            for (Quizz quiz : allQuizzes) {
 
-                        userGrades.put(quiz.getQuizzId(), userQuizz.getGrade());
-                    }
+                Optional<UserQuizz> optionalUserQuizz = userQuizzService.getUserQuizzByUsernameAndQuizzId(currentUser.getUsername(), quiz.getQuizzId());
+
+
+                if (optionalUserQuizz.isPresent()) {
+                    UserQuizz userQuizz = optionalUserQuizz.get();
+
+                    userGrades.put(quiz.getQuizzId(), userQuizz.getGrade());
+
                 }
             }
 
@@ -155,7 +158,7 @@ public class StudentController {
     }
 
     @GetMapping("/shopping-history")
-    public String showHistoryPage(Model model, Authentication authentication){
+    public String showHistoryPage(Model model, Authentication authentication) {
         User currentUser = userService.getCurrentUser(authentication);
         if (currentUser == null) {
             return "redirect:/login";
@@ -165,6 +168,7 @@ public class StudentController {
         model.addAttribute("enrollmentsByDate", enrollmentsByDate);
         return "shoppingHistory";
     }
+
     @GetMapping("")
     public String showHomePage(@RequestParam(value = "title", required = false) String title,
                                @RequestParam(value = "categoryId", required = false) Integer categoryId,
@@ -178,7 +182,7 @@ public class StudentController {
         return "homePage1";
     }
 
-//    @GetMapping("/quizz")
+    //    @GetMapping("/quizz")
 //    public String showAllQuizzInAUnitPage(Model model,@RequestParam("unitId") int unitId){
 //
 //        List<Quizz> quizzes = quizzService.findQuizzByUnitId(unitId);
@@ -189,20 +193,20 @@ public class StudentController {
 //        return "quizz-test";
 //    }
     @GetMapping("/question")
-    public String showAllQuestionInAQuizz(Model model, @RequestParam("quizzId") int quizzId, Authentication authentication){
+    public String showAllQuestionInAQuizz(Model model, @RequestParam("quizzId") int quizzId, Authentication authentication) {
         User user = userService.getCurrentUser(authentication);
         if (user == null) {
             return "redirect:/login";
         }
         List<Question> questions = questionService.getAllQuestionByQuizId(quizzId);
         List<QuestionDTO> questionDTOS = new ArrayList<QuestionDTO>();
-        model.addAttribute("questions",questions);
-        model.addAttribute("quizzId",quizzId);
+        model.addAttribute("questions", questions);
+        model.addAttribute("quizzId", quizzId);
         return "do_quizz_test";
     }
 
     @GetMapping("/show-cart")
-    public String showCart(Model model, Authentication authentication){
+    public String showCart(Model model, Authentication authentication) {
         User user = userService.getCurrentUser(authentication);
         if (user == null) {
             return "redirect:/login";
@@ -212,24 +216,24 @@ public class StudentController {
     }
 
     @PostMapping("/add-to-cart")
-    public String addCart(Model model, @RequestParam("courseId") int courseId, Authentication authentication ) throws Exception{
+    public String addCart(Model model, @RequestParam("courseId") int courseId, Authentication authentication) throws Exception {
         User user = userService.getCurrentUser(authentication);
         if (user == null) {
             return "redirect:/login";
         }
-        if(cartService.addCartService(courseId, authentication)){
+        if (cartService.addCartService(courseId, authentication)) {
             String message = "Course successfully added to cart!";
             boolean success = true;
             return "redirect:/course-detail?courseId=" + courseId + "&message=" + message + "&success=" + success;
-        }
-        else {
+        } else {
             String message = "Course is already in the cart!";
             boolean success = false;
             return "redirect:/course-detail?courseId=" + courseId + "&message=" + message + "&success=" + success;
         }
     }
+
     @PostMapping("/delete-cart-item")
-    public String deleteCart(Model model, @RequestParam("cartId") int cartId, Authentication authentication){
+    public String deleteCart(Model model, @RequestParam("cartId") int cartId, Authentication authentication) {
         User user = userService.getCurrentUser(authentication);
         if (user == null) {
             return "redirect:/login";
@@ -237,9 +241,10 @@ public class StudentController {
         cartService.deleteByCartId(cartId);
         String message = "Course was deleted successfully!";
         boolean success = true;
-        return "redirect:/show-cart?message=" + message + "&success=" +success;
+        return "redirect:/show-cart?message=" + message + "&success=" + success;
     }
-//    @GetMapping("/delete-cart-item")
+
+    //    @GetMapping("/delete-cart-item")
 //    public String updateAfterDeleteCart(Model model, Authentication authentication){
 //        User user = userService.getCurrentUser(authentication);
 //        if (user == null) {
@@ -250,33 +255,35 @@ public class StudentController {
 //        return "redirect:/show-cart?message=" +message + "&success="+success;
 //    }
     @GetMapping("/show-wish-list")
-    public String showWishList(Model model,Authentication authentication){
+    public String showWishList(Model model, Authentication authentication) {
         User user = userService.getCurrentUser(authentication);
         if (user == null) {
             return "redirect:/login";
         }
-        model.addAttribute("WishList",wishListService.showWishList(authentication));
+        model.addAttribute("WishList", wishListService.showWishList(authentication));
         return "wishList";
     }
-    @PostMapping("/add-to-wish-list")
-    public String addWishCourse(Model model,@RequestParam("courseId") int courseId,Authentication authentication) throws Exception{
 
-        if(wishListService.addToWishList(courseId,authentication)){
+    @PostMapping("/add-to-wish-list")
+    public String addWishCourse(Model model, @RequestParam("courseId") int courseId, Authentication authentication) throws Exception {
+
+        if (wishListService.addToWishList(courseId, authentication)) {
             String message = "Course successfully added to wish list!";
             boolean success = true;
             return "redirect:/course-detail?courseId=" + courseId + "&message=" + message + "&success=" + success;
-        }
-        else {
+        } else {
             String message = "Course is already in the wish list!";
             boolean success = false;
             return "redirect:/course-detail?courseId=" + courseId + "&message=" + message + "&success=" + success;
         }
     }
+
     @PostMapping("/delete-wish-list-item")
-    public String deleteWishListItem(Model model, @RequestParam("WishListId") int wishListId){
+    public String deleteWishListItem(Model model, @RequestParam("WishListId") int wishListId) {
         wishListService.deleteFromWishList(wishListId);
         return "redirect:/show-wish-list";
     }
+
     @PostMapping("/submit-review")
     public String submitReview(@ModelAttribute("reviewDTO") ReviewDTO reviewDTO,
                                BindingResult result,
@@ -293,6 +300,7 @@ public class StudentController {
         reviewService.addReview(reviewDTO, currentUser);
         return "redirect:/course-detail?courseId=" + reviewDTO.getCourseId();
     }
+
     @GetMapping("/profile")
     public String getUserProfile(Model model, Authentication authentication) {
         User user = userService.getCurrentUser(authentication);

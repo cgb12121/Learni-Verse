@@ -49,7 +49,7 @@
                 <h3 style="justify-self: center; text-align: center;">New Question</h3>
                 <input type="hidden" name="quizzId" th:value="${quizz.quizzId}"/>
                 <p><strong>Question:</strong></p>
-                <input th:field="*{requirement}" type="text" required autocomplete="off" placeholder="Answer"/>
+                <input th:field="*{requirement}" type="text" required autocomplete="off" placeholder="Question"/>
                 <p><strong>Choice 1:</strong></p>
                 <input th:field="*{choice1}" type="text" autocomplete="off" placeholder="Answer"/>
                 <select th:field="*{isChoice1}">
