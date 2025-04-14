@@ -6,6 +6,8 @@ import com.hanu.leaniverse.model.Unit;
 import com.hanu.leaniverse.repository.QuestionRepository;
 import com.hanu.leaniverse.repository.QuizzRepository;
 import com.hanu.leaniverse.repository.UnitRepository;
+import com.hanu.leaniverse.repository.UserQuizzRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class QuizzServiceImpl implements QuizzService {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private UserQuizzRepository userQuizzRepository;
 
 
     @Override
@@ -51,9 +56,12 @@ public class QuizzServiceImpl implements QuizzService {
     }
 
     @Override
+    @Transactional
     public void deleteQuiz(int quizId) {
         Quizz quizz = quizzRepository.findById(quizId)
                 .orElseThrow(() -> new RuntimeException("Quiz not found"));
+        userQuizzRepository.deleteByQuizzId(quizId);
+        questionRepository.deleteByQuizzId(quizId);
         quizzRepository.delete(quizz);
     }
 

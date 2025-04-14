@@ -73,6 +73,12 @@
                 <p>No contents created</p>
             </div>
             <div th:each="element : ${course.units}" class="content-element">
+                <div class="quiz-header">
+                    <p class="quiz-title" th:text="'Unit: ' + ${element.Description}"></p>
+                </div>
+                <div class="content-element" th:if="${element.video.isEmpty()}">
+                    <p>No video uploaded</p>
+                </div>
                 <div th:each="vid : ${element.video}" class="element">
                     <i class="fa-solid fa-circle-play"></i>
                     <div class="content-detail">
@@ -93,7 +99,7 @@
             <div class="img">
                 <p th:text="${tutor.user.fullName}" class="name"></p>
                 <img class="avatar"
-                     src="https://static.tvtropes.org/pmwiki/pub/images/11fbb437_bb86_43cf_b54c_75587a77da78.jpeg"
+                     src="https://c8.alamy.com/comp/2E2PJKR/vector-logo-of-a-tutor-educational-courses-2E2PJKR.jpg"
                      alt="">
             </div>
             <div class="tutor-description">
@@ -105,7 +111,7 @@
 
                 <ul style="padding: 0">
                     <p style="padding: 0"><strong style="padding: 0">Some courses:</strong></p>
-                    <li style="padding-block: 1%" th:each="teach, iterStat : ${tutor.getTeaches}"
+                    <li style="padding-block: 1%;" th:each="teach, iterStat : ${tutor.getTeaches}"
                         th:if="${iterStat.index < 4}">
                         <a th:href="@{course-detail(courseId=${teach.getCourse.courseId})}"
                            th:text="${teach.getCourse.courseName}"></a>
@@ -120,12 +126,11 @@
             <h2>Review and rating</h2>
             <button onclick="openReviewPopup()" class="modal-btn">Write a Review</button>
         </div>
+        <div style="display: block;" class="quiz-card" th:if="${reviews.isEmpty()}">
+            <p>No review yet</p>
+        </div>
         <div class="reviews-container">
-            <div style="margin-inline: 4%; display: block;" class="quiz-card" th:if="${reviews.isEmpty()}">
-                <p>No review yet</p>
-            </div>
-
-            <div style="margin-inline: 4%; display: block;" th:each="review : ${reviews}" class="quiz-card">
+            <div style=" display: block;" th:each="review : ${reviews}" class="quiz-card">
                 <p><strong th:text="${review.user.fullName}"></strong></p>
                 <p><strong>Rating:</strong> <span th:text="${review.star}"></span>⭐</p>
                 <p><strong>Content:</strong> <span th:text="${review.content}"></span></p>
@@ -137,7 +142,8 @@
             <span class="review-close-btn" onclick="closeReviewPopup()">&times;</span>
             <h2>Submit Your Review</h2>
 
-            <form style="width: 80%; justify-content: center; display: flex; flex-direction: column;" th:action="@{/submit-review(courseId=${course.courseId})}+'#reviews'" th:object="${reviewDTO}"
+            <form style="width: 80%; justify-content: center; display: flex; flex-direction: column;"
+                  th:action="@{/submit-review(courseId=${course.courseId})}+'#reviews'" th:object="${reviewDTO}"
                   method="post">
                 <div class="form-group">
                     <label for="rating">Rating:</label>

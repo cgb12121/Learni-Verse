@@ -11,19 +11,8 @@
 </head>
 <body style="background-color: #f8f9fa;">
 <div th:replace="~{/fragments/header_nav.html :: headerNavCombo}"></div>
-<div style="padding-bottom: 5%;">
-  <div class="profile-card">
-    <div class="profile-photo">
-      <img src="https://static.tvtropes.org/pmwiki/pub/images/11fbb437_bb86_43cf_b54c_75587a77da78.jpeg" alt="Profile">
-      <div class="section">
-        <h4>Work</h4>
-        <p>
-          <span class="label" th:text="${organization}"></span>
-          <span class="tag">Primary</span><br>
-        </p>
-      </div>
-    </div>
- 
+<div style="padding-bottom: 5%; margin-block: 5%;">
+  <div class="unit-detail-container" style="display: flex;">
     <div class="profile-info">
       <div class="name-title">
         <div>
@@ -33,6 +22,14 @@
       </div>
       <div class="tabs">
         <div class="active">About</div>
+      </div>
+      <div class="section">
+        <h4>Work</h4>
+        <p th:if="${#strings.isEmpty(organization)}">N/A</p>
+        <p th:if="${!#strings.isEmpty(organization)}">
+          <span class="label" th:text="${organization}"></span>
+          <span class="tag">Primary</span><br>
+        </p>
       </div>
       <div class="section">
         <h4>Contact Information</h4>
@@ -48,7 +45,7 @@
         <p><span class="label">Gender:</span> <span th:text="${userInfo?.gender ?: 'N/A'}"></span></p>
       </div>
 
-      <button class="btn-primary" id="editBtn" style="margin-top: 20px;">Edit Profile</button>
+      <button class="dashboard-button" id="editBtn" style="margin-top: 20px;margin-inline: 0;">Edit Profile</button>
     </div>
   </div>
 
@@ -57,29 +54,40 @@
     <div class="modal-content">
       <span class="close" id="closeModal">&times;</span>
       <h3>Edit Profile</h3>
-      <form th:action="@{/edit-profile}" th:object="${userInfo}" method="post">
+      <form class="edit-form" th:action="@{/edit-profile}" th:object="${userInfo}" method="post">
         <label>Name:</label>
         <input type="text" name="fullName" th:value="${user?.fullName ?: ''}"><br>
 
         <label>Email:</label>
-        <input type="email" th:field="*{email}"><br>
+        <input type="email" th:field="*{email}" autocomplete="off" minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+               title="Only letters and numbers are allowed" placeholder="Unit title"><br>
 
         <label>Birthday:</label>
-        <input type="date" th:field="*{dob}"><br>
+        <input type="date" th:field="*{dob}" autocomplete="off" minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+               title="Only letters and numbers are allowed" placeholder="Unit title"><br>
         <label>Place of birth:</label>
-        <input type="text" th:field="*{pob}"><br>
+        <input type="text" th:field="*{pob}" autocomplete="off"><br>
         <label>Address:</label>
-        <input type="text" th:field="*{address}"><br>
+        <input type="text" th:field="*{address}" autocomplete="off" minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+               title="Only letters and numbers are allowed" placeholder="Unit title"><br>
         <label>Phone:</label>
-        <input type="text" th:field="*{phoneNumber}"><br>
+        <input type="text" th:field="*{phoneNumber}" autocomplete="off" minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+               title="Only letters and numbers are allowed" placeholder="Unit title"><br>
         <label>Gender:</label>
-        <input type="text" th:field="*{gender}"><br>
+        <select th:field="*{gender}" style="padding: 8px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;margin-bottom: 30px;">
+          <option value="">Select gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
         <label>Position:</label>
-        <input type="text" th:field="*{position}"><br>
+        <input type="text" th:field="*{position}" autocomplete="off" minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+               title="Only letters and numbers are allowed" placeholder="Unit title"><br>
         <label>Organization:</label>
-        <input type="text" th:field="*{organization}"><br>
+        <input type="text" th:field="*{organization}" autocomplete="off" minlength="3" maxlength="100" pattern="^[A-Za-z0-9 ]+$"
+               title="Only letters and numbers are allowed" placeholder="Unit title"><br>
 
-        <button type="submit" class="btn-primary">Save Changes</button>
+        <button type="submit" class="dashboard-button" style="padding: 10px;">Save Changes</button>
       </form>
     </div>
   </div>

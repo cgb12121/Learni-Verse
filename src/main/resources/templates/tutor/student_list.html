@@ -10,4 +10,25 @@
 </ul>
 <a th:href="@{/tutor/dashboard}">Back to Dashboard</a>
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded",()=>{
+        updateCartTotal();
+        updateWishListCount();
+     });
+        document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.getElementById("user-icon");
+        const userPopup = document.getElementById("user-popup");
+
+        userIcon.addEventListener("click", ()=> {
+            userPopup.classList.toggle("show");
+        });
+
+        // Close the popup when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!userPopup.contains(event.target) && !userIcon.contains(event.target)) {
+                userPopup.classList.remove("show");
+            }
+        });
+    });
+</script>
 </html>

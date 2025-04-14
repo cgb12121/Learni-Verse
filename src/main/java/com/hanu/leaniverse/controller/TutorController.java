@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -38,6 +39,9 @@ public class TutorController {
     @Autowired
     private QuizzService quizzService;
 
+    @Autowired
+    private VideoService videoService;
+
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, Authentication authentication) {
@@ -47,7 +51,7 @@ public class TutorController {
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
         model.addAttribute("courses", tutorService.getCoursesForTutor(tutor));
         model.addAttribute("tutor", tutor);
@@ -68,9 +72,11 @@ public class TutorController {
                                @RequestParam("categoryIds") List<Integer> categoryIds,
                                Authentication authentication,
                                Model model) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
-
         if (tutor == null) {
             return "redirect:/";
         }
@@ -92,11 +98,13 @@ public class TutorController {
                                @ModelAttribute("courseDTO") CourseDTO courseDTO,
                                Authentication authentication,
                                Model model) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
-
         if (tutor == null) {
-            return "redirect:/tutor/dashboard";
+            return "redirect:/";
         }
 
         try {
@@ -117,10 +125,13 @@ public class TutorController {
     @PostMapping("/course/delete")
     public String deleteCourse(@RequestParam("courseId") int courseId, Authentication authentication) {
 
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
         Course course = tutorService.getCourseById(courseId);
         if (course != null) {
@@ -133,10 +144,13 @@ public class TutorController {
     public String viewStudents(@PathVariable("courseId") int courseId,
                                Model model,
                                Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
         Course course = tutorService.getCourseById(courseId);
         if (course == null || tutorService.hasAccessToCourse(tutor, course)) {
@@ -149,9 +163,13 @@ public class TutorController {
 
     @GetMapping("/course/{courseId}/detail")
     public String showCourseDetail(@PathVariable("courseId") int courseId, Model model, Authentication authentication) {
-        User user = userService.getCurrentUser(authentication);
-        if (user == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
+        }
+        User user = userService.getCurrentUser(authentication);
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
         }
         Course course = courseService.getCourseById(courseId);
         model.addAttribute("course", course);
@@ -160,9 +178,13 @@ public class TutorController {
 
     @GetMapping("/course/unit/{unitId}")
     public String showUnit(@PathVariable("unitId") int unitId, Model model, Authentication authentication) {
-        User user = userService.getCurrentUser(authentication);
-        if (user == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
+        }
+        User user = userService.getCurrentUser(authentication);
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
         }
         Unit unit = unitService.getUnitById(unitId);
         model.addAttribute("unit", unit);
@@ -173,10 +195,13 @@ public class TutorController {
     public String addUnit(@PathVariable("courseId") int courseId,
                           @RequestParam("description") String description,
                           Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
         Course course = tutorService.getCourseById(courseId);
         if (course == null || tutorService.hasAccessToCourse(tutor, course)) {
@@ -189,45 +214,75 @@ public class TutorController {
     public String deleteUnit(@RequestParam("unitId") int unitId,
                           @PathVariable("courseId") int courseId,
                           Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
         tutorService.deleteUnit(unitId);
         return "redirect:/tutor/course/" + courseId + "/detail";
     }
-
-    @PostMapping("/unit/{unitId}/uploadVideo")
-    public String uploadVideo(@PathVariable("unitId") int unitId,
-                              @RequestParam("description") String description,
-                              @RequestParam("file") MultipartFile file,
-                              Authentication authentication) {
+    @PostMapping("/unit/{unitId}/upload-video")
+    public String uploadVideo(@PathVariable int unitId,
+                              @RequestParam String filePath,
+                              @RequestParam String description,
+                              Model model, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
-            return "redirect:/tutor/dashboard";
+            return "redirect:/";
         }
-        Unit unit = tutorService.getUnitById(unitId);
-        if (unit == null || tutorService.hasAccessToCourse(tutor, unit.getCourse())) {
-            return "redirect:/tutor/dashboard";
+        Video video = new Video();
+        video.setDescription(description);
+        video.setCreateAt(new Date());
+        Unit unit = unitService.getUnitById(unitId);
+        video.setUnit(unit);
+
+        if (filePath.contains("youtube.com/watch?v=")) {
+            filePath = filePath.split("v=")[1].split("&")[0];
+        } else if (filePath.contains("youtu.be/")) {
+            filePath = filePath.split("youtu.be/")[1].split("\\?")[0];
         }
-        try {
-            tutorService.uploadVideo(unit, description, file);
-            return "redirect:/tutor/course/" + unit.getCourse().getCourseId() + "/edit";
-        } catch (Exception e) {
-            return "redirect:/tutor/course/" + unit.getCourse().getCourseId() + "/edit?error=" + (e.getMessage().equals("No file provided") ? "noFile" : "uploadFailed");
+        video.setFilePath(filePath);
+
+        videoService.addNewVideo(video);
+
+        return "redirect:/tutor/course/unit/" + unitId;
+    }
+
+    @PostMapping("/unit/{unitId}/delete-video/{videoId}")
+    public String deleteVideo(@PathVariable("unitId") int unitId,
+                              @PathVariable("videoId") int videoId,
+                              Authentication authentication){
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
         }
+        User user = userService.getCurrentUser(authentication);
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
+        }
+        videoService.deleteVideoById(videoId);
+        return "redirect:/tutor/course/unit/" + unitId;
     }
 
     @PostMapping("/unit/{unitId}/upload-quiz")
     public String uploadQuiz(@PathVariable("unitId") int unitId,
                              @RequestParam("quizzName") String quizzName,
                              Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
-            return "redirect:/tutor/dashboard";
+            return "redirect:/";
         }
         Unit unit = tutorService.getUnitById(unitId);
         if (unit == null || tutorService.hasAccessToCourse(tutor, unit.getCourse())) {
@@ -241,10 +296,13 @@ public class TutorController {
     public String viewQuizGrades(@PathVariable("quizzId") int quizzId,
                                  Model model,
                                  Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
         Tutor tutor = tutorService.getTutorFromAuthentication(user);
         if (tutor == null) {
-            return "redirect:/tutor/dashboard";
+            return "redirect:/";
         }
         Quizz quizz = tutorService.getQuizzById(quizzId);
         if (quizz == null || tutorService.hasAccessToCourse(tutor, quizz.getUnit().getCourse())) {
@@ -260,9 +318,13 @@ public class TutorController {
                              @PathVariable("unitId") int unitId,
                              @ModelAttribute("quiz") Quizz quiz,
                              Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
-        if (user == null) {
-            return "redirect:/tutor/dashboard";
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
         }
 
         quizzService.createQuiz(unitId, quiz.getQuizzName());
@@ -273,9 +335,13 @@ public class TutorController {
     public String updateQuiz(@PathVariable("quizId") int quizId,
                              @ModelAttribute("quiz") Quizz updatedQuiz,
                              Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
         User user = userService.getCurrentUser(authentication);
-        if (user == null) {
-            return "redirect:/tutor/dashboard";
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
         }
 
         Quizz quiz = quizzService.updateQuiz(quizId, updatedQuiz.getQuizzName());
@@ -286,19 +352,27 @@ public class TutorController {
     public String deleteQuiz(@PathVariable("quizId") int quizId,
                              @PathVariable("unitId") int unitId,
                              Authentication authentication) {
-        User user = userService.getCurrentUser(authentication);
-        if (user == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
+        User user = userService.getCurrentUser(authentication);
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
+        }
         quizzService.deleteQuiz(quizId);
-        return "redirect:/tutor/course/unit?unitId=" + unitId;
+        return "redirect:/tutor/course/unit/" + unitId;
     }
 
-    @GetMapping("/tutor/course/unit/quizz/{quizzId}")
+    @GetMapping("/course/unit/quizz/{quizzId}")
     public String showAllQuestionEditPage(@PathVariable("quizzId") int quizzId, Model model, Authentication authentication){
-        User user = userService.getCurrentUser(authentication);
-        if (user == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
+        }
+        User user = userService.getCurrentUser(authentication);
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
         }
         Quizz quizz = quizzService.getQuizzById(quizzId);
         Question question = new Question();
@@ -306,21 +380,29 @@ public class TutorController {
         model.addAttribute("questionForm", question);
         return "/tutor/quizz";
     }
-    @PostMapping("/tutor/course/unit/quizz/{quizzId}/add-question")
+    @PostMapping("/course/unit/quizz/{quizzId}/add-question")
     public String addQuestion(@ModelAttribute Question question, @PathVariable("quizzId") int quizzId, Authentication authentication) {
-        User user = userService.getCurrentUser(authentication);
-        if (user == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
+        }
+        User user = userService.getCurrentUser(authentication);
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
         }
         Question q = quizzService.addQuestionToQuiz(quizzId, question);
         return "redirect:/tutor/course/unit/quizz/" + quizzId;
     }
 
-    @PostMapping("/tutor/course/unit/quizz/{quizzId}/delete-question/{questionId}")
+    @PostMapping("/course/unit/quizz/{quizzId}/delete-question/{questionId}")
     public String deleteQuestion(@PathVariable int questionId, @PathVariable int quizzId, Authentication authentication){
-        User user = userService.getCurrentUser(authentication);
-        if (user == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
+        }
+        User user = userService.getCurrentUser(authentication);
+        Tutor tutor = tutorService.getTutorFromAuthentication(user);
+        if (tutor == null) {
+            return "redirect:/";
         }
         quizzService.deleteQuiz(questionId);
         return "redirect:/tutor/course/unit/quizz/" + quizzId;

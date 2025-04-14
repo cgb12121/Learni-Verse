@@ -156,6 +156,7 @@ public class TutorServiceImpl implements TutorService {
         Quizz quizz = new Quizz();
         quizz.setQuizzName(quizzName);
         quizz.setUnit(unit);
+        quizz.setCreateAt(new Date());
         quizzRepository.save(quizz);
     }
     public void deleteUnit(int unitId){
