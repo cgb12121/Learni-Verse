@@ -1,6 +1,6 @@
 package com.hanu.leaniverse.security;
 
-import com.hanu.leaniverse.service.UserService;
+import com.hanu.leaniverse.service.user.UserService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

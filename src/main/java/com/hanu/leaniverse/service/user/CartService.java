@@ -1,7 +1,6 @@
-package com.hanu.leaniverse.service;
+package com.hanu.leaniverse.service.user;
 
 import com.hanu.leaniverse.model.Cart;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;

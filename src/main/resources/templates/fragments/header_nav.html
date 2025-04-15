@@ -14,7 +14,7 @@
         <div class="logo">
             <a href="/" style="font-weight: bold;">LearniVerse</a>
         </div>
-        <form th:action="@{/home-page} + '#search-result'" method="get" class="search-bar">
+        <form th:action="@{/} + '#search-result'" method="get" class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input name="title" type="text" placeholder="Search my courses" th:value="${param.title}">
         </form>

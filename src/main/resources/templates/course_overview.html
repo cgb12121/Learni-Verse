@@ -34,14 +34,14 @@
             <ul class="lesson-list">
                 <li th:if="${unit.video.isEmpty()}">No video uploaded yet</li>
                 <li class="lesson-item" th:each="lesson : ${unit.video}">
-      <span class="lesson-icon">
-        <img th:src="@{/icons/play-icon.svg}" alt="Video" width="24">
-      </span>
+<!--      <span class="lesson-icon">-->
+<!--        <img th:src="@{/icons/play-icon.svg}" alt="Video" width="24">-->
+<!--      </span>-->
                     <span class="lesson-text" th:text="${lesson.description}">Lesson Title</span>
-                    <div class="lesson-meta">
-                        <img src="/icons/time-icon.svg" alt="Time Icon" width="16">
-                        <span th:text="${lesson.length}">Duration</span>
-                    </div>
+<!--                    <div class="lesson-meta">-->
+<!--                        <img src="/icons/time-icon.svg" alt="Time Icon" width="16">-->
+<!--                        <span th:text="${lesson.length}">Duration</span>-->
+<!--                    </div>-->
                 </li>
             </ul>
         </div>

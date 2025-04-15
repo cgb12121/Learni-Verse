@@ -28,7 +28,7 @@
     </div>
 
     <!-- My Courses List -->
-    <div class="video-section">
+    <div class="video-section" style="display:flex;">
         <div class="course-card" th:each="course : ${courses}">
             <img th:src="@{'/courseImg/' + ${course.courseImage}}" alt="Course image" class="course-image">
             <a th:href="@{/course-detail(courseId=${course.courseId})}" class="course-title"

@@ -1,4 +1,4 @@
-package com.hanu.leaniverse.service;
+package com.hanu.leaniverse.service.user;
 import com.hanu.leaniverse.dto.UserDTO;
 import com.hanu.leaniverse.model.User;
 import com.hanu.leaniverse.model.UserSensitiveInformation;

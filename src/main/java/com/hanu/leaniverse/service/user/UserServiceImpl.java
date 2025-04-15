@@ -1,19 +1,16 @@
-package com.hanu.leaniverse.service;
+package com.hanu.leaniverse.service.user;
 
 
 import com.hanu.leaniverse.dto.UserDTO;
-import com.hanu.leaniverse.model.Cart;
 import com.hanu.leaniverse.model.User;
 import com.hanu.leaniverse.model.UserSensitiveInformation;
 import com.hanu.leaniverse.repository.TutorRepository;
 import com.hanu.leaniverse.repository.UserRepository;
 import com.hanu.leaniverse.repository.UserSensitiveInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -71,16 +68,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User signUpAccount(UserDTO userDTO) {
+         if(userRepository.findByUsername(userDTO.getUsername())==null) {
+             User user = new User();
+             user.setUsername(userDTO.getUsername());
+             user.setFullName(userDTO.getFullName());
+             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+//        user.setRole("STUDENT");
 
-        User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setFullName(userDTO.getFullName());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setRole("STUDENT");
+             User savedUser = userRepository.save(user);
 
-        User savedUser = userRepository.save(user);
-
-        return savedUser;
+             return savedUser;
+         }
+         else {
+             return null;
+         }
     }
     public User getCurrentUser(Authentication authentication){
         if(authentication !=null && authentication.getPrincipal() instanceof UserDetails){

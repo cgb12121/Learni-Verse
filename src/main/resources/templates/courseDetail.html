@@ -34,7 +34,7 @@
         </form>
         <div class="button-container">
             <form class="btn gift-button"
-                  th:action="@{/submit-order(amount=100000, orderInfo=${course.courseId}+':'+${course.courseName})}"
+                  th:action="@{/submit-order(amount=${#numbers.formatInteger(course.price, 0)}, orderInfo=${course.courseId}+':'+${course.courseName})}"
                   th:method="post">
                 <button type="submit">Buy Now</button>
             </form>
@@ -180,7 +180,7 @@
         </div>
         <div class="course-container">
             <div class="course-card" th:each="relatedCourse : ${relatedCourses}">
-                <img src="" alt="Course image" class="course-image">
+                <img th:src="@{'/courseImg/' + ${relatedCourse.courseImage}}" alt="Course image" class="course-image">
                 <a th:href="@{/course-detail(courseId=${relatedCourse.courseId})}" class="course-title"
                    style="font-size: 16px;" th:text="${relatedCourse.courseName}"></a>
                 <p class="course-instructor" th:text="${relatedCourse.teaches[0].tutor.user.fullName}"></p>
