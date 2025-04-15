@@ -21,7 +21,7 @@
         <div class="cart-container">
             <div th:each="course : ${CartList}" class="cart-item">
                 <a class="cart-img-container" th:href="@{/course-detail(courseId=${course.getCourse().courseId})}">
-                    <img src="" alt="Course Image">
+                    <img th:src="@{'/courseImg/' + ${course.getCourse.courseImage}}" alt="Course Image" style="max-height:200px; object-fit:cover;">
                 </a>
                 <div class="cart-text-container">
                     <a class="related-course-name" th:text="${course.getCourse.courseName}">Course Name</a>
@@ -60,41 +60,41 @@
         <div class="icon" th:text="${param.success == 'true'} ? '✔' : '✖'"></div>
         <p th:text="${param.message}"></p>
     </div>
-    <!-- RELATED COURSES -->
-    <div class="related-container cart-related-container">
-        <div class="related-header">
-            <p>Related courses</p>
-        </div>
-        <div class="course-container">
-            <div class="course-card">
-                <img src="" alt="Course image" class="course-image">
-                <a class="course-title">Linear algebra and its applications</a>
-                <p class="course-instructor">Nguyen Tung Anh</p>
-                <p class="course-price">$ 99</p>
-            </div>
-            <div class="course-card">
-                <img src="" alt="Course image" class="course-image">
-                <a class="course-title">Linear algebra and its applications</a>
-                <p class="course-instructor">Nguyen Tung Anh</p>
+<!--    &lt;!&ndash; RELATED COURSES &ndash;&gt;-->
+<!--    <div class="related-container cart-related-container">-->
+<!--        <div class="related-header">-->
+<!--            <p>Related courses</p>-->
+<!--        </div>-->
+<!--        <div class="course-container">-->
+<!--            <div class="course-card">-->
+<!--                <img src="" alt="Course image" class="course-image">-->
+<!--                <a class="course-title">Linear algebra and its applications</a>-->
+<!--                <p class="course-instructor">Nguyen Tung Anh</p>-->
+<!--                <p class="course-price">$ 99</p>-->
+<!--            </div>-->
+<!--            <div class="course-card">-->
+<!--                <img src="" alt="Course image" class="course-image">-->
+<!--                <a class="course-title">Linear algebra and its applications</a>-->
+<!--                <p class="course-instructor">Nguyen Tung Anh</p>-->
 
-                <p class="course-price">$ 99</p>
-            </div>
-            <div class="course-card">
-                <img src="" alt="Course image" class="course-image">
-                <a class="course-title">Linear algebra and its applications</a>
-                <p class="course-instructor">Nguyen Tung Anh</p>
+<!--                <p class="course-price">$ 99</p>-->
+<!--            </div>-->
+<!--            <div class="course-card">-->
+<!--                <img src="" alt="Course image" class="course-image">-->
+<!--                <a class="course-title">Linear algebra and its applications</a>-->
+<!--                <p class="course-instructor">Nguyen Tung Anh</p>-->
 
-                <p class="course-price">$ 99</p>
-            </div>
-            <div class="course-card">
-                <img src="" alt="Course image" class="course-image">
-                <a class="course-title">Linear algebra and its applications</a>
-                <p class="course-instructor">Nguyen Tung Anh</p>
+<!--                <p class="course-price">$ 99</p>-->
+<!--            </div>-->
+<!--            <div class="course-card">-->
+<!--                <img src="" alt="Course image" class="course-image">-->
+<!--                <a class="course-title">Linear algebra and its applications</a>-->
+<!--                <p class="course-instructor">Nguyen Tung Anh</p>-->
 
-                <p class="course-price">$ 99</p>
-            </div>
-        </div>
-    </div>
+<!--                <p class="course-price">$ 99</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 <div th:replace="~{/fragments/header_nav.html :: footer}"></div>
 </body>

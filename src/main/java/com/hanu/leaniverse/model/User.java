@@ -9,6 +9,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
+    @Column(unique = true)
     private String username;
     private String fullName;
     private String password;
@@ -35,7 +36,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
 
-    private String role;
+//    private String role;
 
     public User() {
     }
@@ -162,11 +163,11 @@ public class User {
         this.comments = comments;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+//    public String getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(String role) {
+//        this.role = role;
+//    }
 }

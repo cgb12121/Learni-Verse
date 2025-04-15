@@ -5,13 +5,11 @@ import com.hanu.leaniverse.dto.ReviewDTO;
 import com.hanu.leaniverse.dto.QuestionDTO;
 
 import com.hanu.leaniverse.model.*;
-import com.hanu.leaniverse.repository.*;
-import com.hanu.leaniverse.service.*;
+import com.hanu.leaniverse.service.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -74,7 +72,7 @@ public class StudentController {
 
         Course course = courseService.getCourseById(courseId);
         if (course == null) {
-            return "redirect:/home-page";
+            return "redirect:/";
         }
 
         boolean isEnrolled = enrollmentService.isEnrolled(currentUser.getUserId(), courseId);
@@ -212,6 +210,7 @@ public class StudentController {
             return "redirect:/login";
         }
         model.addAttribute("CartList", cartService.getAllCartByUserId(user.getUserId()));
+        model.addAttribute("enrollmentList",enrollmentService.getAllEnrollmentsByUser(user));
         return "cart";
     }
 

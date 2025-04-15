@@ -3,16 +3,14 @@ package com.hanu.leaniverse.controller;
 
 import com.hanu.leaniverse.model.Course;
 import com.hanu.leaniverse.model.Enrollment;
-import com.hanu.leaniverse.repository.EnrollmentRepository;
-import com.hanu.leaniverse.service.CourseService;
-import com.hanu.leaniverse.service.EnrollmentService;
-import com.hanu.leaniverse.service.UserService;
-import com.hanu.leaniverse.service.VNPayService;
+import com.hanu.leaniverse.service.user.CourseService;
+import com.hanu.leaniverse.service.user.EnrollmentService;
+import com.hanu.leaniverse.service.user.UserService;
+import com.hanu.leaniverse.service.user.VNPayService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -49,19 +47,21 @@ public class PaymentController {
             String  totalPrice = request.getParameter("vnp_Amount");
             String bank = request.getParameter("vnp_BankCode");
             String cardType = request.getParameter("vnp_CardType");
-            for(int i= 0; i<orderInfo.split(",").length;i++) {
-                String id = orderInfo.split(",")[i].split(":")[0];
-                Course course = courseService.getCourseById(Integer.parseInt(id));
-                Enrollment enrollment = new Enrollment();
-                enrollment.setBank(bank);
-                enrollment.setPrice(Integer.parseInt(totalPrice)/100);
-                enrollment.setCardType(cardType);
-                enrollment.setCreateAt(new Date());
-                enrollment.setTransactionNumber(transactionId);
-                enrollment.setCourse(course);
-                enrollment.setUser(userService.getCurrentUser(SecurityContextHolder.getContext().getAuthentication()));
-                enrollment.setOrderInfo(orderInfo);
-                enrollmentService.saveAndFlush(enrollment);
+            if(paymentStatus==1) {
+                for (int i = 0; i < orderInfo.split(",").length; i++) {
+                    String id = orderInfo.split(",")[i].split(":")[0];
+                    Course course = courseService.getCourseById(Integer.parseInt(id));
+                    Enrollment enrollment = new Enrollment();
+                    enrollment.setBank(bank);
+                    enrollment.setPrice(Integer.parseInt(totalPrice) / 100);
+                    enrollment.setCardType(cardType);
+                    enrollment.setCreateAt(new Date());
+                    enrollment.setTransactionNumber(transactionId);
+                    enrollment.setCourse(course);
+                    enrollment.setUser(userService.getCurrentUser(SecurityContextHolder.getContext().getAuthentication()));
+                    enrollment.setOrderInfo(orderInfo);
+                    enrollmentService.saveAndFlush(enrollment);
+                }
             }
             return paymentStatus == 1 ? "paymentSuccess" : "orderfail";
         }

@@ -2,7 +2,7 @@ package com.hanu.leaniverse.controller;
 
 import com.hanu.leaniverse.dto.UserDTO;
 import com.hanu.leaniverse.model.User;
-import com.hanu.leaniverse.service.UserService;
+import com.hanu.leaniverse.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -34,13 +34,13 @@ public class SecurityController {
                 return "login";
             }
 
-            if (user.getRole().equals("TUTOR") || user.getRole().equals("ROLE_TUTOR")) {
-                return "tutor/dashboard";
-            }
-
-            if (user.getRole().equals("ADMIN") || user.getRole().equals("ROLE_ADMIN")) {
-                return "admin/users";
-            }
+//            if (user.getRole().equals("TUTOR") || user.getRole().equals("ROLE_TUTOR")) {
+//                return "tutor/dashboard";
+//            }
+//
+//            if (user.getRole().equals("ADMIN") || user.getRole().equals("ROLE_ADMIN")) {
+//                return "admin/users";
+//            }
 
             return "homePage1";
 

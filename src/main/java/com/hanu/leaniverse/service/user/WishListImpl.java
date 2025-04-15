@@ -1,4 +1,4 @@
-package com.hanu.leaniverse.service;
+package com.hanu.leaniverse.service.user;
 
 import com.hanu.leaniverse.model.Course;
 import com.hanu.leaniverse.model.User;
@@ -7,7 +7,6 @@ import com.hanu.leaniverse.repository.CourseRepository;
 import com.hanu.leaniverse.repository.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

@@ -1,6 +1,5 @@
-package com.hanu.leaniverse.service;
+package com.hanu.leaniverse.service.user;
 
-import com.hanu.leaniverse.dto.ReviewDTO;
 import com.hanu.leaniverse.model.*;
 import com.hanu.leaniverse.repository.CategoryRepository;
 import com.hanu.leaniverse.repository.CourseRepository;

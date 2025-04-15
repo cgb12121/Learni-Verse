@@ -1,9 +1,6 @@
-package com.hanu.leaniverse.service;
+package com.hanu.leaniverse.service.user;
 
-import com.hanu.leaniverse.dto.ReviewDTO;
 import com.hanu.leaniverse.model.Course;
-import com.hanu.leaniverse.model.Review;
-import com.hanu.leaniverse.model.User;
 
 import java.util.Map;
 

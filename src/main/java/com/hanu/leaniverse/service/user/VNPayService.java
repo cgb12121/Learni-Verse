@@ -1,4 +1,4 @@
-package com.hanu.leaniverse.service;
+package com.hanu.leaniverse.service.user;
 
 import com.hanu.leaniverse.config.VNPayConfig;
 import jakarta.servlet.http.HttpServletRequest;
